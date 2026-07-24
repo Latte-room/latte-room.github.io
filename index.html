@@ -1,33 +1,57 @@
+html<!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
     <title>らてらてちゃん 非公式応援サイト</title>
     <style>
+        /* 全体のデザイン設定 */
         body { background-color: #f5efe6; color: #4a3e3d; text-align: center; font-family: sans-serif; padding: 20px; }
-        .caution { background-color: #fff; border: 2px solid #d0b8ac; padding: 15px; margin-bottom: 30px; display: inline-block; }
-        .video-container { margin: 20px 0; }
-        .btn { display: inline-block; padding: 10px 20px; background-color: #b08968; color: white; text-decoration: none; border-radius: 5px; margin: 10px; }
+        .caution { background-color: #fff; border: 2px solid #d0b8ac; padding: 15px; margin: 0 auto 30px auto; max-width: 600px; display: block; }
+        .video-section { background-color: #ffffff; border-radius: 10px; padding: 20px; margin: 20px auto; max-width: 600px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .video-container { position: relative; width: 100%; padding-top: 56.25%; margin-top: 15px; }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; border-radius: 5px; }
+        .btn { display: inline-block; padding: 10px 20px; background-color: #b08968; color: white; text-decoration: none; border-radius: 5px; margin: 10px; font-weight: bold; }
+        h2 { border-bottom: 2px solid #d0b8ac; padding-bottom: 5px; display: inline-block; margin-top: 10px; }
     </style>
 </head>
 <body>
 
     <h1>☕️らてらてちゃん 非公式応援ファンサイト☕️</h1>
 
+    <!-- 1. 非公式の注意書き -->
     <div class="caution">
         <strong>【ご注意】</strong><br>
         当サイトはファン個人が運営する非公式の応援サイトです。<br>
         山下学園、らてらてちゃんご本人、および関係者様とは一切関係ありません。
     </div>
 
-    <h2>🎤 おすすめの歌ってみた（山下学園おんがく部）</h2>
-    <div class="video-container">
-        <!-- あとでここにYouTubeの埋め込みコードを入れます。まずは仮の動画を表示します -->
-        <iframe width="560" height="315" src="https://youtube.com" frameborder="0" allowfullscreen></iframe>
+    <!-- 2. 最新動画のエリア -->
+    <div class="video-section">
+        <h2>✨ 最新の動画 ✨</h2>
+        <p>らてらてちゃんの最新の投稿動画です！たくさん再生して応援しましょう！</p>
+        <div class="video-container">
+            <!-- ⚠️ここに最新動画の埋め込みコードを貼る -->
+            <iframe src="https://youtube.com" allowfullscreen></iframe>
+        </div>
     </div>
 
-    <h2>🔗 公式リンク集</h2>
-    <a href="https://bitfan.id" class="btn" target="_blank">公式ファンクラブ（Bitfan）</a>
-    <a href="https://youtube.com" class="btn" target="_blank">公式YouTube</a>
+    <!-- 3. 今までの動画・プレイリストのエリア -->
+    <div class="video-section">
+        <h2>🎤 今までの動画・プレイリスト 🎤</h2>
+        <p>山下学園おんがく部や、これまでの素敵な歌ってみたのまとめです！</p>
+        <div class="video-container">
+            <!-- ⚠️ここにプレイリスト、または過去の動画の埋め込みコードを貼る -->
+            <iframe src="https://youtube.com" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <!-- 4. 公式リンク集 -->
+    <div class="video-section">
+        <h2>🔗 公式リンク集</h2>
+        <p>最新情報や限定コンテンツは公式をチェック！</p>
+        <a href="https://bitfan.id" class="btn" target="_blank">公式ファンクラブ（Bitfan）</a>
+        <a href="https://youtube.com" class="btn" target="_blank">公式YouTube</a>
+    </div>
 
 </body>
 </html>
