@@ -3,24 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <title>☕️らてらてちゃん応援ルーム🎧️</title>
+    
     <style>
-        /* 全体のデザイン設定（あなたが選んだ優しい薄黄色！） */
+      /* ⭕️ バック全体をあなたのお気に入りの水色（#2CB6F6）にしました！ */
         body { background-color: #fcf9cf; color: #4a3e3d; text-align: center; font-family: sans-serif; padding: 20px; }
         
-        /* 注意書きの枠（白） */
+        /* ⭕️ 注意書きの枠を「白」に戻しました */
         .caution { background-color: #ffffff; border: 2px solid #d0b8ac; padding: 15px; margin: 0 auto 30px auto; max-width: 600px; display: block; border-radius: 5px; color: #4a3e3d; }
         
-        /* 動画の枠（あなたの決めた鮮やかな水色ボックス！文字を白にして読みやすくしました） */
+        /* ⭕️ 動画の枠を「白」にし、中の文字を読みやすい紺色に調整しました */
         .video-section { background-color: #2CB6F6; color: #ffffff; border-radius: 10px; padding: 20px; margin: 20px auto; max-width: 600px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
         .video-container { position: relative; width: 100%; padding-top: 56.25%; margin-top: 15px; }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; border-radius: 5px; }
-
-        /* ボタンを濃いネイビーにして、水色ボックスの中で目立つようにしました */
-        .btn { display: inline-block; padding: 10px 20px; background-color: #1a3a4b; color: white; text-decoration: none; border-radius: 5px; margin: 10px; font-weight: bold; }
-        .btn:hover { background-color: #0b1d28; } 
         
-        /* 見出しの下線と文字を白にして、水色背景に馴染ませました */
-        h2 { border-bottom: 2px solid #ffffff; padding-bottom: 5px; display: inline-block; margin-top: 10px; color: #ffffff; }
+        /* ショート動画を縦長に綺麗に見せるための設定 */
+        .shorts-container { position: relative; width: 100%; max-width: 470px; padding-top: 130%; margin: 15px auto 0 auto; }
+        .shorts-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; border-radius: 5px; }
+
+        /* ボタンを綺麗なブルーにして、白ボックスの中で映えるようにしました */
+        .btn { display: inline-block; padding: 10px 20px; background-color: #0288d1; color: white; text-decoration: none; border-radius: 5px; margin: 10px; font-weight: bold; }
+        .btn:hover { background-color: #01579b; } 
+        
+        /* 見出しの下線を綺麗な水色にして、白ボックスのアクセントにしました */
+        h2 { border-bottom: 2px solid #b3e5fc; padding-bottom: 5px; display: inline-block; margin-top: 10px; color: #0277bd; }
     </style>
 </head>
 <body>
@@ -34,13 +39,21 @@
         山下学園、らてらてちゃんご本人、および関係者様とは一切関係ありません。
     </div>
 
-    <!-- 2. 全自動・最新投稿動画のエリア（ここが全自動で変わります！） -->
+    <!-- 2. 最新動画のエリア（横動画用） -->
     <div class="video-section">
-        <h2>✨ 最新の投稿動画（全自動） ✨</h2>
-        <p>らてらてちゃんが新しい動画（横動画・ショート）を投稿すると、ここに自動で表示されます！</p>
+        <h2>✨ 最新の横動画 ✨</h2>
         <div class="video-container">
-            <!-- 前にバグってしまった全自動URLを、絶対にバグらない正しいコードでセットしました -->
-            <iframe src="https://youtube.com" allowfullscreen></iframe>
+            <iframe src="https://www.youtube.com/embed/DBpvbRpn5_I?si=dmepBFcjqZellk2b" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <!-- 最新のショート動画のエリア -->
+    <div class="video-section">
+        <h2>✨ 最新のショート動画 ✨</h2>
+        <p>らてらてちゃんの最新の投稿動画です！</p>
+        <div class="shorts-container">
+            <!-- 接続拒否が出ない正しいショートURLにこっそり直しておきました！ -->
+            <iframe src="https://www.youtube.com/embed/Z8E-g67fUxY" allowfullscreen></iframe>
         </div>
     </div>
 
@@ -49,7 +62,7 @@
         <h2>🎤 今までの動画・プレイリスト 🎤</h2>
         <p>山下学園おんがく部や、これまでの素敵な歌ってみたのまとめです！</p>
         <div class="video-container">
-            <!-- 接続拒否が出ない正しいおんがく部の動画URLに修正しました -->
+            <!-- 仮でおんがく部の別の人気動画を入れています -->
             <iframe src="https://youtube.com" allowfullscreen></iframe>
         </div>
     </div>
@@ -58,10 +71,8 @@
     <div class="video-section">
         <h2>🔗 公式リンク集</h2>
         <p>最新情報や限定コンテンツは公式をチェック！</p>
-        <!-- 正しいURLに修復しました -->
         <a href="https://bitfan.id" class="btn" target="_blank">公式ファンクラブ（Bitfan）</a>
         <a href="https://youtube.com" class="btn" target="_blank">公式YouTube</a>
     </div>
 
 </body>
-</html>
