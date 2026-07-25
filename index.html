@@ -42,19 +42,13 @@
     <!-- 2. 最新動画のエリア（横動画用） -->
     <div class="video-section">
         <h2>✨ 最新の横動画 ✨</h2>
-        <div class="video-container">
-            <iframe src="https://www.youtube.com/embed/DBpvbRpn5_I?si=dmepBFcjqZellk2b" allowfullscreen></iframe>
-        </div>
+       <div class="video-container" id="latest-video"></div>
     </div>
 
     <!-- 最新のショート動画のエリア -->
     <div class="video-section">
         <h2>✨ 最新のショート動画 ✨</h2>
-        <p>らてらてちゃんの最新の投稿動画です！</p>
-        <div class="shorts-container">
-            <!-- 接続拒否が出ない正しいショートURLにこっそり直しておきました！ -->
-            <iframe src="https://www.youtube.com/embed/Z8E-g67fUxY" allowfullscreen></iframe>
-        </div>
+       <div class="shorts-container" id="latest-shorts"></div>
     </div>
 
     <!-- 3. 今までの動画・プレイリストのエリア -->
@@ -74,5 +68,41 @@
         <a href="https://bitfan.id" class="btn" target="_blank">公式ファンクラブ（Bitfan）</a>
         <a href="https://youtube.com" class="btn" target="_blank">公式YouTube</a>
     </div>
+    
+<script src="script.js"></script>
+    const API_KEY = "ここにAPIキー";
+const CHANNEL_ID = "ここにチャンネルID";
 
+// 最新動画取得
+fetch(`https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&channelId=${CHANNEL_ID}&order=date&maxResults=5&part=snippet`)
+.then(res => res.json())
+.then(data => {
+  let normalVideo = null;
+  let shortsVideo = null;
+
+  data.items.forEach(item => {
+    const id = item.id.videoId;
+    if (!id) return;
+
+    // Shorts判定（ざっくり）
+    if (!shortsVideo && item.snippet.title.includes("#shorts")) {
+      shortsVideo = id;
+    } else if (!normalVideo) {
+      normalVideo = id;
+    }
+  });
+
+  // 横動画
+  if (normalVideo) {
+    document.getElementById("latest-video").innerHTML =
+      `<iframe src="https://www.youtube.com/embed/${normalVideo}" allowfullscreen></iframe>`;
+  }
+
+  // ショート
+  if (shortsVideo) {
+    document.getElementById("latest-shorts").innerHTML =
+      `<iframe src="https://www.youtube.com/embed/${shortsVideo}" allowfullscreen></iframe>`;
+  }
+});
+    
 </body>
