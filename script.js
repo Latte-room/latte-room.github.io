@@ -1,5 +1,5 @@
 const API_KEY = "AIzaSyBIrDQkZXjtMWbCjznHp_Rga-GhPFwZTWI";
-const CHANNEL_ID = "UCq9s3R0dZ8lW1y6r2JQF6Qg";
+const CHANNEL_ID = "UCKx_KMe4Q92491rkY8JufOg";
 
 fetch(`https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&channelId=${CHANNEL_ID}&part=snippet,id&order=date&maxResults=10&type=video`)
 .then(res => res.json())
