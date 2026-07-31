@@ -1,7 +1,7 @@
 const API_KEY = "AIzaSyBIrDQkZXjtMWbCjznHp_Rga-GhPFwZTWI"; // あなたのAPIキー
 const CHANNEL_ID = "UCKx_KMe4Q92491rkY8JufOg";
 
-fetch(`https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&channelId=${CHANNEL_ID}&part=id&order=date&maxResults=15&type=video`)
+fetch(`https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&channelId=${CHANNEL_ID}&part=id&order=date&maxResults=50&type=video`)
   .then(res => res.json())
   .then(searchData => {
     if (!searchData.items || searchData.items.length === 0) {
