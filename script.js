@@ -1,10 +1,11 @@
 const API_KEY = "AIzaSyBIrDQkZXjtMWbCjznHp_Rga-GhPFwZTWI";
 const CHANNEL_ID = "UCq9s3R0dZ8lW1y6r2JQF6Qg";
 
-fetch(`https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&channelId=${CHANNEL_ID}&order=date&maxResults=5&part=snippet`)
+fetch(`https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&channelId=${CHANNEL_ID}&part=snippet,id&order=date&maxResults=10&type=video`)
 .then(res => res.json())
 .then(data => {
-  console.log(data); // 
+  console.log(data);
+
   let normalVideo = null;
   let shortsVideo = null;
 
