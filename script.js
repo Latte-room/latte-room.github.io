@@ -2,7 +2,7 @@ const API_KEY = "AIzaSyBIrDQkZXjtMWbCjznHp_Rga-GhPFwZTWI"; // ★あなたのキ
 const CHANNEL_ID = "UCKx_KMe4Q92491rkY8JufOg";
 
 // ❌ 住所が消えていたURLを、⭕️ プラスを使わず完全に繋げた正しい住所に直しました！
-const searchUrl = "https://googleapis.com" + API_KEY + "&channelId=" + CHANNEL_ID + "&part=id&order=date&maxResults=10&type=video";
+const searchUrl = "https://www.googleapis.com/youtube/v3/search?key=" + API_KEY + "&channelId=" + CHANNEL_ID + "&part=id&order=date&maxResults=10&type=video";
 
 // 1. 最初の通信
 fetch(searchUrl)
@@ -11,7 +11,7 @@ fetch(searchUrl)
   if (!searchData.items || searchData.items.length === 0) return;
   
   // 10件の動画IDをカンマで繋ぎます
-  const videoIds = searchData.items.map(item => item.id.videoId).join(',');
+  const videoUrl = "https://www.googleapis.com/youtube/v3/videos?key=" + API_KEY + "&id=" + videoIds + "&part=snippet,liveStreamingDetails";
   
   // 2つ目のURLも完璧な住所になっています
   const videoUrl = "https://googleapis.com" + API_KEY + "&id=" + videoIds + "&part=snippet,liveStreamingDetails";
@@ -49,12 +49,12 @@ fetch(searchUrl)
   // 画面への埋め込み処理
   if (normalVideo) {
     document.getElementById("latest-video").innerHTML =
-      "<iframe src='https://youtube.com" + normalVideo + "' allowfullscreen></iframe>";
+      "<iframe src='https://www.youtube.com/embed/" + normalVideo + "' allowfullscreen></iframe>"
   }
 
   if (shortsVideo) {
     document.getElementById("latest-shorts").innerHTML =
-      "<iframe src='https://youtube.com" + shortsVideo + "' allowfullscreen></iframe>";
+      "<iframe src='https://www.youtube.com/embed/" + normalVideo + "' allowfullscreen></iframe>"
   }
 })
 .catch(err => console.error("エラーが発生しました:", err));
