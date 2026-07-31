@@ -1,8 +1,11 @@
-const API_KEY = "AIzaSyBIrDQkZXjtMWbCjznHp_Rga-GhPFwZTWI";
+const API_KEY = "AIzaSyBIrDQkZXjtMWbCjznHp_Rga-GhPFwZTWI"; // ★ここをご自身の本物のAPIキーに書き換えてください
 const CHANNEL_ID = "UCKx_KMe4Q92491rkY8JufOg";
 
-// 1. 最初のURLに「www.」と「/youtube/v3/search」を完璧に修復しました！
-fetch(`https://googleapis.com{API_KEY}&channelId=${CHANNEL_ID}&part=id&order=date&maxResults=10&type=video`)
+// ❌ 記号のバグで合体できていなかったURLを、⭕️ 確実に文字が合体する安全な書き方に直しました！
+const searchUrl = "https://googleapis.com" + API_KEY + "&channelId=" + CHANNEL_ID + "&part=id&order=date&maxResults=10&type=video";
+
+// 1. まずはチャンネルの最新動画10件のIDを取得します
+fetch(searchUrl)
 .then(res => res.json())
 .then(searchData => {
   if (!searchData.items || searchData.items.length === 0) return;
@@ -10,8 +13,9 @@ fetch(`https://googleapis.com{API_KEY}&channelId=${CHANNEL_ID}&part=id&order=dat
   // 10件の動画IDをカンマで繋ぎます
   const videoIds = searchData.items.map(item => item.id.videoId).join(',');
   
-  // 2. 2つ目のURLも完璧な公式のアドレスになっています
-  return fetch(`https://googleapis.com{API_KEY}&id=${videoIds}&part=snippet,liveStreamingDetails`);
+  // 2. 2つ目のURLも、絶対にバグが起きない確実な書き方に直しました
+  const videoUrl = "https://googleapis.com" + API_KEY + "&id=" + videoIds + "&part=snippet,liveStreamingDetails";
+  return fetch(videoUrl);
 })
 .then(res => {
   if (!res) return;
@@ -28,7 +32,7 @@ fetch(`https://googleapis.com{API_KEY}&channelId=${CHANNEL_ID}&part=id&order=dat
     const id = item.id;
     if (!id) return;
 
-    // タイトルまたは説明文（裏側）に「shorts」が含まれているかを正確に判定
+    // タイトルまたは説明文に「shorts」が含まれているかを正確に判定
     const isShorts = (item.snippet.title && item.snippet.title.toLowerCase().includes("#shorts")) || 
                      (item.snippet.description && item.snippet.description.toLowerCase().includes("shorts"));
 
@@ -42,15 +46,15 @@ fetch(`https://googleapis.com{API_KEY}&channelId=${CHANNEL_ID}&part=id&order=dat
     }
   });
 
-  // 画面への埋め込み処理（あなたの作ってくれた枠のIDと連動します！）
+  // 画面への埋め込み処理
   if (normalVideo) {
     document.getElementById("latest-video").innerHTML =
-      `<iframe src="https://youtube.com{normalVideo}" allowfullscreen></iframe>`;
+      "<iframe src='https://youtube.com" + normalVideo + "' allowfullscreen></iframe>";
   }
 
   if (shortsVideo) {
     document.getElementById("latest-shorts").innerHTML =
-      `<iframe src="https://youtube.com{shortsVideo}" allowfullscreen></iframe>`;
+      "<iframe src='https://youtube.com" + shortsVideo + "' allowfullscreen></iframe>";
   }
 })
 .catch(err => console.error("エラーが発生しました:", err));
