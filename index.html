@@ -70,39 +70,6 @@
     </div>
     
 <script src="script.js"></script>
-
-
-// 最新動画取得
-fetch(`https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&channelId=${CHANNEL_ID}&order=date&maxResults=5&part=snippet`)
-.then(res => res.json())
-.then(data => {
-  let normalVideo = null;
-  let shortsVideo = null;
-
-  data.items.forEach(item => {
-    const id = item.id.videoId;
-    if (!id) return;
-
-    // Shorts判定（ざっくり）
-    if (!shortsVideo && item.snippet.title.includes("#shorts")) {
-      shortsVideo = id;
-    } else if (!normalVideo) {
-      normalVideo = id;
-    }
-  });
-
-  // 横動画
-  if (normalVideo) {
-    document.getElementById("latest-video").innerHTML =
-      `<iframe src="https://www.youtube.com/embed/${normalVideo}" allowfullscreen></iframe>`;
-  }
-
-  // ショート
-  if (shortsVideo) {
-    document.getElementById("latest-shorts").innerHTML =
-      `<iframe src="https://www.youtube.com/embed/${shortsVideo}" allowfullscreen></iframe>`;
-  }
-});
-    
+   
 </body>
 </html>
