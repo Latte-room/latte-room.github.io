@@ -1,45 +1,53 @@
 const API_KEY = "AIzaSyBIrDQkZXjtMWbCjznHp_Rga-GhPFwZTWI"; // あなたのAPIキー
 const CHANNEL_ID = "UCKx_KMe4Q92491rkY8JufOg";
 
-// 1. 最新10件の動画IDを取得
-fetch(`https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&channelId=${CHANNEL_ID}&part=id&order=date&maxResults=10&type=video`)
+fetch(`https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&channelId=${CHANNEL_ID}&part=id&order=date&maxResults=15&type=video`)
   .then(res => res.json())
   .then(searchData => {
-    if (!searchData.items || searchData.items.length === 0) return;
+    if (!searchData.items || searchData.items.length === 0) {
+      console.log("動画が見つかりませんでした");
+      return;
+    }
 
     const videoIds = searchData.items.map(item => item.id.videoId).join(",");
+    console.log("取得した動画ID:", videoIds);
 
-    // 2. 動画の詳細（長さ・タイトルなど）を取得
     return fetch(`https://www.googleapis.com/youtube/v3/videos?key=${API_KEY}&id=${videoIds}&part=contentDetails,snippet`);
   })
-  .then(res => res.json())
+  .then(res => {
+    if (!res) return;
+    return res.json();
+  })
   .then(data => {
     if (!data || !data.items) return;
 
     let normalVideo = null;
     let shortsVideo = null;
 
+    console.log("----- 動画一覧 -----");
     data.items.forEach(item => {
       const id = item.id;
-      if (!id) return;
+      const title = item.snippet.title;
+      const seconds = parseDuration(item.contentDetails.duration);
+      const isShorts = seconds <= 60;
 
-      // ISO 8601形式の長さを秒に変換
-      const duration = item.contentDetails.duration; // 例: PT1M23S
-      const seconds = parseDuration(duration);
-
-      const isShorts = seconds <= 60; // 60秒以下をショートと判定
+      console.log(`${isShorts ? "【ショート】" : "【横動画】"} ${seconds}秒 - ${title}`);
 
       if (isShorts) {
-        if (!shortsVideo) shortsVideo = id; // 最新のショート
+        if (!shortsVideo) shortsVideo = id;
       } else {
-        if (!normalVideo) normalVideo = id; // 最新の横動画
+        if (!normalVideo) normalVideo = id;
       }
     });
 
-    // 埋め込み
+    console.log("選ばれた横動画ID:", normalVideo);
+    console.log("選ばれたショートID:", shortsVideo);
+
     if (normalVideo) {
       document.getElementById("latest-video").innerHTML =
         `<iframe src="https://www.youtube.com/embed/${normalVideo}" allowfullscreen></iframe>`;
+    } else {
+      console.log("横動画が見つかりませんでした（最新15件が全部ショートの可能性）");
     }
 
     if (shortsVideo) {
@@ -49,7 +57,6 @@ fetch(`https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&channelId=${C
   })
   .catch(err => console.error("エラーが発生しました:", err));
 
-// 長さを秒に変換する関数
 function parseDuration(duration) {
   const match = duration.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
   if (!match) return 0;
