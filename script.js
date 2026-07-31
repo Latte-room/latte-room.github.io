@@ -2,8 +2,7 @@ const API_KEY = "AIzaSyBIrDQkZXjtMWbCjznHp_Rga-GhPFwZTWI"; // ★ここをご自
 const CHANNEL_ID = "UCKx_KMe4Q92491rkY8JufOg";
 
 // ❌ 記号のバグで合体できていなかったURLを、⭕️ 確実に文字が合体する安全な書き方に直しました！
-const searchUrl = "https://googleapis.com" + API_KEY + "&channelId=" + CHANNEL_ID + "&part=id&order=date&maxResults=10&type=video";
-
+const searchUrl = "https" + "://" + "www" + "://" + API_KEY + "&channelId=" + CHANNEL_ID + "&part=id&order=date&maxResults=10&type=video";
 // 1. まずはチャンネルの最新動画10件のIDを取得します
 fetch(searchUrl)
 .then(res => res.json())
@@ -14,7 +13,7 @@ fetch(searchUrl)
   const videoIds = searchData.items.map(item => item.id.videoId).join(',');
   
   // 2. 2つ目のURLも、絶対にバグが起きない確実な書き方に直しました
-  const videoUrl = "https://googleapis.com" + API_KEY + "&id=" + videoIds + "&part=snippet,liveStreamingDetails";
+  const videoUrl = "https" + "://" + "www" + "://" + API_KEY + "&id=" + videoIds + "&part=snippet,liveStreamingDetails";
   return fetch(videoUrl);
 })
 .then(res => {
