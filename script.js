@@ -118,42 +118,56 @@ async function fetchOriginalSongs() {
 // 実行
 fetchOriginalSongs().catch(err => console.error("オリジナル曲の取得エラー:", err));
 
-これで完成です。ページを更新すると、注意書きの下に「オリジナル曲」が横スクロールで表示されるはずです。試してみて、幅が気になる・高さを変えたい・余白を調整したいなどあれば教えてください！
+// オリジナル曲を取得して表示（最大5曲・新しい順）
+async function fetchOriginalSongs() {
+  const container = document.getElementById("original-songs");
+  if (!container) return;
 
-YouTube Data API v3 の使用方法について詳しく学ぶ
+  let originalVideos = [];
+  let pageToken = "";
+  let tryCount = 0;
+  const maxTries = 4;
 
-CSS スライダーのアニメーション効果を追加する
+  while (originalVideos.length < 5 && tryCount < maxTries) {
+    tryCount++;
 
-オリジナル曲の検索キーワードを調整する
+    let searchUrl = "https://www.googleapis.com/youtube/v3/search?key=" + API_KEY +
+                    "&channelId=" + CHANNEL_ID +
+                    "&part=snippet,id&order=date&maxResults=50&type=video";
+    if (pageToken) {
+      searchUrl += "&pageToken=" + pageToken;
+    }
 
-cssはindexでいいんだよね？
+    const res = await fetch(searchUrl);
+    const data = await res.json();
 
-はい、その通りです！今の構成だとCSSは全部 index.html の中の <style> タグに書いてあるので、そこに追加すればOKです。別ファイル（style.css など）を作る必要はありません。前回お伝えしたこの部分を、<style> の中にそのまま貼り付けてください：css
+    if (!data.items || data.items.length === 0) break;
 
-/* オリジナル曲スライダー */
-.songs-slider {
-  display: flex;
-  gap: 16px;
-  overflow-x: auto;
-  padding: 10px 0 15px 0;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
+    data.items.forEach(function(item) {
+      const title = item.snippet.title || "";
+      if (title.includes("【オリジナル曲】") && originalVideos.length < 5) {
+        originalVideos.push(item.id.videoId);
+      }
+    });
+
+    pageToken = data.nextPageToken || "";
+    if (!pageToken) break;
+  }
+
+  if (originalVideos.length === 0) {
+    container.innerHTML = "<p style='color:white;'>オリジナル曲はまだありません</p>";
+    return;
+  }
+
+  // 新しい曲が左に来るように表示
+  let html = "";
+  originalVideos.forEach(function(id) {
+    html += '<iframe src="https://www.youtube.com/embed/' + id + '" allowfullscreen></iframe>';
+  });
+  container.innerHTML = html;
 }
 
-.songs-slider iframe {
-  flex: 0 0 320px;
-  height: 180px;
-  border: none;
-  border-radius: 8px;
-  scroll-snap-align: start;
-  background: #000;
-}
-
-/* スクロールバーを少し目立たなく */
-.songs-slider::-webkit-scrollbar {
-  height: 6px;
-}
-.songs-slider::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.5);
-  border-radius: 3px;
-}
+// 実行
+fetchOriginalSongs().catch(function(err) {
+  console.error("オリジナル曲の取得エラー:", err);
+});
