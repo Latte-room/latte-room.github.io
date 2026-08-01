@@ -24,6 +24,7 @@ async function fetchLatestVideos() {
 
     const videoRes = await fetch(`https://www.googleapis.com/youtube/v3/videos?key=${API_KEY}&id=${videoIds}&part=snippet`);
     const videoData = await videoRes.json();
+    console.log(videoData); // 
 
     // ⭐ ここが重要（forに変更）
     for (const item of videoData.items) {
