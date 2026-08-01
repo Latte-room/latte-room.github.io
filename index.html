@@ -26,8 +26,18 @@
         
         /* 見出しの下線を綺麗な水色にして、白ボックスのアクセントにしました */
         h2 { border-bottom: 2px solid #b3e5fc; padding-bottom: 5px; display: inline-block; margin-top: 10px; color: #0277bd; }
+
+        /* オリジナル曲スライダー */
+.songs-slider { display: flex; gap: 16px; overflow-x: auto; padding: 10px 0 15px 0; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
+
+.songs-slider iframe { flex: 0 0 320px; height: 180px; border: none; border-radius: 8px; scroll-snap-align: start; background: #000;}
+
+/* スクロールバーを少し目立たなく */
+.songs-slider::-webkit-scrollbar { height: 6px;}
+.songs-slider::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.5); border-radius: 3px;}
     </style>
 </head>
+    
 <body>
 
     <h1>☕️らてらてちゃん応援ルーム🎧️</h1>
