@@ -1,42 +1,127 @@
-body {
-  background: linear-gradient(135deg, #4facfe, #00f2fe);
-  color: white;
-  font-family: sans-serif;
-  text-align: center;
-}
+<style>
+  body {
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    color: #4a3e3d;
+    text-align: center;
+    font-family: sans-serif;
+    padding: 20px;
+    margin: 0;
+  }
 
-/* タイトル */
-h2 {
-  margin-top: 50px;
-  font-size: 24px;
-}
+  h1 {
+    color: white;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
 
-/* カード */
-.video-card {
-  margin: 30px auto;
-  width: fit-content; /* ←これが重要 */
-  background: rgba(0,0,0,0.6);
-  padding: 20px;
-  border-radius: 20px;
-  box-shadow: 0 15px 30px rgba(0,0,0,0.4);
-}
+  /* 注意書き */
+  .caution {
+    background-color: #ffffff;
+    border: 2px solid #d0b8ac;
+    padding: 15px;
+    margin: 0 auto 30px auto;
+    max-width: 600px;
+    border-radius: 8px;
+    color: #4a3e3d;
+  }
 
-/* 横動画 */
-.video-card iframe {
-  width: 640px;   /* ←固定サイズにする */
-  height: 360px;
-  border-radius: 12px;
-}
+  /* 各セクションのカード */
+  .video-section {
+    background-color: rgba(255, 255, 255, 0.95);
+    color: #333;
+    border-radius: 16px;
+    padding: 25px 20px;
+    margin: 25px auto;
+    max-width: 720px;          /* ← 少し広めに */
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  }
 
-/* Shorts */
-.video-card.shorts iframe {
-  width: 320px;
-  height: 560px;
-}
+  h2 {
+    border-bottom: 2px solid #4facfe;
+    padding-bottom: 8px;
+    display: inline-block;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    color: #0277bd;
+  }
 
-/* タイトル文字 */
-.video-card p {
-  margin-top: 15px;
-  font-size: 14px;
-  line-height: 1.5;
-}
+  /* ===== 横動画（最新動画・プレイリスト） ===== */
+  .video-container {
+    position: relative;
+    width: 100%;
+    max-width: 640px;          /* 最大幅を指定 */
+    margin: 15px auto 0;
+    padding-top: 56.25%;       /* 16:9 */
+  }
+
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 12px;
+  }
+
+  /* ===== ショート動画 ===== */
+  .shorts-container {
+    position: relative;
+    width: 100%;
+    max-width: 360px;          /* 少し大きめに */
+    margin: 15px auto 0;
+    padding-top: 177%;         /* 約9:16 */
+  }
+
+  .shorts-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 12px;
+  }
+
+  /* ===== オリジナル曲スライダー ===== */
+  .songs-slider {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    padding: 10px 5px 20px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .songs-slider iframe {
+    flex: 0 0 320px;
+    height: 180px;
+    border: none;
+    border-radius: 10px;
+    scroll-snap-align: start;
+    background: #000;
+  }
+
+  .songs-slider::-webkit-scrollbar {
+    height: 6px;
+  }
+  .songs-slider::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,0.25);
+    border-radius: 3px;
+  }
+
+  /* ボタン */
+  .btn {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: #0288d1;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    margin: 8px;
+    font-weight: bold;
+    transition: background 0.2s;
+  }
+  .btn:hover {
+    background-color: #01579b;
+  }
+</style>
