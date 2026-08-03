@@ -5,41 +5,35 @@ body {
   text-align: center;
 }
 
-/* タイトル */
 h2 {
   margin-top: 40px;
-  font-size: 22px;
 }
 
 /* カード */
 .video-card {
   margin: 20px auto;
-  max-width: 600px;
+  max-width: 900px;
   background: #1a1a1a;
   padding: 15px;
   border-radius: 15px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-  transition: 0.3s;
 }
 
-.video-card:hover {
-  transform: translateY(-5px);
-}
-
-/* iframe（横動画） */
+/* 横動画 */
 .video-card iframe {
+  display: block;
+  margin: 0 auto;
   width: 100%;
-  height: 315px;
+  max-width: 800px;
+  height: 450px;
   border-radius: 10px;
 }
 
-/* Shortsだけ縦 */
+/* Shorts */
 .video-card.shorts iframe {
-  height: 500px;
+  width: 300px;
+  height: 530px;
 }
 
-/* タイトル */
 .video-card p {
   margin-top: 10px;
-  font-size: 14px;
 }
