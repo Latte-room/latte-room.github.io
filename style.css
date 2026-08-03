@@ -11,9 +11,9 @@
   h1 {
     color: white;
     text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    font-size: 28px;
   }
 
-  /* 注意書き */
   .caution {
     background: #fff;
     border: 2px solid #d0b8ac;
@@ -21,15 +21,15 @@
     margin: 0 auto 30px;
     max-width: 600px;
     border-radius: 8px;
+    color: #4a3e3d;
   }
 
-  /* 各セクション */
   .video-section {
-    background: rgba(255,255,255,0.95);
+    background: rgba(255, 255, 255, 0.95);
     border-radius: 16px;
-    padding: 25px 20px;
+    padding: 25px 15px;
     margin: 25px auto;
-    max-width: 720px;
+    max-width: 900px;          /* ← かなり広めにしました */
     box-shadow: 0 8px 25px rgba(0,0,0,0.15);
   }
 
@@ -38,43 +38,41 @@
     padding-bottom: 8px;
     display: inline-block;
     color: #0277bd;
-    margin-top: 5px;
+    margin: 5px 0 15px;
   }
 
-  /* ===== 動画カード（共通） ===== */
+  /* ===== 横動画カード ===== */
   .video-card {
-    margin: 20px auto 0;
+    margin: 15px auto 0;
     background: #111;
     padding: 12px;
     border-radius: 16px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
     width: 100%;
-    max-width: 640px;          /* 横動画の最大幅 */
+    max-width: 800px;          /* ← 大きくしました */
   }
 
-  /* 横動画用iframe */
   .video-card iframe {
     width: 100%;
-    aspect-ratio: 16 / 9;      /* これが大事！ */
+    aspect-ratio: 16 / 9;
     height: auto;
     border: none;
-    border-radius: 10px;
+    border-radius: 12px;
     display: block;
   }
 
-  /* ===== Shorts用 ===== */
+  /* ===== Shorts ===== */
   .video-card.shorts {
-    max-width: 360px;          /* Shortsは少し細め */
+    max-width: 400px;          /* ← Shortsも大きく */
   }
 
   .video-card.shorts iframe {
-    aspect-ratio: 9 / 16;      /* 縦長 */
+    aspect-ratio: 9 / 16;
   }
 
-  /* タイトル文字 */
   .video-card p {
     margin: 12px 0 4px;
-    font-size: 14px;
+    font-size: 15px;
     line-height: 1.5;
     color: #fff;
   }
@@ -98,15 +96,6 @@
     background: #000;
   }
 
-  .songs-slider::-webkit-scrollbar {
-    height: 6px;
-  }
-  .songs-slider::-webkit-scrollbar-thumb {
-    background: rgba(0,0,0,0.25);
-    border-radius: 3px;
-  }
-
-  /* ボタン */
   .btn {
     display: inline-block;
     padding: 12px 24px;
