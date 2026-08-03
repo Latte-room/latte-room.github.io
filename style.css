@@ -1,39 +1,42 @@
 body {
-  background: #0f0f0f;
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
   color: white;
   font-family: sans-serif;
   text-align: center;
 }
 
+/* タイトル */
 h2 {
-  margin-top: 40px;
+  margin-top: 50px;
+  font-size: 24px;
 }
 
 /* カード */
 .video-card {
-  margin: 20px auto;
-  max-width: 900px;
-  background: #1a1a1a;
-  padding: 15px;
-  border-radius: 15px;
+  margin: 30px auto;
+  width: fit-content; /* ←これが重要 */
+  background: rgba(0,0,0,0.6);
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.4);
 }
 
 /* 横動画 */
 .video-card iframe {
-  display: block;
-  margin: 0 auto;
-  width: 100%;
-  max-width: 800px;
-  height: 450px;
-  border-radius: 10px;
+  width: 640px;   /* ←固定サイズにする */
+  height: 360px;
+  border-radius: 12px;
 }
 
 /* Shorts */
 .video-card.shorts iframe {
-  width: 300px;
-  height: 530px;
+  width: 320px;
+  height: 560px;
 }
 
+/* タイトル文字 */
 .video-card p {
-  margin-top: 10px;
+  margin-top: 15px;
+  font-size: 14px;
+  line-height: 1.5;
 }
