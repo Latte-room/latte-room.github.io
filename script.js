@@ -82,8 +82,13 @@ async function fetchLatestVideos() {
 
   // 表示
   if (normalVideo) {
-    document.getElementById("latest-video").innerHTML =
-      `<iframe src="https://www.youtube.com/embed/${normalVideo}" allowfullscreen></iframe>`;
+    document.getElementById("latest-video").innerHTML = `
+  <iframe width="560" height="315"
+    src="https://www.youtube.com/embed/${normalVideo}"
+    frameborder="0" allowfullscreen>
+  </iframe>
+  <p>${videoTitle}</p>
+`;
   } else {
     document.getElementById("latest-video").innerHTML =
       `<p>横動画が見つかりませんでした</p>`;
