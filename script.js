@@ -2,10 +2,11 @@ const API_KEY = "AIzaSyBIrDQkZXjtMWbCjznHp_Rga-GhPFwZTWI"; // あなたのAPIキ
 const CHANNEL_ID = "UCKx_KMe4Q92491rkY8JufOg";
 
 async function fetchLatestVideos() {
-  console.log("関数スタート");
-
   let normalVideo = null;
   let shortsVideo = null;
+  let normalTitle = "";
+  let shortsTitle = "";
+
   let pageToken = "";
   let tryCount = 0;
   const maxTries = 5;
@@ -13,43 +14,24 @@ async function fetchLatestVideos() {
   try {
     while ((!normalVideo || !shortsVideo) && tryCount < maxTries) {
       tryCount++;
-      console.log("ループ回数:", tryCount);
 
       let searchUrl = `https://www.googleapis.com/youtube/v3/search?key=${API_KEY}&channelId=${CHANNEL_ID}&part=id&order=date&maxResults=50&type=video`;
       if (pageToken) searchUrl += `&pageToken=${pageToken}`;
 
-      console.log("searchURL:", searchUrl);
-
       const searchRes = await fetch(searchUrl);
       const searchData = await searchRes.json();
 
-      console.log("searchData:", searchData);
-
-      if (!searchData.items || searchData.items.length === 0) {
-        console.log("動画なし");
-        break;
-      }
+      if (!searchData.items || searchData.items.length === 0) break;
 
       const videoIds = searchData.items.map(item => item.id.videoId).join(",");
       pageToken = searchData.nextPageToken || "";
-
-      console.log("videoIds:", videoIds);
 
       const videoRes = await fetch(
         `https://www.googleapis.com/youtube/v3/videos?key=${API_KEY}&id=${videoIds}&part=snippet`
       );
 
-      console.log("ここ通ってる①");
-
       const videoData = await videoRes.json();
-
-      console.log("ここ通ってる②");
-      console.log("videoData:", videoData);
-
-      if (!videoData.items) {
-        console.error("videoData壊れてる", videoData);
-        break;
-      }
+      if (!videoData.items) break;
 
       for (const item of videoData.items) {
         const id = item.id;
@@ -61,12 +43,12 @@ async function fetchLatestVideos() {
 
         if (isShorts && !shortsVideo) {
           shortsVideo = id;
-          console.log("Shorts見つけた:", id);
+          shortsTitle = title;
         }
 
         if (!isShorts && !normalVideo) {
           normalVideo = id;
-          console.log("横動画見つけた:", id);
+          normalTitle = title;
         }
 
         if (shortsVideo && normalVideo) break;
@@ -75,33 +57,26 @@ async function fetchLatestVideos() {
       if (!pageToken) break;
     }
   } catch (err) {
-    console.error("💥 fetchでエラー:", err);
+    console.error("エラー:", err);
   }
 
-  console.log("最終結果", { normalVideo, shortsVideo });
+  // 🎬 横動画
+  document.getElementById("latest-video").innerHTML = normalVideo
+    ? `
+    <div class="video-card">
+      <iframe src="https://www.youtube.com/embed/${normalVideo}" allowfullscreen></iframe>
+      <p>${normalTitle}</p>
+    </div>`
+    : `<p>動画が見つかりません</p>`;
 
-  // 表示
-  if (normalVideo) {
-    document.getElementById("latest-video").innerHTML = `
-  <iframe width="560" height="315"
-    src="https://www.youtube.com/embed/${normalVideo}"
-    frameborder="0" allowfullscreen>
-  </iframe>
-  <p>${videoTitle}</p>
-`;
-  } else {
-    document.getElementById("latest-video").innerHTML =
-      `<p>横動画が見つかりませんでした</p>`;
-  }
-
-  if (shortsVideo) {
-    document.getElementById("latest-shorts").innerHTML =
-      `<iframe src="https://www.youtube.com/embed/${shortsVideo}" allowfullscreen></iframe>`;
-  } else {
-    document.getElementById("latest-shorts").innerHTML =
-      `<p>ショート動画が見つかりませんでした</p>`;
-  }
+  // 📱 Shorts
+  document.getElementById("latest-shorts").innerHTML = shortsVideo
+    ? `
+    <div class="video-card shorts">
+      <iframe src="https://www.youtube.com/embed/${shortsVideo}" allowfullscreen></iframe>
+      <p>${shortsTitle}</p>
+    </div>`
+    : `<p>ショートが見つかりません</p>`;
 }
 
-// ⭐ 忘れがち
 fetchLatestVideos();
