@@ -19,8 +19,9 @@ body {
 
 /* ↓↓↓ そのまま全部移動 ↓↓↓ */
 .video-section {
-  background-color: #2CB6F6;
-  color: #ffffff;
+  background: linear-gradient(135deg, #2CB6F6, #6dd5fa);
+  color: white;
+}
   border-radius: 10px;
   padding: 20px;
   margin: 20px auto;
