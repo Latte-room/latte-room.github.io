@@ -1,4 +1,8 @@
 body {
+background: red !important;
+}
+
+body {
   background-color: #fcf9cf;
   color: #4a3e3d;
   text-align: center;
