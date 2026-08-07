@@ -18,7 +18,7 @@ body {
 }
 
 /* ↓↓↓ そのまま全部移動 ↓↓↓ */
-.video-section {
+  video-section {
   background: linear-gradient(135deg, #2CB6F6, #6dd5fa);
   color: white;
 }
