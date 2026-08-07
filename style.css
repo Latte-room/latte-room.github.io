@@ -44,15 +44,6 @@ body {
     color: #4a3e3d;
   }
 
-  .video-section {
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 16px;
-    padding: 25px 15px;
-    margin: 25px auto;
-    max-width: 900px;          /* ← かなり広めにしました */
-    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-  }
-
   h2 {
     border-bottom: 2px solid #4facfe;
     padding-bottom: 8px;
