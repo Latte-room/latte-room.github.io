@@ -19,13 +19,18 @@ body {
 
 /* ↓↓↓ そのまま全部移動 ↓↓↓ */
 .video-section {
-  background: linear-gradient(135deg, #2CB6F6, #6dd5fa);
-  color: white;
-  border-radius: 16px;
-  padding: 25px 15px;
-  margin: 25px auto;
-  max-width: 900px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  animation: fadeInUp 0.8s ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
   h1 {
@@ -62,15 +67,14 @@ body {
   max-width: 800px;
 }
 
-.video-card iframe {
-  width: 100%;
-  height: 450px;
-  border-radius: 12px;
+.video-card:hover {
+  transform: scale(1.03);
+  transition: 0.3s;
 }
 
 .video-card p {
-  color: white;
-  margin-top: 10px;
+  font-weight: bold;
+  font-size: 16px;
 }
 
   /* ===== Shorts ===== */
