@@ -19,7 +19,13 @@ body {
 
 /* ↓↓↓ そのまま全部移動 ↓↓↓ */
 .video-section {
-  animation: fadeInUp 0.8s ease;
+  background: linear-gradient(135deg, #2CB6F6, #6dd5fa);
+  color: white;
+  border-radius: 16px;
+  padding: 25px 15px;
+  margin: 25px auto;
+  max-width: 900px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
 }
 
 @keyframes fadeInUp {
