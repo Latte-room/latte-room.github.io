@@ -1,5 +1,4 @@
-<style>
-  body {
+   body {
     background: linear-gradient(135deg, #4facfe, #00f2fe);
     color: #333;
     font-family: sans-serif;
@@ -109,4 +108,3 @@
   .btn:hover {
     background: #01579b;
   }
-</style>
