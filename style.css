@@ -62,24 +62,25 @@ body {
   }
 
   /* ===== 横動画カード ===== */
-  .video-card {
-    margin: 15px auto 0;
-    background: #111;
-    padding: 12px;
-    border-radius: 16px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-    width: 100%;
-    max-width: 800px;          /* ← 大きくしました */
-  }
+.video-card {
+  margin: 15px auto 0;
+  background: #111;
+  padding: 12px;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 800px;
+}
 
-  .video-card iframe {
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    height: auto;
-    border: none;
-    border-radius: 12px;
-    display: block;
-  }
+.video-card iframe {
+  width: 100%;
+  height: 450px;
+  border-radius: 12px;
+}
+
+.video-card p {
+  color: white;
+  margin-top: 10px;
+}
 
   /* ===== Shorts ===== */
   .video-card.shorts {
