@@ -62,12 +62,12 @@ async function fetchLatestVideos() {
         const id = item.id;
         const title = item.snippet.title || "";
 
-        // Shorts判定
-      const isShorts =
-      title.includes("#shorts") ||
-      title.toLowerCase().includes("shorts");
+        // 最新動画・ショートの判定
+        const isShorts =
+          title.includes("#shorts") ||
+          title.toLowerCase().includes("shorts");
 
-if (title.includes("オリジナル曲") && !isShorts) {
+        if (isShorts && !shortsVideo) {
           shortsVideo = id;
           shortsTitle = title;
         }
@@ -105,7 +105,6 @@ if (title.includes("オリジナル曲") && !isShorts) {
             title="${normalTitle}"
             allowfullscreen>
           </iframe>
-
           <p>${normalTitle}</p>
         </div>
       `
@@ -126,7 +125,6 @@ if (title.includes("オリジナル曲") && !isShorts) {
             title="${shortsTitle}"
             allowfullscreen>
           </iframe>
-
           <p>${shortsTitle}</p>
         </div>
       `
@@ -138,38 +136,28 @@ if (title.includes("オリジナル曲") && !isShorts) {
 
 // ==================================================
 // 🎵 オリジナル曲
-// 「オリジナル曲」をタイトルに含む動画だけ取得
+// 「オリジナル曲」を含む通常動画だけ取得
 // ==================================================
 
 async function fetchOriginalSongs() {
-
   const container =
     document.getElementById("original-songs");
 
-  if (!container) {
-    return;
-  }
+  if (!container) return;
 
   let originalVideos = [];
-
   let pageToken = "";
   let tryCount = 0;
 
-  // 最大250本まで探す
   const maxTries = 5;
 
-
   try {
-
     while (
       originalVideos.length < 5 &&
       tryCount < maxTries
     ) {
-
       tryCount++;
 
-
-      // YouTube検索
       let searchUrl =
         `https://www.googleapis.com/youtube/v3/search` +
         `?key=${API_KEY}` +
@@ -179,31 +167,18 @@ async function fetchOriginalSongs() {
         `&maxResults=50` +
         `&type=video`;
 
-
       if (pageToken) {
-        searchUrl +=
-          `&pageToken=${pageToken}`;
+        searchUrl += `&pageToken=${pageToken}`;
       }
 
+      const res = await fetch(searchUrl);
+      const data = await res.json();
 
-      const res =
-        await fetch(searchUrl);
-
-      const data =
-        await res.json();
-
-
-      if (
-        !data.items ||
-        data.items.length === 0
-      ) {
+      if (!data.items || data.items.length === 0) {
         break;
       }
 
-
-      // 動画を確認
       for (const item of data.items) {
-
         const title =
           item.snippet.title || "";
 
@@ -211,70 +186,59 @@ async function fetchOriginalSongs() {
           item.id.videoId;
 
 
-        // 🎵 「オリジナル曲」を含む動画だけ
-        if (
-          title.includes("オリジナル曲")
-        ) {
+        // ⭐ オリジナル曲か？
+        const isOriginal =
+          title.includes("オリジナル曲");
 
-          // 重複チェック
+
+        // ⭐ Shortsか？
+        const isShorts =
+          title.includes("#shorts") ||
+          title.toLowerCase().includes("shorts");
+
+
+        // ⭐ オリジナル曲 ＆ Shortsではない
+        if (isOriginal && !isShorts) {
+
           const alreadyExists =
             originalVideos.some(
               video => video.id === id
             );
 
-
           if (!alreadyExists) {
-
             originalVideos.push({
               id: id,
               title: title
             });
-
           }
-
         }
 
 
-        // 5曲集まったら終了
-        if (
-          originalVideos.length >= 5
-        ) {
+        if (originalVideos.length >= 5) {
           break;
         }
-
       }
-
 
       pageToken =
         data.nextPageToken || "";
 
-
       if (!pageToken) {
         break;
       }
-
     }
 
 
-
-    // 🎵 見つからなかった場合
+    // 見つからなかった場合
     if (originalVideos.length === 0) {
-
       container.innerHTML =
         "<p>オリジナル曲が見つかりませんでした</p>";
-
       return;
     }
 
 
-
-    // ==================================================
-    // 🎵 オリジナル曲をスライダーに表示
-    // ==================================================
-
+    // 🎵 表示
     container.innerHTML =
       originalVideos.map(video => `
-
         <div class="song-slide">
 
           <iframe
@@ -286,7 +250,6 @@ async function fetchOriginalSongs() {
           <p>${video.title}</p>
 
         </div>
-
       `).join("");
 
 
@@ -299,9 +262,7 @@ async function fetchOriginalSongs() {
 
     container.innerHTML =
       "<p>オリジナル曲を読み込めませんでした</p>";
-
   }
-
 }
 
 
@@ -311,5 +272,4 @@ async function fetchOriginalSongs() {
 // ==================================================
 
 fetchLatestVideos();
-
 fetchOriginalSongs();
