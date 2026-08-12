@@ -1,28 +1,23 @@
 const API_KEY = "AIzaSyBIrDQkZXjtMWbCjznHp_Rga-GhPFwZTWI"; // あなたのAPIキー
 const CHANNEL_ID = "UCKx_KMe4Q92491rkY8JufOg";
 
+
+// ==================================================
+// 🎬 最新の横動画 ＆ 最新ショート
+// ==================================================
+
 async function fetchLatestVideos() {
-
-  console.log("🎬 最新動画の取得開始");
-
   let normalVideo = null;
   let shortsVideo = null;
-
   let normalTitle = "";
   let shortsTitle = "";
 
   let pageToken = "";
   let tryCount = 0;
-
   const maxTries = 5;
 
   try {
-
-    while (
-      (!normalVideo || !shortsVideo) &&
-      tryCount < maxTries
-    ) {
-
+    while ((!normalVideo || !shortsVideo) && tryCount < maxTries) {
       tryCount++;
 
       let searchUrl =
@@ -41,26 +36,14 @@ async function fetchLatestVideos() {
       const searchRes = await fetch(searchUrl);
       const searchData = await searchRes.json();
 
-      console.log(
-        `📄 ${tryCount}ページ目`,
-        searchData
-      );
-
-      if (
-        !searchData.items ||
-        searchData.items.length === 0
-      ) {
-        console.log("動画が見つかりません");
+      if (!searchData.items || searchData.items.length === 0) {
         break;
       }
 
       const videoIds =
-        searchData.items
-          .map(item => item.id.videoId)
-          .join(",");
+        searchData.items.map(item => item.id.videoId).join(",");
 
-      pageToken =
-        searchData.nextPageToken || "";
+      pageToken = searchData.nextPageToken || "";
 
       const videoRes = await fetch(
         `https://www.googleapis.com/youtube/v3/videos` +
@@ -69,69 +52,32 @@ async function fetchLatestVideos() {
         `&part=snippet`
       );
 
-      const videoData =
-        await videoRes.json();
-
-      console.log(
-        "🎥 動画データ:",
-        videoData
-      );
+      const videoData = await videoRes.json();
 
       if (!videoData.items) {
-        console.error(
-          "動画詳細の取得に失敗:",
-          videoData
-        );
         break;
       }
 
       for (const item of videoData.items) {
-
         const id = item.id;
-        const title =
-          item.snippet.title || "";
+        const title = item.snippet.title || "";
 
-        const lowerTitle =
-          title.toLowerCase();
-
+        // Shorts判定
         const isShorts =
-          lowerTitle.includes("#shorts") ||
-          lowerTitle.includes("shorts");
+          title.includes("#shorts") ||
+          title.toLowerCase().includes("shorts");
 
-        // Shorts
-        if (
-          isShorts &&
-          !shortsVideo
-        ) {
-
+        if (isShorts && !shortsVideo) {
           shortsVideo = id;
           shortsTitle = title;
-
-          console.log(
-            "📱 Shorts発見:",
-            title
-          );
         }
 
-        // 横動画
-        if (
-          !isShorts &&
-          !normalVideo
-        ) {
-
+        if (!isShorts && !normalVideo) {
           normalVideo = id;
           normalTitle = title;
-
-          console.log(
-            "🎬 横動画発見:",
-            title
-          );
         }
 
-        if (
-          normalVideo &&
-          shortsVideo
-        ) {
+        if (shortsVideo && normalVideo) {
           break;
         }
       }
@@ -141,32 +87,19 @@ async function fetchLatestVideos() {
       }
     }
 
-  } catch (error) {
-
-    console.error(
-      "💥 エラー:",
-      error
-    );
-
+  } catch (err) {
+    console.error("最新動画取得エラー:", err);
   }
 
 
-  // =========================
-  // 🎬 横動画を表示
-  // =========================
-
+  // 🎬 横動画
   const latestVideo =
-    document.getElementById(
-      "latest-video"
-    );
+    document.getElementById("latest-video");
 
   if (latestVideo) {
-
-    if (normalVideo) {
-
-      latestVideo.innerHTML = `
+    latestVideo.innerHTML = normalVideo
+      ? `
         <div class="video-card">
-
           <iframe
             src="https://www.youtube.com/embed/${normalVideo}"
             title="${normalTitle}"
@@ -174,35 +107,20 @@ async function fetchLatestVideos() {
           </iframe>
 
           <p>${normalTitle}</p>
-
         </div>
-      `;
-
-    } else {
-
-      latestVideo.innerHTML =
-        "<p>横動画が見つかりませんでした</p>";
-
-    }
+      `
+      : `<p>動画が見つかりません</p>`;
   }
 
 
-  // =========================
-  // 📱 Shortsを表示
-  // =========================
-
+  // 📱 Shorts
   const latestShorts =
-    document.getElementById(
-      "latest-shorts"
-    );
+    document.getElementById("latest-shorts");
 
   if (latestShorts) {
-
-    if (shortsVideo) {
-
-      latestShorts.innerHTML = `
+    latestShorts.innerHTML = shortsVideo
+      ? `
         <div class="video-card shorts">
-
           <iframe
             src="https://www.youtube.com/embed/${shortsVideo}"
             title="${shortsTitle}"
@@ -210,34 +128,188 @@ async function fetchLatestVideos() {
           </iframe>
 
           <p>${shortsTitle}</p>
-
         </div>
-      `;
-
-    } else {
-
-      latestShorts.innerHTML =
-        "<p>ショート動画が見つかりませんでした</p>";
-
-    }
+      `
+      : `<p>ショートが見つかりません</p>`;
   }
-
-
-  console.log(
-    "✅ 最終結果:",
-    {
-      normalVideo,
-      shortsVideo
-    }
-  );
 }
 
 
-// =========================
+
+// ==================================================
+// 🎵 オリジナル曲
+// 「オリジナル曲」をタイトルに含む動画だけ取得
+// ==================================================
+
+async function fetchOriginalSongs() {
+
+  const container =
+    document.getElementById("original-songs");
+
+  if (!container) {
+    return;
+  }
+
+  let originalVideos = [];
+
+  let pageToken = "";
+  let tryCount = 0;
+
+  // 最大250本まで探す
+  const maxTries = 5;
+
+
+  try {
+
+    while (
+      originalVideos.length < 5 &&
+      tryCount < maxTries
+    ) {
+
+      tryCount++;
+
+
+      // YouTube検索
+      let searchUrl =
+        `https://www.googleapis.com/youtube/v3/search` +
+        `?key=${API_KEY}` +
+        `&channelId=${CHANNEL_ID}` +
+        `&part=snippet,id` +
+        `&order=date` +
+        `&maxResults=50` +
+        `&type=video`;
+
+
+      if (pageToken) {
+        searchUrl +=
+          `&pageToken=${pageToken}`;
+      }
+
+
+      const res =
+        await fetch(searchUrl);
+
+      const data =
+        await res.json();
+
+
+      if (
+        !data.items ||
+        data.items.length === 0
+      ) {
+        break;
+      }
+
+
+      // 動画を確認
+      for (const item of data.items) {
+
+        const title =
+          item.snippet.title || "";
+
+        const id =
+          item.id.videoId;
+
+
+        // 🎵 「オリジナル曲」を含む動画だけ
+        if (
+          title.includes("オリジナル曲")
+        ) {
+
+          // 重複チェック
+          const alreadyExists =
+            originalVideos.some(
+              video => video.id === id
+            );
+
+
+          if (!alreadyExists) {
+
+            originalVideos.push({
+              id: id,
+              title: title
+            });
+
+          }
+
+        }
+
+
+        // 5曲集まったら終了
+        if (
+          originalVideos.length >= 5
+        ) {
+          break;
+        }
+
+      }
+
+
+      pageToken =
+        data.nextPageToken || "";
+
+
+      if (!pageToken) {
+        break;
+      }
+
+    }
+
+
+
+    // 🎵 見つからなかった場合
+    if (originalVideos.length === 0) {
+
+      container.innerHTML =
+        "<p>オリジナル曲が見つかりませんでした</p>";
+
+      return;
+    }
+
+
+
+    // ==================================================
+    // 🎵 オリジナル曲をスライダーに表示
+    // ==================================================
+
+    container.innerHTML =
+      originalVideos.map(video => `
+
+        <div class="song-slide">
+
+          <iframe
+            src="https://www.youtube.com/embed/${video.id}"
+            title="${video.title}"
+            allowfullscreen>
+          </iframe>
+
+          <p>${video.title}</p>
+
+        </div>
+
+      `).join("");
+
+
+  } catch (err) {
+
+    console.error(
+      "オリジナル曲取得エラー:",
+      err
+    );
+
+    container.innerHTML =
+      "<p>オリジナル曲を読み込めませんでした</p>";
+
+  }
+
+}
+
+
+
+// ==================================================
 // 🚀 実行
-// =========================
+// ==================================================
 
 fetchLatestVideos();
 
-
-
+fetchOriginalSongs();
