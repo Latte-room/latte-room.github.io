@@ -186,6 +186,7 @@ body {
     flex-basis: 40px;
     font-size: 30px;
   }
+  
   /* ========================================
    🎵 オリジナル曲・中央スライダー
 ======================================== */
@@ -293,23 +294,43 @@ body {
   max-width: 800px;
 }
 
-  /* 🎵 オリジナル曲を横動画と同じくらいの大きさにする */
+ /* 🎵 オリジナル曲を横動画と同じサイズにする */
 #original-songs .song-slider-wrapper {
+  display: grid;
+  grid-template-columns: 50px minmax(0, 800px) 50px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
   width: 100%;
-  max-width: 900px;
+  max-width: none;
   margin: 0 auto;
 }
 
 #original-songs .song-slide {
   width: 100%;
   max-width: 800px;
-  flex: 0 0 800px;
+  margin: 0;
+  box-sizing: border-box;
 }
 
 #original-songs .song-slide iframe {
   width: 100%;
-  aspect-ratio: 16 / 9;
   height: auto;
+  aspect-ratio: 16 / 9;
+  display: block;
+}
+
+/* スマホ */
+@media (max-width: 700px) {
+  #original-songs .song-slider-wrapper {
+    grid-template-columns: 40px minmax(0, 1fr) 40px;
+    gap: 5px;
+  }
+
+  #original-songs .song-slide {
+    width: 100%;
+    max-width: none;
+  }
 }
 
 }
