@@ -255,3 +255,60 @@ fetchLatestVideos();
 
 fetchOriginalSongs();
 
+
+/*========================================
+   🎵 オリジナル曲スライダー
+======================================== */
+
+.songs-slider {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  padding: 10px 5px 20px;
+
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.song-slide {
+  flex: 0 0 320px;
+
+  background: #111;
+  border-radius: 12px;
+
+  padding: 8px;
+
+  scroll-snap-align: start;
+}
+
+.song-slide iframe {
+  width: 100%;
+  height: 180px;
+
+  border: none;
+  border-radius: 8px;
+
+  display: block;
+}
+
+.song-slide p {
+  color: white;
+
+  font-size: 14px;
+  line-height: 1.4;
+
+  margin: 10px 4px 4px;
+}
+
+
+/* スクロールバー */
+
+.songs-slider::-webkit-scrollbar {
+  height: 6px;
+}
+
+.songs-slider::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.5);
+  border-radius: 3px;
+}
+
