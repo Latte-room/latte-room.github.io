@@ -331,7 +331,25 @@ body {
     width: 100%;
     max-width: none;
   }
+
+  /* 強制的に横動画と同じ幅にする */
+#original-songs,
+#original-songs .song-slider-wrapper {
+  max-width: 900px !important;
+  width: 100% !important;
 }
 
+#original-songs .song-slide {
+  max-width: 800px !important;
+  width: 100% !important;
 }
+
+#original-songs .song-slide iframe {
+  width: 100% !important;
+  height: 450px !important;
+}
+  
+}
+  
+
 
