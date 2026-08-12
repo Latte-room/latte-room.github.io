@@ -85,29 +85,29 @@ body {
 }
 
 /*========================================
-   🎵 オリジナル曲スライダー
+   🎵 オリジナル曲スライダー（大きく調整）
 ======================================== */
 .songs-slider {
   display: flex;
-  gap: 18px;
+  gap: 20px;
   overflow-x: auto;
-  padding: 10px 8px 20px;
+  padding: 10px 8px 24px;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
 }
 
 .song-slide {
-  flex: 0 0 340px;          /* 少し大きくしました */
+  flex: 0 0 460px;          /* ← ここを大きく（おすすめ420〜480） */
   background: #111;
   border-radius: 14px;
-  padding: 10px;
+  padding: 12px;
   scroll-snap-align: start;
   box-sizing: border-box;
 }
 
 .song-slide iframe {
   width: 100%;
-  height: 191px;            /* 340px幅に合わせた16:9 */
+  height: 259px;            /* 420px幅に合わせた16:9 */
   border: none;
   border-radius: 10px;
   display: block;
@@ -115,46 +115,8 @@ body {
 
 .song-slide p {
   color: white;
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.45;
-  margin: 12px 4px 4px;
+  margin: 12px 6px 4px;
   text-align: center;
-}
-
-/* スクロールバー */
-.songs-slider::-webkit-scrollbar {
-  height: 8px;
-}
-
-.songs-slider::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 4px;
-}
-
-.songs-slider::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.55);
-  border-radius: 4px;
-}
-
-.songs-slider::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.75);
-}
-
-/* スマホ対応 */
-@media (max-width: 600px) {
-  .video-card iframe {
-    height: 220px;
-  }
-
-  .song-slide {
-    flex: 0 0 280px;
-  }
-
-  .song-slide iframe {
-    height: 157px;
-  }
-
-  .video-section h1 {
-    font-size: 24px;
-  }
 }
