@@ -187,24 +187,30 @@ body {
     font-size: 30px;
   }
 
-    /* ========================================
-   🎵 オリジナル曲・中央スライダー
+/* ========================================
+   🎵 オリジナル曲（横動画と同じくらいの大きさ）
 ======================================== */
 
-.song-slider-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 15px;
+#original-songs {
   width: 100%;
   max-width: 900px;
   margin: 0 auto;
 }
 
-/* 動画カード */
+/* 左右ボタン＋動画のラッパー */
+.song-slider-wrapper {
+  display: grid;
+  grid-template-columns: 48px 1fr 48px;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+/* 動画カード本体（横動画と同じサイズ） */
 .song-slide {
   width: 100%;
-  max-width: 560px;
+  max-width: 800px;
+  margin: 0 auto;
   background: #111;
   border-radius: 16px;
   padding: 12px;
@@ -214,10 +220,9 @@ body {
 
 .song-slide iframe {
   width: 100%;
-  aspect-ratio: 16 / 9;
-  height: auto;
+  height: 450px;                 /* 横動画と同じ高さ */
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
   display: block;
 }
 
@@ -225,41 +230,26 @@ body {
   color: white;
   font-size: 15px;
   line-height: 1.5;
-  margin: 12px 8px 6px;
+  margin: 12px 8px 4px;
   text-align: center;
-}
-
-/* 曲番号 */
-.song-count {
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 14px;
-  margin-top: 8px;
 }
 
 /* 左右ボタン */
 .song-arrow {
   width: 48px;
   height: 48px;
-  flex: 0 0 48px;
-
   border: none;
   border-radius: 50%;
-
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.92);
   color: #0288d1;
-
-  font-size: 36px;
-  line-height: 1;
-
+  font-size: 32px;
   cursor: pointer;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-
-  transition: transform 0.2s, background 0.2s;
+  transition: 0.2s;
+  flex-shrink: 0;
 }
 
 .song-arrow:hover {
@@ -271,85 +261,20 @@ body {
   transform: scale(0.95);
 }
 
-/* スマホ */
-@media (max-width: 600px) {
-
+/* スマホ対応 */
+@media (max-width: 700px) {
   .song-slider-wrapper {
+    grid-template-columns: 40px 1fr 40px;
     gap: 6px;
   }
 
-  .song-slide {
-    max-width: calc(100% - 70px);
-    padding: 8px;
+  .song-slide iframe {
+    height: 220px;
   }
 
   .song-arrow {
     width: 40px;
     height: 40px;
-    flex-basis: 40px;
-    font-size: 30px;
+    font-size: 28px;
   }
-
-  #original-songs .song-slide {
-  max-width: 800px;
 }
-
- /* 🎵 オリジナル曲を横動画と同じサイズにする */
-#original-songs .song-slider-wrapper {
-  display: grid;
-  grid-template-columns: 50px minmax(0, 800px) 50px;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  width: 100%;
-  max-width: none;
-  margin: 0 auto;
-}
-
-#original-songs .song-slide {
-  width: 100%;
-  max-width: 800px;
-  margin: 0;
-  box-sizing: border-box;
-}
-
-#original-songs .song-slide iframe {
-  width: 100%;
-  height: auto;
-  aspect-ratio: 16 / 9;
-  display: block;
-}
-
-/* スマホ */
-@media (max-width: 700px) {
-  #original-songs .song-slider-wrapper {
-    grid-template-columns: 40px minmax(0, 1fr) 40px;
-    gap: 5px;
-  }
-
-  #original-songs .song-slide {
-    width: 100%;
-    max-width: none;
-  }
-
-  /* 強制的に横動画と同じ幅にする */
-#original-songs,
-#original-songs .song-slider-wrapper {
-  max-width: 900px !important;
-  width: 100% !important;
-}
-
-#original-songs .song-slide {
-  max-width: 800px !important;
-  width: 100% !important;
-}
-
-#original-songs .song-slide iframe {
-  width: 100% !important;
-  height: 450px !important;
-}
-  
-}
-  
-
-
