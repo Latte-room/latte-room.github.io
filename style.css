@@ -293,4 +293,23 @@ body {
   max-width: 800px;
 }
 
+  /* 🎵 オリジナル曲を横動画と同じくらいの大きさにする */
+#original-songs .song-slider-wrapper {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+#original-songs .song-slide {
+  width: 100%;
+  max-width: 800px;
+  flex: 0 0 800px;
+}
+
+#original-songs .song-slide iframe {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  height: auto;
+}
+
 }
