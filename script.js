@@ -134,42 +134,23 @@ async function fetchLatestVideos() {
   }
 }
 
-
-
 // ==================================================
 // 🎵 オリジナル曲
-// 「オリジナル曲」をタイトルに含む動画だけ取得
 // ==================================================
 
 async function fetchOriginalSongs() {
-
-  const container =
-    document.getElementById("original-songs");
-
-  if (!container) {
-    return;
-  }
+  const container = document.getElementById("original-songs");
+  if (!container) return;
 
   let originalVideos = [];
-
   let pageToken = "";
   let tryCount = 0;
-
-  // 最大250本まで探す
-  const maxTries = 5;
-
+  const maxTries = 5; // 必要なら増やす
 
   try {
-
-    while (
-      originalVideos.length < 5 &&
-      tryCount < maxTries
-    ) {
-
+    while (originalVideos.length < 5 && tryCount < maxTries) {
       tryCount++;
 
-
-      // YouTube検索
       let searchUrl =
         `https://www.googleapis.com/youtube/v3/search` +
         `?key=${API_KEY}` +
@@ -177,139 +158,79 @@ async function fetchOriginalSongs() {
         `&part=snippet,id` +
         `&order=date` +
         `&maxResults=50` +
-        `&type=video`;
-
+        `&type=video` +
+        `&q=${encodeURIComponent("オリジナル曲")}`;  // ← ここが重要！
 
       if (pageToken) {
-        searchUrl +=
-          `&pageToken=${pageToken}`;
+        searchUrl += `&pageToken=${pageToken}`;
       }
 
+      const res = await fetch(searchUrl);
+      const data = await res.json();
 
-      const res =
-        await fetch(searchUrl);
-
-      const data =
-        await res.json();
-
-
-      if (
-        !data.items ||
-        data.items.length === 0
-      ) {
-        break;
+      // エラーチェック（クォータ切れ・キー不正など）
+      if (data.error) {
+        console.error("YouTube API Error:", data.error);
+        container.innerHTML = `<p>APIエラー: ${data.error.message}</p>`;
+        return;
       }
 
+      if (!data.items || data.items.length === 0) break;
 
-      // 動画を確認
       for (const item of data.items) {
+        const title = (item.snippet?.title || "").normalize("NFC"); // 正規化
+        const id = item.id?.videoId;
 
-        const title =
-          item.snippet.title || "";
+        if (!id) continue;
 
-        const id =
-          item.id.videoId;
-
-
-        // 🎵 「オリジナル曲」を含む動画だけ
-        if (
-          title.includes("オリジナル曲")
-        ) {
-
-          // 重複チェック
-          const alreadyExists =
-            originalVideos.some(
-              video => video.id === id
-            );
-
-
+        // より緩く「オリジナル」を含むものにする（必要に応じて調整）
+        if (title.includes("オリジナル曲") || title.includes("オリジナル")) {
+          const alreadyExists = originalVideos.some(v => v.id === id);
           if (!alreadyExists) {
-
-            originalVideos.push({
-              id: id,
-              title: title
-            });
-
+            originalVideos.push({ id, title });
           }
-
         }
 
-
-        // 5曲集まったら終了
-        if (
-          originalVideos.length >= 5
-        ) {
-          break;
-        }
-
+        if (originalVideos.length >= 5) break;
       }
 
-
-      pageToken =
-        data.nextPageToken || "";
-
-
-      if (!pageToken) {
-        break;
-      }
-
+      pageToken = data.nextPageToken || "";
+      if (!pageToken) break;
     }
 
-
-
-    // 🎵 見つからなかった場合
     if (originalVideos.length === 0) {
-
-      container.innerHTML =
-        "<p>オリジナル曲が見つかりませんでした</p>";
-
+      container.innerHTML = "<p>オリジナル曲が見つかりませんでした</p>";
       return;
     }
 
-
-
-    // ==================================================
-    // 🎵 オリジナル曲をスライダーに表示
-    // ==================================================
-
-    container.innerHTML =
-      originalVideos.map(video => `
-
-        <div class="song-slide">
-
-          <iframe
-            src="https://www.youtube.com/embed/${video.id}"
-            title="${video.title}"
-            allowfullscreen>
-          </iframe>
-
-          <p>${video.title}</p>
-
-        </div>
-
-      `).join("");
-
+    // 表示
+    container.innerHTML = originalVideos.map(video => `
+      <div class="song-slide">
+        <iframe
+          src="https://www.youtube.com/embed/${video.id}"
+          title="${video.title}"
+          allowfullscreen>
+        </iframe>
+        <p>${video.title}</p>
+      </div>
+    `).join("");
 
   } catch (err) {
-
-    console.error(
-      "オリジナル曲取得エラー:",
-      err
-    );
-
-    container.innerHTML =
-      "<p>オリジナル曲を読み込めませんでした</p>";
-
+    console.error("オリジナル曲取得エラー:", err);
+    container.innerHTML = "<p>オリジナル曲を読み込めませんでした</p>";
   }
-
 }
 
+さらに確実にしたい場合（uploadsプレイリスト方式）Search APIより信頼性が高い方法です。js
+
+// チャンネルIDの先頭UCをUUに変えるだけ
+const UPLOADS_PLAYLIST_ID = CHANNEL_ID.replace(/^UC/, "UU");
+
+// playlistItemsを使う
+let url = `https://www.googleapis.com/youtube/v3/playlistItems` +
+  `?key=${API_KEY}` +
+  `&playlistId=${UPLOADS_PLAYLIST_ID}` +
+  `&part=snippet` +
+  `&maxResults=50`;
 
 
-// ==================================================
-// 🚀 実行
-// ==================================================
-
-fetchLatestVideos();
-
-fetchOriginalSongs();
