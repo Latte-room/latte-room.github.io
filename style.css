@@ -289,4 +289,8 @@ body {
     font-size: 30px;
   }
 
+  #original-songs .song-slide {
+  max-width: 650px;
+}
+
 }
