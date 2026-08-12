@@ -180,22 +180,22 @@ async function fetchOriginalSongs() {
 
       for (const item of data.items) {
         const rawTitle = item.snippet?.title || "";
-        const title = rawTitle.normalize("NFC"); // 文字の正規化
+        const title = rawTitle.normalize("NFC");
         const id = item.id?.videoId;
 
         if (!id) continue;
 
-        // ショートっぽいものは除外
         const isShorts =
           title.includes("#shorts") ||
           title.toLowerCase().includes("shorts") ||
           title.includes("ショート");
 
-        // 「オリジナル曲」がタイトルに入っているものだけ採用
         const isOriginal = title.includes("オリジナル曲");
 
         if (isOriginal && !isShorts) {
-          const alreadyExists = originalVideos.some(v => v.id === id);
+          const alreadyExists =
+            originalVideos.some(v => v.id === id);
+
           if (!alreadyExists) {
             originalVideos.push({
               id: id,
@@ -208,32 +208,90 @@ async function fetchOriginalSongs() {
       }
 
       pageToken = data.nextPageToken || "";
+
       if (!pageToken) break;
     }
 
     if (originalVideos.length === 0) {
-      container.innerHTML = "<p>オリジナル曲が見つかりませんでした</p>";
+      container.innerHTML =
+        "<p>オリジナル曲が見つかりませんでした</p>";
       return;
     }
 
-    // 表示
-    container.innerHTML = originalVideos.map(video => `
-      <div class="song-slide">
-        <iframe
-          src="https://www.youtube.com/embed/${video.id}"
-          title="${video.title}"
-          allowfullscreen>
-        </iframe>
-        <p>${video.title}</p>
-      </div>
-    `).join("");
+    // ==========================================
+    // 🎵 オリジナル曲を中央に1本表示
+    // ==========================================
+
+    let currentIndex = 0;
+
+    function showSong(index) {
+      currentIndex = index;
+
+      const video = originalVideos[currentIndex];
+
+      container.innerHTML = `
+        <div class="song-slider-wrapper">
+
+          <button class="song-arrow song-prev" aria-label="前の曲">
+            ‹
+          </button>
+
+          <div class="song-slide">
+            <iframe
+              src="https://www.youtube.com/embed/${video.id}"
+              title="${video.title}"
+              allowfullscreen>
+            </iframe>
+
+            <p>${video.title}</p>
+
+            <div class="song-count">
+              ${currentIndex + 1} / ${originalVideos.length}
+            </div>
+          </div>
+
+          <button class="song-arrow song-next" aria-label="次の曲">
+            ›
+          </button>
+
+        </div>
+      `;
+
+      // 前の曲
+      const prevButton =
+        container.querySelector(".song-prev");
+
+      prevButton.addEventListener("click", function() {
+        const nextIndex =
+          (currentIndex - 1 + originalVideos.length) %
+          originalVideos.length;
+
+        showSong(nextIndex);
+      });
+
+      // 次の曲
+      const nextButton =
+        container.querySelector(".song-next");
+
+      nextButton.addEventListener("click", function() {
+        const nextIndex =
+          (currentIndex + 1) %
+          originalVideos.length;
+
+        showSong(nextIndex);
+      });
+    }
+
+    // 最初の曲を表示
+    showSong(0);
 
   } catch (err) {
     console.error("オリジナル曲取得エラー:", err);
-    container.innerHTML = "<p>オリジナル曲を読み込めませんでした</p>";
+
+    container.innerHTML =
+      "<p>オリジナル曲を読み込めませんでした</p>";
   }
 }
-
 
 // ==================================================
 // 🚀 実行
