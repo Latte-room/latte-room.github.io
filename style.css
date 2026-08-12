@@ -186,5 +186,107 @@ body {
     flex-basis: 40px;
     font-size: 30px;
   }
+  /* ========================================
+   🎵 オリジナル曲・中央スライダー
+======================================== */
+
+.song-slider-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* 動画カード */
+.song-slide {
+  width: 100%;
+  max-width: 560px;
+  background: #111;
+  border-radius: 16px;
+  padding: 12px;
+  box-sizing: border-box;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+.song-slide iframe {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  height: auto;
+  border: none;
+  border-radius: 10px;
+  display: block;
+}
+
+.song-slide p {
+  color: white;
+  font-size: 15px;
+  line-height: 1.5;
+  margin: 12px 8px 6px;
+  text-align: center;
+}
+
+/* 曲番号 */
+.song-count {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+/* 左右ボタン */
+.song-arrow {
+  width: 48px;
+  height: 48px;
+  flex: 0 0 48px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.9);
+  color: #0288d1;
+
+  font-size: 36px;
+  line-height: 1;
+
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+  transition: transform 0.2s, background 0.2s;
+}
+
+.song-arrow:hover {
+  background: white;
+  transform: scale(1.08);
+}
+
+.song-arrow:active {
+  transform: scale(0.95);
+}
+
+/* スマホ */
+@media (max-width: 600px) {
+
+  .song-slider-wrapper {
+    gap: 6px;
+  }
+
+  .song-slide {
+    max-width: calc(100% - 70px);
+    padding: 8px;
+  }
+
+  .song-arrow {
+    width: 40px;
+    height: 40px;
+    flex-basis: 40px;
+    font-size: 30px;
+  }
 
 }
