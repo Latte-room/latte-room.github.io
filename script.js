@@ -63,11 +63,11 @@ async function fetchLatestVideos() {
         const title = item.snippet.title || "";
 
         // Shorts判定
-        const isShorts =
-          title.includes("#shorts") ||
-          title.toLowerCase().includes("shorts");
+      const isShorts =
+      title.includes("#shorts") ||
+      title.toLowerCase().includes("shorts");
 
-        if (isShorts && !shortsVideo) {
+if (title.includes("オリジナル曲") && !isShorts) {
           shortsVideo = id;
           shortsTitle = title;
         }
