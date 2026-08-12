@@ -220,17 +220,3 @@ async function fetchOriginalSongs() {
     container.innerHTML = "<p>オリジナル曲を読み込めませんでした</p>";
   }
 }
-
-さらに確実にしたい場合（uploadsプレイリスト方式）Search APIより信頼性が高い方法です。js
-
-// チャンネルIDの先頭UCをUUに変えるだけ
-const UPLOADS_PLAYLIST_ID = CHANNEL_ID.replace(/^UC/, "UU");
-
-// playlistItemsを使う
-let url = `https://www.googleapis.com/youtube/v3/playlistItems` +
-  `?key=${API_KEY}` +
-  `&playlistId=${UPLOADS_PLAYLIST_ID}` +
-  `&part=snippet` +
-  `&maxResults=50`;
-
-
