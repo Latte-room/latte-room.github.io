@@ -137,7 +137,6 @@ async function fetchLatestVideos() {
 // ==================================================
 // 🎵 オリジナル曲
 // ==================================================
-
 async function fetchOriginalSongs() {
   const container = document.getElementById("original-songs");
   if (!container) return;
@@ -145,49 +144,59 @@ async function fetchOriginalSongs() {
   let originalVideos = [];
   let pageToken = "";
   let tryCount = 0;
-  const maxTries = 5; // 必要なら増やす
+  const maxTries = 8; // 少し多めに（必要に応じて調整）
 
   try {
     while (originalVideos.length < 5 && tryCount < maxTries) {
       tryCount++;
 
+      // Search API + q パラメータで「オリジナル曲」を含む動画を絞り込み
       let searchUrl =
-        `https://www.googleapis.com/youtube/v3/search` +
-        `?key=${API_KEY}` +
-        `&channelId=${CHANNEL_ID}` +
-        `&part=snippet,id` +
-        `&order=date` +
-        `&maxResults=50` +
-        `&type=video` +
-        `&q=${encodeURIComponent("オリジナル曲")}`;  // ← ここが重要！
+        "https://www.googleapis.com/youtube/v3/search" +
+        "?key=" + API_KEY +
+        "&channelId=" + CHANNEL_ID +
+        "&part=snippet,id" +
+        "&order=date" +
+        "&maxResults=50" +
+        "&type=video" +
+        "&q=" + encodeURIComponent("オリジナル曲");
 
       if (pageToken) {
-        searchUrl += `&pageToken=${pageToken}`;
+        searchUrl += "&pageToken=" + pageToken;
       }
 
       const res = await fetch(searchUrl);
       const data = await res.json();
 
-      // エラーチェック（クォータ切れ・キー不正など）
+      // APIエラーチェック
       if (data.error) {
         console.error("YouTube API Error:", data.error);
-        container.innerHTML = `<p>APIエラー: ${data.error.message}</p>`;
+        container.innerHTML = "<p>APIエラーが発生しました</p>";
         return;
       }
 
-      if (!data.items || data.items.length === 0) break;
+      if (!data.items || data.items.length === 0) {
+        break;
+      }
 
       for (const item of data.items) {
-        const title = (item.snippet?.title || "").normalize("NFC"); // 正規化
-        const id = item.id?.videoId;
+        const rawTitle = (item.snippet && item.snippet.title) ? item.snippet.title : "";
+        const title = rawTitle.normalize("NFC"); // 結合文字を正規化
+        const id = item.id && item.id.videoId;
 
         if (!id) continue;
 
-        // より緩く「オリジナル」を含むものにする（必要に応じて調整）
+        // 「オリジナル曲」または「オリジナル」を含むものを対象
         if (title.includes("オリジナル曲") || title.includes("オリジナル")) {
-          const alreadyExists = originalVideos.some(v => v.id === id);
+          const alreadyExists = originalVideos.some(function(v) {
+            return v.id === id;
+          });
+
           if (!alreadyExists) {
-            originalVideos.push({ id, title });
+            originalVideos.push({
+              id: id,
+              title: rawTitle   // 表示用は元のタイトルを使う
+            });
           }
         }
 
@@ -198,22 +207,22 @@ async function fetchOriginalSongs() {
       if (!pageToken) break;
     }
 
+    // 見つからなかった場合
     if (originalVideos.length === 0) {
       container.innerHTML = "<p>オリジナル曲が見つかりませんでした</p>";
       return;
     }
 
-    // 表示
-    container.innerHTML = originalVideos.map(video => `
-      <div class="song-slide">
-        <iframe
-          src="https://www.youtube.com/embed/${video.id}"
-          title="${video.title}"
-          allowfullscreen>
-        </iframe>
-        <p>${video.title}</p>
-      </div>
-    `).join("");
+    // 表示（テンプレートリテラルを使わない安全な書き方）
+    let html = "";
+    originalVideos.forEach(function(video) {
+      html +=
+        '<div class="song-slide">' +
+          '<iframe src="https://www.youtube.com/embed/' + video.id + '" title="' + video.title.replace(/"/g, '&quot;') + '" allowfullscreen></iframe>' +
+          '<p>' + video.title + '</p>' +
+        '</div>';
+    });
+    container.innerHTML = html;
 
   } catch (err) {
     console.error("オリジナル曲取得エラー:", err);
