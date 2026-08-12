@@ -142,34 +142,18 @@ async function fetchLatestVideos() {
 // ==================================================
 
 async function fetchOriginalSongs() {
-
-  const container =
-    document.getElementById("original-songs");
-
-  if (!container) {
-    return;
-  }
+  const container = document.getElementById("original-songs");
+  if (!container) return;
 
   let originalVideos = [];
-
   let pageToken = "";
   let tryCount = 0;
-
-  // 最大250本まで探す
-  const maxTries = 5;
-
+  const maxTries = 8;
 
   try {
-
-    while (
-      originalVideos.length < 5 &&
-      tryCount < maxTries
-    ) {
-
+    while (originalVideos.length < 5 && tryCount < maxTries) {
       tryCount++;
 
-
-      // YouTube検索
       let searchUrl =
         `https://www.googleapis.com/youtube/v3/search` +
         `?key=${API_KEY}` +
@@ -177,133 +161,78 @@ async function fetchOriginalSongs() {
         `&part=snippet,id` +
         `&order=date` +
         `&maxResults=50` +
-        `&type=video`;
-
+        `&type=video` +
+        `&q=${encodeURIComponent("オリジナル曲")}`;
 
       if (pageToken) {
-        searchUrl +=
-          `&pageToken=${pageToken}`;
+        searchUrl += `&pageToken=${pageToken}`;
       }
 
+      const res = await fetch(searchUrl);
+      const data = await res.json();
 
-      const res =
-        await fetch(searchUrl);
-
-      const data =
-        await res.json();
-
-
-      if (
-        !data.items ||
-        data.items.length === 0
-      ) {
+      if (data.error) {
+        console.error("APIエラー:", data.error);
         break;
       }
 
+      if (!data.items || data.items.length === 0) break;
 
-      // 動画を確認
       for (const item of data.items) {
+        const rawTitle = item.snippet?.title || "";
+        const title = rawTitle.normalize("NFC"); // 文字の正規化
+        const id = item.id?.videoId;
 
-        const title =
-          item.snippet.title || "";
+        if (!id) continue;
 
-        const id =
-          item.id.videoId;
+        // ショートっぽいものは除外
+        const isShorts =
+          title.includes("#shorts") ||
+          title.toLowerCase().includes("shorts") ||
+          title.includes("ショート");
 
+        // 「オリジナル曲」がタイトルに入っているものだけ採用
+        const isOriginal = title.includes("オリジナル曲");
 
-        // 🎵 「オリジナル曲」を含む動画だけ
-        if (
-          title.includes("オリジナル曲")
-        ) {
-
-          // 重複チェック
-          const alreadyExists =
-            originalVideos.some(
-              video => video.id === id
-            );
-
-
+        if (isOriginal && !isShorts) {
+          const alreadyExists = originalVideos.some(v => v.id === id);
           if (!alreadyExists) {
-
             originalVideos.push({
               id: id,
-              title: title
+              title: rawTitle
             });
-
           }
-
         }
 
-
-        // 5曲集まったら終了
-        if (
-          originalVideos.length >= 5
-        ) {
-          break;
-        }
-
+        if (originalVideos.length >= 5) break;
       }
 
-
-      pageToken =
-        data.nextPageToken || "";
-
-
-      if (!pageToken) {
-        break;
-      }
-
+      pageToken = data.nextPageToken || "";
+      if (!pageToken) break;
     }
 
-
-
-    // 🎵 見つからなかった場合
     if (originalVideos.length === 0) {
-
-      container.innerHTML =
-        "<p>オリジナル曲が見つかりませんでした</p>";
-
+      container.innerHTML = "<p>オリジナル曲が見つかりませんでした</p>";
       return;
     }
 
-
-
-    // ==================================================
-    // 🎵 オリジナル曲をスライダーに表示
-    // ==================================================
-
-    container.innerHTML =
-      originalVideos.map(video => `
-
-        <div class="song-slide">
-
-          <iframe
-            src="https://www.youtube.com/embed/${video.id}"
-            title="${video.title}"
-            allowfullscreen>
-          </iframe>
-
-          <p>${video.title}</p>
-
-        </div>
-
-      `).join("");
-
+    // 表示
+    container.innerHTML = originalVideos.map(video => `
+      <div class="song-slide">
+        <iframe
+          src="https://www.youtube.com/embed/${video.id}"
+          title="${video.title}"
+          allowfullscreen>
+        </iframe>
+        <p>${video.title}</p>
+      </div>
+    `).join("");
 
   } catch (err) {
-
-    console.error(
-      "オリジナル曲取得エラー:",
-      err
-    );
-
-    container.innerHTML =
-      "<p>オリジナル曲を読み込めませんでした</p>";
-
+    console.error("オリジナル曲取得エラー:", err);
+    container.innerHTML = "<p>オリジナル曲を読み込めませんでした</p>";
   }
-
 }
-
 
 
 // ==================================================
