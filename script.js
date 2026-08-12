@@ -225,62 +225,40 @@ async function fetchOriginalSongs() {
     let currentIndex = 0;
 
     function showSong(index) {
-      currentIndex = index;
+  currentIndex = index;
 
-      const video = originalVideos[currentIndex];
+  const video = originalVideos[currentIndex];
 
-      container.innerHTML = `
-        <div class="song-slider-wrapper">
+  container.innerHTML = `
+    <div class="song-slider-wrapper">
+      <button class="song-arrow song-prev" aria-label="前の曲">‹</button>
 
-          <button class="song-arrow song-prev" aria-label="前の曲">
-            ‹
-          </button>
+      <div class="video-card">
+        <iframe
+          src="https://www.youtube.com/embed/${video.id}"
+          title="${video.title}"
+          allowfullscreen>
+        </iframe>
+        <p>${video.title}</p>
+        <div class="song-count">${currentIndex + 1} / ${originalVideos.length}</div>
+      </div>
 
-          <div class="song-slide">
-            <iframe
-              src="https://www.youtube.com/embed/${video.id}"
-              title="${video.title}"
-              allowfullscreen>
-            </iframe>
+      <button class="song-arrow song-next" aria-label="次の曲">›</button>
+    </div>
+  `;
 
-            <p>${video.title}</p>
+  // 前の曲
+  container.querySelector(".song-prev").addEventListener("click", function() {
+    const nextIndex = (currentIndex - 1 + originalVideos.length) % originalVideos.length;
+    showSong(nextIndex);
+  });
 
-            <div class="song-count">
-              ${currentIndex + 1} / ${originalVideos.length}
-            </div>
-          </div>
-
-          <button class="song-arrow song-next" aria-label="次の曲">
-            ›
-          </button>
-
-        </div>
-      `;
-
-      // 前の曲
-      const prevButton =
-        container.querySelector(".song-prev");
-
-      prevButton.addEventListener("click", function() {
-        const nextIndex =
-          (currentIndex - 1 + originalVideos.length) %
-          originalVideos.length;
-
-        showSong(nextIndex);
-      });
-
-      // 次の曲
-      const nextButton =
-        container.querySelector(".song-next");
-
-      nextButton.addEventListener("click", function() {
-        const nextIndex =
-          (currentIndex + 1) %
-          originalVideos.length;
-
-        showSong(nextIndex);
-      });
-    }
+  // 次の曲
+  container.querySelector(".song-next").addEventListener("click", function() {
+    const nextIndex = (currentIndex + 1) % originalVideos.length;
+    showSong(nextIndex);
+  });
+}
 
     // 最初の曲を表示
     showSong(0);
