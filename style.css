@@ -286,4 +286,31 @@ body {
     height: 40px;
     font-size: 28px;
   }
+
+  /* ===== 強制サイズ合わせ ===== */
+#original-songs {
+  width: 100% !important;
+  max-width: 900px !important;
+}
+
+.song-slider-wrapper {
+  display: grid !important;
+  grid-template-columns: 50px 1fr 50px !important;
+  gap: 10px !important;
+  width: 100% !important;
+  max-width: 900px !important;
+  margin: 0 auto !important;
+}
+
+.song-slide {
+  width: 100% !important;
+  max-width: none !important;     /* ここが重要 */
+  margin: 0 !important;
+}
+
+.song-slide iframe {
+  width: 100% !important;
+  height: 450px !important;       /* 横動画と同じ高さ */
+  aspect-ratio: auto !important;
+}
 }
