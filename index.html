@@ -1,57 +1,90 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <title>☕️らてらてちゃん応援ルーム🎧️</title>
-
-    <link rel="stylesheet" href="style.css">
-   </head>
-    
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>☕️らてらてちゃん応援ルーム🎧️</title>
+  <link rel="stylesheet" href="style.css">
+</head>
 <body>
 
-    <h1>☕️らてらてちゃん応援ルーム🎧️</h1>
+  <h1>☕️らてらてちゃん応援ルーム🎧️</h1>
 
-    <!-- 1. 非公式の注意書き -->
-    <div class="caution">
-        <strong>【ご注意】</strong><br>
-        当サイトはファン個人が運営する非公式の応援サイトです。<br>
-        山下学園、らてらてちゃんご本人、および関係者様とは一切関係ありません。
+  <!-- タブボタン -->
+  <div class="tab-buttons">
+    <button class="tab-btn active" data-tab="profile">プロフィール</button>
+    <button class="tab-btn" data-tab="songs">うた</button>
+    <button class="tab-btn" data-tab="videos">動画</button>
+    <button class="tab-btn" data-tab="calendar">カレンダー</button>
+    <button class="tab-btn" data-tab="fan">ファンコーナー</button>
+  </div>
+
+  <!-- タブの中身 -->
+  <div class="tab-contents">
+
+    <!-- プロフィール -->
+    <div id="profile" class="tab-content active">
+      <div class="video-section">
+        <h2>プロフィール</h2>
+
+        <div class="caution">
+          <strong>【ご注意】</strong><br>
+          当サイトはファン個人が運営する非公式の応援サイトです。<br>
+          山下学園、らてらてちゃんご本人、および関係者様とは一切関係ありません。
+        </div>
+
+        <p>ここにプロフィール文を書いていきます。</p>
+        <!-- 後で追加予定 -->
+      </div>
     </div>
 
-   <!-- オリジナル曲 -->
-    <div class="video-section">
-      <h2>🎵 オリジナル曲 🎵</h2>
-      <div class="songs-slider" id="original-songs"></div>
+    <!-- うた（オリジナル曲 + 歌ってみた） -->
+    <div id="songs" class="tab-content">
+      <div class="video-section">
+        <h2>🎵 オリジナル曲 🎵</h2>
+        <div class="songs-slider" id="original-songs"></div>
+      </div>
+
+      <div class="video-section">
+        <h2>🎤 歌ってみた</h2>
+        <p>ここに歌ってみたを追加予定</p>
+        <!-- 後で作る部分 -->
+      </div>
     </div>
 
-    <!-- 最新動画 -->
-    <div class="video-section">
-      <h2>🎬 最新動画</h2>
-      <div id="latest-video"></div>
+    <!-- 動画 -->
+    <div id="videos" class="tab-content">
+      <div class="video-section">
+        <h2>🎬 最新動画</h2>
+        <div id="latest-video"></div>
+      </div>
+
+      <div class="video-section">
+        <h2>📱 最新ショート</h2>
+        <div id="latest-shorts"></div>
+      </div>
     </div>
 
-    <!-- 最新ショート -->
-   <div class="video-section">
-      <h2>📱 最新ショート</h2>
-      <div id="latest-shorts"></div>
-   </div>
-
-    <!-- 今までの動画・プレイリスト -->
-    <div class="video-section">
-      <h2>🎤 今までの動画・プレイリスト 🎤</h2>
-      <p>山下学園おんがく部や、これまでの素敵な歌ってみたのまとめです！</p>
-      <div class="video-container"></div>
+    <!-- カレンダー -->
+    <div id="calendar" class="tab-content">
+      <div class="video-section">
+        <h2>📅 カレンダー</h2>
+        <p>ライブ・配信予定をここに表示予定（Googleカレンダー埋め込み）</p>
+        <!-- 後でGoogleカレンダーを埋め込む -->
+      </div>
     </div>
 
-    <!-- 4. 公式リンク集 -->
-    <div class="video-section">
-        <h2>🔗 公式リンク集</h2>
-        <p>最新情報や限定コンテンツは公式をチェック！</p>
-        <a href="https://bitfan.id" class="btn" target="_blank">公式ファンクラブ（Bitfan）</a>
-        <a href="https://youtube.com" class="btn" target="_blank">公式YouTube</a>
+    <!-- ファンコーナー -->
+    <div id="fan" class="tab-content">
+      <div class="video-section">
+        <h2>💬 ファンコーナー</h2>
+        <p>好きな動画や、初めて知った動画などを書き込める場所にする予定です。</p>
+        <!-- 後でフォームや掲示板的なものを追加 -->
+      </div>
     </div>
-    
-<script src="script.js"></script>
-   
+
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
