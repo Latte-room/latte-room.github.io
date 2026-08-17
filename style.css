@@ -250,3 +250,55 @@ body {
     font-size: 28px;
   }
 }
+/* ===== タブボタン ===== */
+.tab-buttons {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 25px auto 10px;
+  max-width: 900px;
+}
+
+.tab-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 30px;
+  background: #ffffff;
+  color: #0288d1;
+  font-size: 15px;
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  transition: 0.2s;
+}
+
+.tab-btn:hover {
+  background: #e3f2fd;
+  transform: translateY(-2px);
+}
+
+.tab-btn.active {
+  background: linear-gradient(135deg, #2CB6F6, #6dd5fa);
+  color: white;
+  font-weight: bold;
+}
+
+/* ===== タブの中身 ===== */
+.tab-contents {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
