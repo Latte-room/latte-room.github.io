@@ -277,6 +277,25 @@ async function fetchOriginalSongs() {
 
 document.addEventListener("DOMContentLoaded", function() {
   console.log("DOM読み込み完了 → 動画取得開始");
+
+  // タブ切り替え
+  const buttons = document.querySelectorAll(".tab-btn");
+  const contents = document.querySelectorAll(".tab-content");
+
+  buttons.forEach(btn => {
+    btn.addEventListener("click", function() {
+      // 全部のタブとボタンから active を外す
+      buttons.forEach(b => b.classList.remove("active"));
+      contents.forEach(c => c.classList.remove("active"));
+
+      // クリックしたボタンと対応する中身に active をつける
+      btn.classList.add("active");
+      const tabId = btn.getAttribute("data-tab");
+      document.getElementById(tabId).classList.add("active");
+    });
+  });
+
+  // 動画取得
   fetchLatestVideos();
   fetchOriginalSongs();
 });
