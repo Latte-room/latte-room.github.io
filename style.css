@@ -302,3 +302,36 @@ body {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* ===== ナビゲーション ===== */
+.main-nav {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 25px auto 30px;
+  max-width: 900px;
+}
+
+.nav-link {
+  padding: 10px 22px;
+  border-radius: 30px;
+  background: #ffffff;
+  color: #0288d1;
+  text-decoration: none;
+  font-size: 15px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  transition: 0.2s;
+}
+
+.nav-link:hover {
+  background: #e3f2fd;
+  transform: translateY(-2px);
+}
+
+/* 今いるページを目立たせる */
+.nav-link.active {
+  background: linear-gradient(135deg, #2CB6F6, #6dd5fa);
+  color: white;
+  font-weight: bold;
+}
