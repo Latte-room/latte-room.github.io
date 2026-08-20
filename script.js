@@ -272,6 +272,134 @@ async function fetchOriginalSongs() {
 }
 
 // ==================================================
+// 🎵 歌ってみた（カバー）＆ 山下学園 サムネイル付きスライダー
+// ==================================================
+
+const PLAYLIST_ID = "PLLJ57zRrF1yPhtd2yTExV-7A6wgbKV1Nx";
+
+async function fetchPlaylistSongs() {
+  let covers = [];
+  let gakuen = [];
+  let pageToken = "";
+  let tryCount = 0;
+  const maxTries = 10;
+
+  try {
+    while (tryCount < maxTries) {
+      tryCount++;
+
+      let url = `https://www.googleapis.com/youtube/v3/playlistItems?key=${API_KEY}&playlistId=${PLAYLIST_ID}&part=snippet&maxResults=50`;
+      if (pageToken) url += `&pageToken=${pageToken}`;
+
+      const res = await fetch(url);
+      const data = await res.json();
+
+      if (data.error || !data.items) break;
+
+      for (const item of data.items) {
+        const title = (item.snippet?.title || "").normalize("NFC");
+        const videoId = item.snippet?.resourceId?.videoId;
+        if (!videoId) continue;
+
+        const videoData = {
+          id: videoId,
+          title: item.snippet.title,
+          thumbnail: item.snippet.thumbnails?.medium?.url || item.snippet.thumbnails?.default?.url
+        };
+
+        const isGakuen = title.includes("山下学園") || 
+                         title.includes("BEATNIXS") || 
+                         title.includes("@山下") || 
+                         title.includes("フリーライブ");
+
+        const isCover = title.includes("Covered") || 
+                        title.includes("covered") || 
+                        title.includes("COVERED") || 
+                        title.includes("歌ってみた");
+
+        if (isGakuen) {
+          gakuen.push(videoData);
+        } else if (isCover) {
+          covers.push(videoData);
+        }
+      }
+
+      pageToken = data.nextPageToken || "";
+      if (!pageToken) break;
+    }
+
+    createThumbSlider("covers-slider", covers);
+    createThumbSlider("gakuen-slider", gakuen);
+
+  } catch (err) {
+    console.error("プレイリスト取得エラー:", err);
+  }
+}
+
+function createThumbSlider(containerId, videos) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  if (videos.length === 0) {
+    container.innerHTML = "<p>動画が見つかりませんでした</p>";
+    return;
+  }
+
+  let currentIndex = 0;
+
+  function render() {
+    const video = videos[currentIndex];
+
+    let thumbsHtml = "";
+    videos.forEach((v, i) => {
+      thumbsHtml += `
+        <div class="thumb-item ${i === currentIndex ? "active" : ""}" data-index="${i}">
+          <img src="${v.thumbnail}" alt="">
+          <p>${v.title}</p>
+        </div>
+      `;
+    });
+
+    container.innerHTML = `
+      <div class="thumb-main">
+        <iframe src="https://www.youtube.com/embed/${video.id}" title="${video.title}" allowfullscreen></iframe>
+        <p>${video.title}</p>
+      </div>
+
+      <div class="thumb-list-wrapper">
+        <button class="thumb-arrow thumb-prev">‹</button>
+        <div class="thumb-list">
+          ${thumbsHtml}
+        </div>
+        <button class="thumb-arrow thumb-next">›</button>
+      </div>
+    `;
+
+    // サムネイルクリック
+    container.querySelectorAll(".thumb-item").forEach(function(item) {
+      item.addEventListener("click", function() {
+        currentIndex = Number(item.getAttribute("data-index"));
+        render();
+      });
+    });
+
+    // 前の曲
+    container.querySelector(".thumb-prev").addEventListener("click", function() {
+      currentIndex = (currentIndex - 1 + videos.length) % videos.length;
+      render();
+    });
+
+    // 次の曲
+    container.querySelector(".thumb-next").addEventListener("click", function() {
+      currentIndex = (currentIndex + 1) % videos.length;
+      render();
+    });
+  }
+
+  render();
+}
+
+// ==================================================
 // 🚀 実行
 // ==================================================
 
@@ -298,4 +426,5 @@ document.addEventListener("DOMContentLoaded", function() {
   // 動画取得
   fetchLatestVideos();
   fetchOriginalSongs();
+  fetchPlaylistSongs();   // ← これを追加
 });
