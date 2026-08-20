@@ -94,9 +94,8 @@ async function fetchLatestVideos() {
   }
 }
 
-
 // ==================================================
-// 🎵 オリジナル曲
+// 🎵 オリジナル曲（サムネイル付きスライダー）
 // ==================================================
 async function fetchOriginalSongs() {
   const container = document.getElementById("original-songs");
@@ -108,7 +107,7 @@ async function fetchOriginalSongs() {
   const maxTries = 8;
 
   try {
-    while (originalVideos.length < 5 && tryCount < maxTries) {
+    while (originalVideos.length < 10 && tryCount < maxTries) {
       tryCount++;
 
       let searchUrl =
@@ -139,55 +138,28 @@ async function fetchOriginalSongs() {
 
         if (isOriginal && !isShorts) {
           if (!originalVideos.some(v => v.id === id)) {
-            originalVideos.push({ id, title: rawTitle });
+            originalVideos.push({
+              id: id,
+              title: rawTitle,
+              thumbnail: item.snippet.thumbnails?.medium?.url || item.snippet.thumbnails?.default?.url
+            });
           }
         }
-        if (originalVideos.length >= 5) break;
+        if (originalVideos.length >= 10) break;
       }
 
       pageToken = data.nextPageToken || "";
       if (!pageToken) break;
     }
 
-    if (originalVideos.length === 0) {
-      container.innerHTML = "<p>オリジナル曲が見つかりませんでした</p>";
-      return;
-    }
-
-    let currentIndex = 0;
-
-    function showSong(index) {
-      currentIndex = index;
-      const video = originalVideos[currentIndex];
-
-      container.innerHTML = `
-        <div class="song-slider-wrapper">
-          <button class="song-arrow song-prev">‹</button>
-          <div class="video-card">
-            <iframe src="https://www.youtube.com/embed/${video.id}" title="${video.title}" allowfullscreen></iframe>
-            <p>${video.title}</p>
-            <div class="song-count">${currentIndex + 1} / ${originalVideos.length}</div>
-          </div>
-          <button class="song-arrow song-next">›</button>
-        </div>
-      `;
-
-      container.querySelector(".song-prev").addEventListener("click", () => {
-        showSong((currentIndex - 1 + originalVideos.length) % originalVideos.length);
-      });
-      container.querySelector(".song-next").addEventListener("click", () => {
-        showSong((currentIndex + 1) % originalVideos.length);
-      });
-    }
-
-    showSong(0);
+    // サムネイル付きスライダーで表示
+    createThumbSlider("original-songs", originalVideos);
 
   } catch (err) {
     console.error("オリジナル曲取得エラー:", err);
     container.innerHTML = "<p>オリジナル曲を読み込めませんでした</p>";
   }
 }
-
 
 // ==================================================
 // 🎵 歌ってみた（カバー）＆ 山下学園
