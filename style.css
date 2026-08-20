@@ -451,3 +451,60 @@ body {
   flex: 0 0 140px !important;
   width: 140px !important;
 }
+
+/* ===== サムネイル横並び 強制版 ===== */
+
+.thumb-list-wrapper {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  width: 100% !important;
+}
+
+.thumb-list {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  gap: 12px !important;
+  padding: 8px 4px !important;
+  width: 100% !important;
+  scroll-behavior: smooth !important;
+}
+
+.thumb-item {
+  flex: 0 0 140px !important;
+  width: 140px !important;
+  min-width: 140px !important;
+  max-width: 140px !important;
+  display: block !important;
+  cursor: pointer;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #222;
+  border: 3px solid transparent;
+  transition: 0.2s;
+}
+
+.thumb-item.active {
+  border-color: #2CB6F6 !important;
+}
+
+.thumb-item img {
+  width: 100% !important;
+  height: 80px !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+
+.thumb-item p {
+  color: white;
+  font-size: 12px;
+  padding: 6px;
+  margin: 0;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
