@@ -347,58 +347,54 @@ function createThumbSlider(containerId, videos) {
 
   let currentIndex = 0;
 
-  function render() {
-    const video = videos[currentIndex];
+ function render() {
+  const video = videos[currentIndex];
 
-    let thumbsHtml = "";
-    videos.forEach((v, i) => {
-      thumbsHtml += `
-        <div class="thumb-item ${i === currentIndex ? "active" : ""}" data-index="${i}">
-          <img src="${v.thumbnail}" alt="">
-          <p>${v.title}</p>
-        </div>
-      `;
-    });
-
-    container.innerHTML = `
-      <div class="thumb-main">
-        <iframe src="https://www.youtube.com/embed/${video.id}" title="${video.title}" allowfullscreen></iframe>
-        <p>${video.title}</p>
-      </div>
-
-      <div class="thumb-list-wrapper">
-        <button class="thumb-arrow thumb-prev">‹</button>
-        <div class="thumb-list">
-          ${thumbsHtml}
-        </div>
-        <button class="thumb-arrow thumb-next">›</button>
+  let thumbsHtml = "";
+  videos.forEach((v, i) => {
+    thumbsHtml += `
+      <div class="thumb-item ${i === currentIndex ? "active" : ""}" data-index="${i}" 
+           style="flex: 0 0 140px; width: 140px; min-width: 140px;">
+        <img src="${v.thumbnail}" alt="" style="width:100%; height:80px; object-fit:cover; display:block;">
+        <p style="color:white; font-size:12px; padding:6px; margin:0; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${v.title}</p>
       </div>
     `;
+  });
 
-    // サムネイルクリック
-    container.querySelectorAll(".thumb-item").forEach(function(item) {
-      item.addEventListener("click", function() {
-        currentIndex = Number(item.getAttribute("data-index"));
-        render();
-      });
-    });
+  container.innerHTML = `
+    <div class="thumb-main">
+      <iframe src="https://www.youtube.com/embed/${video.id}" title="${video.title}" allowfullscreen></iframe>
+      <p>${video.title}</p>
+    </div>
 
-    // 前の曲
-    container.querySelector(".thumb-prev").addEventListener("click", function() {
-      currentIndex = (currentIndex - 1 + videos.length) % videos.length;
+    <div class="thumb-list-wrapper" style="display:flex; align-items:center; gap:10px;">
+      <button class="thumb-arrow thumb-prev">‹</button>
+      <div class="thumb-list" style="display:flex; flex-direction:row; flex-wrap:nowrap; overflow-x:auto; gap:12px; padding:8px 4px; width:100%;">
+        ${thumbsHtml}
+      </div>
+      <button class="thumb-arrow thumb-next">›</button>
+    </div>
+  `;
+
+  // イベント設定
+  container.querySelectorAll(".thumb-item").forEach(function(item) {
+    item.addEventListener("click", function() {
+      currentIndex = Number(item.getAttribute("data-index"));
       render();
     });
+  });
 
-    // 次の曲
-    container.querySelector(".thumb-next").addEventListener("click", function() {
-      currentIndex = (currentIndex + 1) % videos.length;
-      render();
-    });
-  }
+  container.querySelector(".thumb-prev").addEventListener("click", function() {
+    currentIndex = (currentIndex - 1 + videos.length) % videos.length;
+    render();
+  });
 
-  render();
+  container.querySelector(".thumb-next").addEventListener("click", function() {
+    currentIndex = (currentIndex + 1) % videos.length;
+    render();
+  });
 }
-
+  
 // ==================================================
 // 🚀 実行
 // ==================================================
