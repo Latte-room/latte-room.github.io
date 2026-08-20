@@ -508,3 +508,20 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+/* メインの再生動画を大きくする */
+.thumb-main {
+  max-width: 900px;
+  margin: 0 auto 20px;
+}
+
+.thumb-main iframe {
+  width: 100%;
+  height: 480px;          /* ← ここを大きくする（おすすめ 480〜520） */
+  border-radius: 14px;
+}
+
+.thumb-main p {
+  font-size: 17px;
+  margin-top: 14px;
+}
