@@ -436,3 +436,18 @@ body {
   background: white;
   transform: scale(1.08);
 }
+
+/* サムネイルを横並びに強制 */
+.thumb-list {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  overflow-x: auto !important;
+  gap: 12px;
+  padding: 8px 4px;
+}
+
+.thumb-item {
+  flex: 0 0 140px !important;
+  width: 140px !important;
+}
