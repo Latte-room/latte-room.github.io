@@ -1,11 +1,11 @@
 const API_KEY = "AIzaSyBIrDQkZXjtMWbCjznHp_Rga-GhPFwZTWI"; // あなたのAPIキー
 const CHANNEL_ID = "UCKx_KMe4Q92491rkY8JufOg";
+const PLAYLIST_ID = "PLLJ57zRrF1yPhtd2yTExV-7A6wgbKV1Nx";
 
 
 // ==================================================
 // 🎬 最新の横動画 ＆ 最新ショート
 // ==================================================
-
 async function fetchLatestVideos() {
   let normalVideo = null;
   let shortsVideo = null;
@@ -36,111 +36,68 @@ async function fetchLatestVideos() {
       const searchRes = await fetch(searchUrl);
       const searchData = await searchRes.json();
 
-      if (!searchData.items || searchData.items.length === 0) {
-        break;
-      }
+      if (!searchData.items || searchData.items.length === 0) break;
 
-      const videoIds =
-        searchData.items.map(item => item.id.videoId).join(",");
-
+      const videoIds = searchData.items.map(item => item.id.videoId).join(",");
       pageToken = searchData.nextPageToken || "";
 
       const videoRes = await fetch(
-        `https://www.googleapis.com/youtube/v3/videos` +
-        `?key=${API_KEY}` +
-        `&id=${videoIds}` +
-        `&part=snippet`
+        `https://www.googleapis.com/youtube/v3/videos?key=${API_KEY}&id=${videoIds}&part=snippet`
       );
-
       const videoData = await videoRes.json();
 
-      if (!videoData.items) {
-        break;
-      }
+      if (!videoData.items) break;
 
       for (const item of videoData.items) {
         const id = item.id;
         const title = item.snippet.title || "";
 
-        // Shorts判定
-        const isShorts =
-          title.includes("#shorts") ||
-          title.toLowerCase().includes("shorts");
+        const isShorts = title.includes("#shorts") || title.toLowerCase().includes("shorts");
 
         if (isShorts && !shortsVideo) {
           shortsVideo = id;
           shortsTitle = title;
         }
-
         if (!isShorts && !normalVideo) {
           normalVideo = id;
           normalTitle = title;
         }
-
-        if (shortsVideo && normalVideo) {
-          break;
-        }
+        if (shortsVideo && normalVideo) break;
       }
 
-      if (!pageToken) {
-        break;
-      }
+      if (!pageToken) break;
     }
-
   } catch (err) {
     console.error("最新動画取得エラー:", err);
   }
 
-
-  // 🎬 横動画
-  const latestVideo =
-    document.getElementById("latest-video");
-
+  // 横動画
+  const latestVideo = document.getElementById("latest-video");
   if (latestVideo) {
     latestVideo.innerHTML = normalVideo
-      ? `
-        <div class="video-card">
-          <iframe
-            src="https://www.youtube.com/embed/${normalVideo}"
-            title="${normalTitle}"
-            allowfullscreen>
-          </iframe>
-
-          <p>${normalTitle}</p>
-        </div>
-      `
+      ? `<div class="video-card">
+           <iframe src="https://www.youtube.com/embed/${normalVideo}" title="${normalTitle}" allowfullscreen></iframe>
+           <p>${normalTitle}</p>
+         </div>`
       : `<p>動画が見つかりません</p>`;
   }
 
-
-  // 📱 Shorts
-  const latestShorts =
-    document.getElementById("latest-shorts");
-
+  // ショート
+  const latestShorts = document.getElementById("latest-shorts");
   if (latestShorts) {
     latestShorts.innerHTML = shortsVideo
-      ? `
-        <div class="video-card shorts">
-          <iframe
-            src="https://www.youtube.com/embed/${shortsVideo}"
-            title="${shortsTitle}"
-            allowfullscreen>
-          </iframe>
-
-          <p>${shortsTitle}</p>
-        </div>
-      `
+      ? `<div class="video-card shorts">
+           <iframe src="https://www.youtube.com/embed/${shortsVideo}" title="${shortsTitle}" allowfullscreen></iframe>
+           <p>${shortsTitle}</p>
+         </div>`
       : `<p>ショートが見つかりません</p>`;
   }
 }
 
 
-
 // ==================================================
 // 🎵 オリジナル曲
-// 「オリジナル曲」をタイトルに含む動画だけ取得
 // ==================================================
-
 async function fetchOriginalSongs() {
   const container = document.getElementById("original-songs");
   if (!container) return;
@@ -164,119 +121,77 @@ async function fetchOriginalSongs() {
         `&type=video` +
         `&q=${encodeURIComponent("オリジナル曲")}`;
 
-      if (pageToken) {
-        searchUrl += `&pageToken=${pageToken}`;
-      }
+      if (pageToken) searchUrl += `&pageToken=${pageToken}`;
 
       const res = await fetch(searchUrl);
       const data = await res.json();
 
-      if (data.error) {
-        console.error("APIエラー:", data.error);
-        break;
-      }
-
-      if (!data.items || data.items.length === 0) break;
+      if (data.error || !data.items || data.items.length === 0) break;
 
       for (const item of data.items) {
         const rawTitle = item.snippet?.title || "";
         const title = rawTitle.normalize("NFC");
         const id = item.id?.videoId;
-
         if (!id) continue;
 
-        const isShorts =
-          title.includes("#shorts") ||
-          title.toLowerCase().includes("shorts") ||
-          title.includes("ショート");
-
+        const isShorts = title.includes("#shorts") || title.toLowerCase().includes("shorts") || title.includes("ショート");
         const isOriginal = title.includes("オリジナル曲");
 
         if (isOriginal && !isShorts) {
-          const alreadyExists =
-            originalVideos.some(v => v.id === id);
-
-          if (!alreadyExists) {
-            originalVideos.push({
-              id: id,
-              title: rawTitle
-            });
+          if (!originalVideos.some(v => v.id === id)) {
+            originalVideos.push({ id, title: rawTitle });
           }
         }
-
         if (originalVideos.length >= 5) break;
       }
 
       pageToken = data.nextPageToken || "";
-
       if (!pageToken) break;
     }
 
     if (originalVideos.length === 0) {
-      container.innerHTML =
-        "<p>オリジナル曲が見つかりませんでした</p>";
+      container.innerHTML = "<p>オリジナル曲が見つかりませんでした</p>";
       return;
     }
-
-    // ==========================================
-    // 🎵 オリジナル曲を中央に1本表示
-    // ==========================================
 
     let currentIndex = 0;
 
     function showSong(index) {
-  currentIndex = index;
+      currentIndex = index;
+      const video = originalVideos[currentIndex];
 
-  const video = originalVideos[currentIndex];
+      container.innerHTML = `
+        <div class="song-slider-wrapper">
+          <button class="song-arrow song-prev">‹</button>
+          <div class="video-card">
+            <iframe src="https://www.youtube.com/embed/${video.id}" title="${video.title}" allowfullscreen></iframe>
+            <p>${video.title}</p>
+            <div class="song-count">${currentIndex + 1} / ${originalVideos.length}</div>
+          </div>
+          <button class="song-arrow song-next">›</button>
+        </div>
+      `;
 
-  container.innerHTML = `
-    <div class="song-slider-wrapper">
-      <button class="song-arrow song-prev" aria-label="前の曲">‹</button>
+      container.querySelector(".song-prev").addEventListener("click", () => {
+        showSong((currentIndex - 1 + originalVideos.length) % originalVideos.length);
+      });
+      container.querySelector(".song-next").addEventListener("click", () => {
+        showSong((currentIndex + 1) % originalVideos.length);
+      });
+    }
 
-      <div class="video-card">
-        <iframe
-          src="https://www.youtube.com/embed/${video.id}"
-          title="${video.title}"
-          allowfullscreen>
-        </iframe>
-        <p>${video.title}</p>
-        <div class="song-count">${currentIndex + 1} / ${originalVideos.length}</div>
-      </div>
-
-      <button class="song-arrow song-next" aria-label="次の曲">›</button>
-    </div>
-  `;
-
-  // 前の曲
-  container.querySelector(".song-prev").addEventListener("click", function() {
-    const nextIndex = (currentIndex - 1 + originalVideos.length) % originalVideos.length;
-    showSong(nextIndex);
-  });
-
-  // 次の曲
-  container.querySelector(".song-next").addEventListener("click", function() {
-    const nextIndex = (currentIndex + 1) % originalVideos.length;
-    showSong(nextIndex);
-  });
-}
-
-    // 最初の曲を表示
     showSong(0);
 
   } catch (err) {
     console.error("オリジナル曲取得エラー:", err);
-
-    container.innerHTML =
-      "<p>オリジナル曲を読み込めませんでした</p>";
+    container.innerHTML = "<p>オリジナル曲を読み込めませんでした</p>";
   }
 }
 
-// ==================================================
-// 🎵 歌ってみた（カバー）＆ 山下学園 サムネイル付きスライダー
-// ==================================================
 
-const PLAYLIST_ID = "PLLJ57zRrF1yPhtd2yTExV-7A6wgbKV1Nx";
-
+// ==================================================
+// 🎵 歌ってみた（カバー）＆ 山下学園
+// ==================================================
 async function fetchPlaylistSongs() {
   let covers = [];
   let gakuen = [];
@@ -307,15 +222,8 @@ async function fetchPlaylistSongs() {
           thumbnail: item.snippet.thumbnails?.medium?.url || item.snippet.thumbnails?.default?.url
         };
 
-        const isGakuen = title.includes("山下学園") || 
-                         title.includes("BEATNIXS") || 
-                         title.includes("@山下") || 
-                         title.includes("フリーライブ");
-
-        const isCover = title.includes("Covered") || 
-                        title.includes("covered") || 
-                        title.includes("COVERED") || 
-                        title.includes("歌ってみた");
+        const isGakuen = title.includes("山下学園") || title.includes("BEATNIXS") || title.includes("@山下") || title.includes("フリーライブ");
+        const isCover = title.includes("Covered") || title.includes("covered") || title.includes("COVERED") || title.includes("歌ってみた");
 
         if (isGakuen) {
           gakuen.push(videoData);
@@ -336,6 +244,7 @@ async function fetchPlaylistSongs() {
   }
 }
 
+
 function createThumbSlider(containerId, videos) {
   const container = document.getElementById(containerId);
   if (!container) return;
@@ -347,80 +256,63 @@ function createThumbSlider(containerId, videos) {
 
   let currentIndex = 0;
 
- function render() {
-  const video = videos[currentIndex];
+  function render() {
+    const video = videos[currentIndex];
 
-  let thumbsHtml = "";
-  videos.forEach((v, i) => {
-    thumbsHtml += `
-      <div class="thumb-item ${i === currentIndex ? "active" : ""}" data-index="${i}" 
-           style="flex: 0 0 140px; width: 140px; min-width: 140px;">
-        <img src="${v.thumbnail}" alt="" style="width:100%; height:80px; object-fit:cover; display:block;">
-        <p style="color:white; font-size:12px; padding:6px; margin:0; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${v.title}</p>
+    let thumbsHtml = "";
+    videos.forEach((v, i) => {
+      thumbsHtml += `
+        <div class="thumb-item ${i === currentIndex ? "active" : ""}" data-index="${i}"
+             style="flex:0 0 140px; width:140px; min-width:140px;">
+          <img src="${v.thumbnail}" alt="" style="width:100%; height:80px; object-fit:cover; display:block;">
+          <p style="color:white; font-size:12px; padding:6px; margin:0; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${v.title}</p>
+        </div>
+      `;
+    });
+
+    container.innerHTML = `
+      <div class="thumb-main">
+        <iframe src="https://www.youtube.com/embed/${video.id}" title="${video.title}" allowfullscreen></iframe>
+        <p>${video.title}</p>
+      </div>
+      <div class="thumb-list-wrapper" style="display:flex; align-items:center; gap:10px;">
+        <button class="thumb-arrow thumb-prev">‹</button>
+        <div class="thumb-list" style="display:flex; flex-direction:row; flex-wrap:nowrap; overflow-x:auto; gap:12px; padding:8px 4px; width:100%;">
+          ${thumbsHtml}
+        </div>
+        <button class="thumb-arrow thumb-next">›</button>
       </div>
     `;
-  });
 
-  container.innerHTML = `
-    <div class="thumb-main">
-      <iframe src="https://www.youtube.com/embed/${video.id}" title="${video.title}" allowfullscreen></iframe>
-      <p>${video.title}</p>
-    </div>
+    container.querySelectorAll(".thumb-item").forEach(item => {
+      item.addEventListener("click", () => {
+        currentIndex = Number(item.getAttribute("data-index"));
+        render();
+      });
+    });
 
-    <div class="thumb-list-wrapper" style="display:flex; align-items:center; gap:10px;">
-      <button class="thumb-arrow thumb-prev">‹</button>
-      <div class="thumb-list" style="display:flex; flex-direction:row; flex-wrap:nowrap; overflow-x:auto; gap:12px; padding:8px 4px; width:100%;">
-        ${thumbsHtml}
-      </div>
-      <button class="thumb-arrow thumb-next">›</button>
-    </div>
-  `;
-
-  // イベント設定
-  container.querySelectorAll(".thumb-item").forEach(function(item) {
-    item.addEventListener("click", function() {
-      currentIndex = Number(item.getAttribute("data-index"));
+    container.querySelector(".thumb-prev").addEventListener("click", () => {
+      currentIndex = (currentIndex - 1 + videos.length) % videos.length;
       render();
     });
-  });
 
-  container.querySelector(".thumb-prev").addEventListener("click", function() {
-    currentIndex = (currentIndex - 1 + videos.length) % videos.length;
-    render();
-  });
+    container.querySelector(".thumb-next").addEventListener("click", () => {
+      currentIndex = (currentIndex + 1) % videos.length;
+      render();
+    });
+  }
 
-  container.querySelector(".thumb-next").addEventListener("click", function() {
-    currentIndex = (currentIndex + 1) % videos.length;
-    render();
-  });
+  render();
 }
-  
+
+
 // ==================================================
 // 🚀 実行
 // ==================================================
-
 document.addEventListener("DOMContentLoaded", function() {
   console.log("DOM読み込み完了 → 動画取得開始");
 
-  // タブ切り替え
-  const buttons = document.querySelectorAll(".tab-btn");
-  const contents = document.querySelectorAll(".tab-content");
-
-  buttons.forEach(btn => {
-    btn.addEventListener("click", function() {
-      // 全部のタブとボタンから active を外す
-      buttons.forEach(b => b.classList.remove("active"));
-      contents.forEach(c => c.classList.remove("active"));
-
-      // クリックしたボタンと対応する中身に active をつける
-      btn.classList.add("active");
-      const tabId = btn.getAttribute("data-tab");
-      document.getElementById(tabId).classList.add("active");
-    });
-  });
-
-  // 動画取得
   fetchLatestVideos();
   fetchOriginalSongs();
-  fetchPlaylistSongs();   // ← これを追加
+  fetchPlaylistSongs();
 });
