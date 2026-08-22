@@ -206,7 +206,7 @@ body {
 }
 
 .thumb-item.active {
-  border: 3px solid #2CB6F6;       /* 選んだものだけ青い枠 */
+  border: 3px solid #F067A6       /* 選んだものだけ青い枠 */
   transform: translateY(-3px);
 }
 
