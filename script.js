@@ -237,7 +237,7 @@ function createThumbSlider(containerId, videos) {
     videos.forEach((v, i) => {
       thumbsHtml += `
         <div class="thumb-item ${i === currentIndex ? "active" : ""}" data-index="${i}"
-             style="flex:0 0 140px; width:140px; min-width:140px;">
+             style="flex:0 0 210px; width:210px; min-width:210px;">
           <img src="${v.thumbnail}" alt="" style="width:100%; height:80px; object-fit:cover; display:block;">
           <p style="color:white; font-size:12px; padding:6px; margin:0; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${v.title}</p>
         </div>
