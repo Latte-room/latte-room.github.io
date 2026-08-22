@@ -190,8 +190,8 @@ body {
 }
 
 .thumb-item {
-  flex: 0 0 140px;
-  width: 140px;
+  flex: 0 0 210px;
+  width: 210px;
   cursor: pointer;
   border-radius: 10px;
   overflow: hidden;
