@@ -29,9 +29,7 @@ async function fetchLatestVideos() {
         `&maxResults=50` +
         `&type=video`;
 
-      if (pageToken) {
-        searchUrl += `&pageToken=${pageToken}`;
-      }
+      if (pageToken) searchUrl += `&pageToken=${pageToken}`;
 
       const searchRes = await fetch(searchUrl);
       const searchData = await searchRes.json();
@@ -94,6 +92,7 @@ async function fetchLatestVideos() {
   }
 }
 
+
 // ==================================================
 // 🎵 オリジナル曲（サムネイル付きスライダー）
 // ==================================================
@@ -152,7 +151,6 @@ async function fetchOriginalSongs() {
       if (!pageToken) break;
     }
 
-    // サムネイル付きスライダーで表示
     createThumbSlider("original-songs", originalVideos);
 
   } catch (err) {
@@ -160,6 +158,7 @@ async function fetchOriginalSongs() {
     container.innerHTML = "<p>オリジナル曲を読み込めませんでした</p>";
   }
 }
+
 
 // ==================================================
 // 🎵 歌ってみた（カバー）＆ 山下学園
@@ -217,6 +216,9 @@ async function fetchPlaylistSongs() {
 }
 
 
+// ==================================================
+// サムネイル付きスライダー共通関数
+// ==================================================
 function createThumbSlider(containerId, videos) {
   const container = document.getElementById(containerId);
   if (!container) return;
@@ -256,6 +258,7 @@ function createThumbSlider(containerId, videos) {
       </div>
     `;
 
+    // サムネイルクリック
     container.querySelectorAll(".thumb-item").forEach(item => {
       item.addEventListener("click", () => {
         currentIndex = Number(item.getAttribute("data-index"));
@@ -263,32 +266,31 @@ function createThumbSlider(containerId, videos) {
       });
     });
 
+    // 前の曲
     container.querySelector(".thumb-prev").addEventListener("click", () => {
       currentIndex = (currentIndex - 1 + videos.length) % videos.length;
       render();
     });
 
+    // 次の曲
     container.querySelector(".thumb-next").addEventListener("click", () => {
       currentIndex = (currentIndex + 1) % videos.length;
       render();
     });
+
+    // 選ばれているサムネイルが見えるように自動スクロール
+    const activeThumb = container.querySelector(".thumb-item.active");
+    if (activeThumb) {
+      activeThumb.scrollIntoView({
+        behavior: "smooth",
+        inline: "center",
+        block: "nearest"
+      });
+    }
   }
 
-// 選ばれているサムネイルが見えるようにスクロール
-const activeThumb = container.querySelector(".thumb-item.active");
-const thumbList = container.querySelector(".thumb-list");
-
-if (activeThumb && thumbList) {
-  activeThumb.scrollIntoView({
-    behavior: "smooth",
-    inline: "center",
-    block: "nearest"
-  });
-}
-  
   render();
 }
-
 
 
 // ==================================================
