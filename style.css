@@ -196,16 +196,18 @@ body {
   border-radius: 10px;
   overflow: hidden;
   background: #222;
-  border: 3px solid transparent;
+  border: 3px solid transparent;   /* 通常は枠なし */
   transition: 0.2s;
 }
 
 .thumb-item:hover {
   transform: translateY(-3px);
+  border-color: rgba(44, 182, 246, 0.4);
 }
 
 .thumb-item.active {
-  border-color: #2CB6F6;
+  border: 3px solid #2CB6F6;       /* 選んだものだけ青い枠 */
+  transform: translateY(-3px);
 }
 
 .thumb-item img {
