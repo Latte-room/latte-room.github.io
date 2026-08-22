@@ -274,6 +274,18 @@ function createThumbSlider(containerId, videos) {
     });
   }
 
+  // 選ばれているサムネイルが見えるようにスクロール
+const activeThumb = container.querySelector(".thumb-item.active");
+const thumbList = container.querySelector(".thumb-list");
+
+if (activeThumb && thumbList) {
+  activeThumb.scrollIntoView({
+    behavior: "smooth",
+    inline: "center",
+    block: "nearest"
+  });
+}
+  
   render();
 }
 
