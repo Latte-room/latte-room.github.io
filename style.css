@@ -261,3 +261,17 @@ body {
     font-size: 28px;
   }
 }
+/* サムネイル選択時の枠をピンクに強制変更 */
+.thumb-item {
+  border: 3px solid transparent !important;
+}
+
+.thumb-item.active {
+  border: 3px solid #ff69b4 !important;   /* ピンク */
+  transform: translateY(-4px) !important;
+  box-shadow: 0 4px 12px rgba(255, 105, 180, 0.4) !important;
+}
+
+.thumb-item:hover {
+  border-color: rgba(255, 105, 180, 0.5) !important;
+}
