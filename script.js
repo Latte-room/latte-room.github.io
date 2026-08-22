@@ -274,7 +274,10 @@ function createThumbSlider(containerId, videos) {
     });
   }
 
-  // 選ばれているサムネイルが見えるようにスクロール
+  render();
+}
+
+// 選ばれているサムネイルが見えるようにスクロール
 const activeThumb = container.querySelector(".thumb-item.active");
 const thumbList = container.querySelector(".thumb-list");
 
@@ -285,10 +288,6 @@ if (activeThumb && thumbList) {
     block: "nearest"
   });
 }
-  
-  render();
-}
-
 
 // ==================================================
 // 🚀 実行
