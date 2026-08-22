@@ -69,7 +69,6 @@ async function fetchLatestVideos() {
     console.error("最新動画取得エラー:", err);
   }
 
-  // 横動画
   const latestVideo = document.getElementById("latest-video");
   if (latestVideo) {
     latestVideo.innerHTML = normalVideo
@@ -80,7 +79,6 @@ async function fetchLatestVideos() {
       : `<p>動画が見つかりません</p>`;
   }
 
-  // ショート
   const latestShorts = document.getElementById("latest-shorts");
   if (latestShorts) {
     latestShorts.innerHTML = shortsVideo
@@ -94,7 +92,7 @@ async function fetchLatestVideos() {
 
 
 // ==================================================
-// 🎵 オリジナル曲（サムネイル付きスライダー）
+// 🎵 オリジナル曲
 // ==================================================
 async function fetchOriginalSongs() {
   const container = document.getElementById("original-songs");
@@ -278,29 +276,27 @@ function createThumbSlider(containerId, videos) {
       render();
     });
 
-// 選ばれているサムネイルが隠れていたらスクロールする
-const activeThumb = container.querySelector(".thumb-item.active");
-const thumbList = container.querySelector(".thumb-list");
+    // 選ばれているサムネイルが隠れていたらスクロールする
+    const activeThumb = container.querySelector(".thumb-item.active");
+    const thumbList = container.querySelector(".thumb-list");
 
-if (activeThumb && thumbList) {
-  const listRect = thumbList.getBoundingClientRect();
-  const thumbRect = activeThumb.getBoundingClientRect();
+    if (activeThumb && thumbList) {
+      const listRect = thumbList.getBoundingClientRect();
+      const thumbRect = activeThumb.getBoundingClientRect();
 
-  // 左にはみ出している場合
-  if (thumbRect.left < listRect.left) {
-    thumbList.scrollBy({
-      left: thumbRect.left - listRect.left - 20,
-      behavior: "smooth"
-    });
+      if (thumbRect.left < listRect.left) {
+        thumbList.scrollBy({
+          left: thumbRect.left - listRect.left - 20,
+          behavior: "smooth"
+        });
+      } else if (thumbRect.right > listRect.right) {
+        thumbList.scrollBy({
+          left: thumbRect.right - listRect.right + 20,
+          behavior: "smooth"
+        });
+      }
+    }
   }
-  // 右にはみ出している場合
-  else if (thumbRect.right > listRect.right) {
-    thumbList.scrollBy({
-      left: thumbRect.right - listRect.right + 20,
-      behavior: "smooth"
-    });
-  }
-}
 
   render();
 }
