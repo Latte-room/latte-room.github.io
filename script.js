@@ -278,21 +278,29 @@ function createThumbSlider(containerId, videos) {
       render();
     });
 
-   // 選ばれているサムネイルをなめらかに中央へスクロール
+// 選ばれているサムネイルが隠れていたらスクロールする
 const activeThumb = container.querySelector(".thumb-item.active");
 const thumbList = container.querySelector(".thumb-list");
 
 if (activeThumb && thumbList) {
-  const thumbListWidth = thumbList.clientWidth;
-  const thumbWidth = activeThumb.offsetWidth;
-  const scrollPosition = activeThumb.offsetLeft - (thumbListWidth / 2) + (thumbWidth / 2);
+  const listRect = thumbList.getBoundingClientRect();
+  const thumbRect = activeThumb.getBoundingClientRect();
 
-  thumbList.scrollTo({
-    left: scrollPosition,
-    behavior: "smooth"
-  });
-}
+  // 左にはみ出している場合
+  if (thumbRect.left < listRect.left) {
+    thumbList.scrollBy({
+      left: thumbRect.left - listRect.left - 20,
+      behavior: "smooth"
+    });
   }
+  // 右にはみ出している場合
+  else if (thumbRect.right > listRect.right) {
+    thumbList.scrollBy({
+      left: thumbRect.right - listRect.right + 20,
+      behavior: "smooth"
+    });
+  }
+}
 
   render();
 }
