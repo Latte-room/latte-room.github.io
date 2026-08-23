@@ -2,7 +2,6 @@ const API_KEY = "AIzaSyBIrDQkZXjtMWbCjznHp_Rga-GhPFwZTWI"; // あなたのAPIキ
 const CHANNEL_ID = "UCKx_KMe4Q92491rkY8JufOg";
 const PLAYLIST_ID = "PLLJ57zRrF1yPhtd2yTExV-7A6wgbKV1Nx";
 
-
 // ==================================================
 // 🎬 最新の横動画 ＆ 最新ショート
 // ==================================================
@@ -138,7 +137,8 @@ async function fetchOriginalSongs() {
             originalVideos.push({
               id: id,
               title: rawTitle,
-              thumbnail: item.snippet.thumbnails?.medium?.url || item.snippet.thumbnails?.default?.url
+              thumbnail: item.snippet.thumbnails?.medium?.url || item.snippet.thumbnails?.default?.url,
+              publishedAt: item.snippet.publishedAt || ""
             });
           }
         }
@@ -149,6 +149,8 @@ async function fetchOriginalSongs() {
       if (!pageToken) break;
     }
 
+    // 新しい順に並び替え
+    originalVideos.sort((a, b) => (b.publishedAt || "").localeCompare(a.publishedAt || ""));
     createThumbSlider("original-songs", originalVideos);
 
   } catch (err) {
@@ -188,8 +190,8 @@ async function fetchPlaylistSongs() {
         const videoData = {
           id: videoId,
           title: item.snippet.title,
-          thumbnail: item.snippet.thumbnails?.medium?.url || item.snippet.thumbnails?.default?.url
-          publishedAt: item.snippet.publishedAt || ""   // ← これを追加
+          thumbnail: item.snippet.thumbnails?.medium?.url || item.snippet.thumbnails?.default?.url,
+          publishedAt: item.snippet.publishedAt || ""
         };
 
         const isGakuen = title.includes("山下学園") || title.includes("BEATNIXS") || title.includes("@山下") || title.includes("フリーライブ");
@@ -206,12 +208,12 @@ async function fetchPlaylistSongs() {
       if (!pageToken) break;
     }
 
-      // 新しい順に並び替え（publishedAt がある場合）
-  covers.sort((a, b) => (b.publishedAt || "").localeCompare(a.publishedAt || ""));
-  gakuen.sort((a, b) => (b.publishedAt || "").localeCompare(a.publishedAt || ""));
+    // 新しい順に並び替え
+    covers.sort((a, b) => (b.publishedAt || "").localeCompare(a.publishedAt || ""));
+    gakuen.sort((a, b) => (b.publishedAt || "").localeCompare(a.publishedAt || ""));
 
-  createThumbSlider("covers-slider", covers);
-  createThumbSlider("gakuen-slider", gakuen);
+    createThumbSlider("covers-slider", covers);
+    createThumbSlider("gakuen-slider", gakuen);
 
   } catch (err) {
     console.error("プレイリスト取得エラー:", err);
@@ -261,7 +263,6 @@ function createThumbSlider(containerId, videos) {
       </div>
     `;
 
-    // サムネイルクリック
     container.querySelectorAll(".thumb-item").forEach(item => {
       item.addEventListener("click", () => {
         currentIndex = Number(item.getAttribute("data-index"));
@@ -269,19 +270,16 @@ function createThumbSlider(containerId, videos) {
       });
     });
 
-    // 前の曲
     container.querySelector(".thumb-prev").addEventListener("click", () => {
       currentIndex = (currentIndex - 1 + videos.length) % videos.length;
       render();
     });
 
-    // 次の曲
     container.querySelector(".thumb-next").addEventListener("click", () => {
       currentIndex = (currentIndex + 1) % videos.length;
       render();
     });
 
-    // 選ばれているサムネイルが隠れていたらスクロールする
     const activeThumb = container.querySelector(".thumb-item.active");
     const thumbList = container.querySelector(".thumb-list");
 
