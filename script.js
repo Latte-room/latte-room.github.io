@@ -205,8 +205,12 @@ async function fetchPlaylistSongs() {
       if (!pageToken) break;
     }
 
-    createThumbSlider("covers-slider", covers);
-    createThumbSlider("gakuen-slider", gakuen);
+      // 新しい順に並び替え（publishedAt がある場合）
+  covers.sort((a, b) => (b.publishedAt || "").localeCompare(a.publishedAt || ""));
+  gakuen.sort((a, b) => (b.publishedAt || "").localeCompare(a.publishedAt || ""));
+
+  createThumbSlider("covers-slider", covers);
+  createThumbSlider("gakuen-slider", gakuen);
 
   } catch (err) {
     console.error("プレイリスト取得エラー:", err);
