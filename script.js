@@ -189,6 +189,7 @@ async function fetchPlaylistSongs() {
           id: videoId,
           title: item.snippet.title,
           thumbnail: item.snippet.thumbnails?.medium?.url || item.snippet.thumbnails?.default?.url
+          publishedAt: item.snippet.publishedAt || ""   // ← これを追加
         };
 
         const isGakuen = title.includes("山下学園") || title.includes("BEATNIXS") || title.includes("@山下") || title.includes("フリーライブ");
