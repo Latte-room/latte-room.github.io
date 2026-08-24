@@ -160,8 +160,9 @@ async function fetchOriginalSongs() {
 }
 
 
-// ==================================================
+/ ==================================================
 // 🎵 歌ってみた（カバー）＆ 山下学園
+// プレイリスト内の動画を「動画公開日順」に並べる
 // ==================================================
 async function fetchPlaylistSongs() {
   let covers = [];
@@ -174,28 +175,57 @@ async function fetchPlaylistSongs() {
     while (tryCount < maxTries) {
       tryCount++;
 
-      let url = `https://www.googleapis.com/youtube/v3/playlistItems?key=${API_KEY}&playlistId=${PLAYLIST_ID}&part=snippet&maxResults=50`;
-      if (pageToken) url += `&pageToken=${pageToken}`;
+      let url =
+        `https://www.googleapis.com/youtube/v3/playlistItems` +
+        `?key=${API_KEY}` +
+        `&playlistId=${PLAYLIST_ID}` +
+        `&part=snippet,contentDetails` +
+        `&maxResults=50`;
+
+      if (pageToken) {
+        url += `&pageToken=${pageToken}`;
+      }
 
       const res = await fetch(url);
       const data = await res.json();
 
-      if (data.error || !data.items) break;
+      if (data.error || !data.items) {
+        console.error("プレイリストAPIエラー:", data.error);
+        break;
+      }
 
       for (const item of data.items) {
         const title = (item.snippet?.title || "").normalize("NFC");
         const videoId = item.snippet?.resourceId?.videoId;
+
         if (!videoId) continue;
+
+        // ★ 動画そのものの公開日
+        const publishedAt =
+          item.contentDetails?.videoPublishedAt || "";
 
         const videoData = {
           id: videoId,
           title: item.snippet.title,
-          thumbnail: item.snippet.thumbnails?.medium?.url || item.snippet.thumbnails?.default?.url,
-          publishedAt: item.snippet.publishedAt || ""
+          thumbnail:
+            item.snippet.thumbnails?.medium?.url ||
+            item.snippet.thumbnails?.default?.url,
+          publishedAt: publishedAt
         };
 
-        const isGakuen = title.includes("山下学園") || title.includes("BEATNIXS") || title.includes("@山下") || title.includes("フリーライブ");
-        const isCover = title.includes("Covered") || title.includes("covered") || title.includes("COVERED") || title.includes("歌ってみた");
+        // 山下学園関連
+        const isGakuen =
+          title.includes("山下学園") ||
+          title.includes("BEATNIXS") ||
+          title.includes("@山下") ||
+          title.includes("フリーライブ");
+
+        // 歌ってみた関連
+        const isCover =
+          title.includes("Covered") ||
+          title.includes("covered") ||
+          title.includes("COVERED") ||
+          title.includes("歌ってみた");
 
         if (isGakuen) {
           gakuen.push(videoData);
@@ -205,12 +235,22 @@ async function fetchPlaylistSongs() {
       }
 
       pageToken = data.nextPageToken || "";
-      if (!pageToken) break;
+
+      if (!pageToken) {
+        break;
+      }
     }
 
-    // 新しい順に並び替え
-    covers.sort((a, b) => (b.publishedAt || "").localeCompare(a.publishedAt || ""));
-    gakuen.sort((a, b) => (b.publishedAt || "").localeCompare(a.publishedAt || ""));
+    // ==============================================
+    // ★ 動画の公開日が新しい順
+    // ==============================================
+    covers.sort((a, b) =>
+      (b.publishedAt || "").localeCompare(a.publishedAt || "")
+    );
+
+    gakuen.sort((a, b) =>
+      (b.publishedAt || "").localeCompare(a.publishedAt || "")
+    );
 
     createThumbSlider("covers-slider", covers);
     createThumbSlider("gakuen-slider", gakuen);
@@ -219,91 +259,6 @@ async function fetchPlaylistSongs() {
     console.error("プレイリスト取得エラー:", err);
   }
 }
-
-
-// ==================================================
-// サムネイル付きスライダー共通関数
-// ==================================================
-function createThumbSlider(containerId, videos) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-
-  if (videos.length === 0) {
-    container.innerHTML = "<p>動画が見つかりませんでした</p>";
-    return;
-  }
-
-  let currentIndex = 0;
-
-  function render() {
-    const video = videos[currentIndex];
-
-    let thumbsHtml = "";
-    videos.forEach((v, i) => {
-      thumbsHtml += `
-        <div class="thumb-item ${i === currentIndex ? "active" : ""}" data-index="${i}"
-             style="flex:0 0 210px; width:210px; min-width:210px;">
-          <img src="${v.thumbnail}" alt="" style="width:100%; height:80px; object-fit:cover; display:block;">
-          <p style="color:white; font-size:12px; padding:6px; margin:0; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${v.title}</p>
-        </div>
-      `;
-    });
-
-    container.innerHTML = `
-      <div class="thumb-main">
-        <iframe src="https://www.youtube.com/embed/${video.id}" title="${video.title}" allowfullscreen></iframe>
-        <p>${video.title}</p>
-      </div>
-      <div class="thumb-list-wrapper" style="display:flex; align-items:center; gap:10px;">
-        <button class="thumb-arrow thumb-prev">‹</button>
-        <div class="thumb-list" style="display:flex; flex-direction:row; flex-wrap:nowrap; overflow-x:auto; gap:12px; padding:8px 4px; width:100%;">
-          ${thumbsHtml}
-        </div>
-        <button class="thumb-arrow thumb-next">›</button>
-      </div>
-    `;
-
-    container.querySelectorAll(".thumb-item").forEach(item => {
-      item.addEventListener("click", () => {
-        currentIndex = Number(item.getAttribute("data-index"));
-        render();
-      });
-    });
-
-    container.querySelector(".thumb-prev").addEventListener("click", () => {
-      currentIndex = (currentIndex - 1 + videos.length) % videos.length;
-      render();
-    });
-
-    container.querySelector(".thumb-next").addEventListener("click", () => {
-      currentIndex = (currentIndex + 1) % videos.length;
-      render();
-    });
-
-    const activeThumb = container.querySelector(".thumb-item.active");
-    const thumbList = container.querySelector(".thumb-list");
-
-    if (activeThumb && thumbList) {
-      const listRect = thumbList.getBoundingClientRect();
-      const thumbRect = activeThumb.getBoundingClientRect();
-
-      if (thumbRect.left < listRect.left) {
-        thumbList.scrollBy({
-          left: thumbRect.left - listRect.left - 20,
-          behavior: "smooth"
-        });
-      } else if (thumbRect.right > listRect.right) {
-        thumbList.scrollBy({
-          left: thumbRect.right - listRect.right + 20,
-          behavior: "smooth"
-        });
-      }
-    }
-  }
-
-  render();
-}
-
 
 // ==================================================
 // 🚀 実行
