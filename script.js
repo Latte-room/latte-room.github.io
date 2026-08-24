@@ -259,14 +259,4 @@ async function fetchPlaylistSongs() {
     console.error("プレイリスト取得エラー:", err);
   }
 }
-
-// ==================================================
-// 🚀 実行
-// ==================================================
-document.addEventListener("DOMContentLoaded", function() {
-  console.log("DOM読み込み完了 → 動画取得開始");
-
-  fetchLatestVideos();
-  fetchOriginalSongs();
-  fetchPlaylistSongs();
 });
