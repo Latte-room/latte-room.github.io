@@ -367,7 +367,7 @@ body {
 
 /* ===== 星空背景用：見出しを星っぽく ===== */
 .video-section h2 {
-  color: #fff3b0;
+  color: #E65292;
   text-shadow:
     0 0 5px rgba(255, 243, 176, 0.8),
     0 0 12px rgba(255, 243, 176, 0.45);
@@ -375,6 +375,6 @@ body {
 
 /* タイトルの色をピンクに */
 h1 {
-  color: #E65292;
+  color: #fff3b0;
   text-shadow: 0 2px 8px rgba(255, 105, 180, 0.3);
 }
