@@ -503,3 +503,20 @@ h1 {
 .menu-children {
   padding-left: 40;
 }
+
+/* 子メニュー強制位置調整 */
+.menu-children {
+  padding-left: 0 !important;
+  text-align: left !important;
+}
+
+.menu-link.child {
+  display: block !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  text-align: left !important;
+  font-size: 15px !important;
+  padding: 10px 16px 10px 48px !important; /* 左位置はここで調整 */
+  margin: 0 !important;
+  opacity: 0.95;
+}
