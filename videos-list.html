@@ -393,207 +393,124 @@
      * =====================================
      */
 
-    async function fetchPlaylistVideos(
-      playlistId,
-      containerId
-    ) {
+    async function fetchPlaylistVideos(playlistId, containerId) {
 
-      const container =
-        document.getElementById(containerId);
+  const container = document.getElementById(containerId);
 
-      if (!container) return;
+  if (!container) return;
 
-      if (
-        !playlistId ||
-        playlistId.includes("★")
-      ) {
+  if (!playlistId || playlistId.includes("★")) {
 
-        container.innerHTML =
-          "<p>プレイリストを設定してください</p>";
+    container.innerHTML =
+      "<p>プレイリストを設定してください</p>";
 
-        return;
+    return;
+  }
 
+  let pageToken = "";
+
+  try {
+
+    do {
+
+      let url =
+        `https://www.googleapis.com/youtube/v3/playlistItems` +
+        `?key=${API_KEY}` +
+        `&playlistId=${encodeURIComponent(playlistId)}` +
+        `&part=snippet` +
+        `&maxResults=50`;
+
+      if (pageToken) {
+        url += `&pageToken=${encodeURIComponent(pageToken)}`;
       }
 
+      const response = await fetch(url);
 
-      let pageToken = "";
+      const data = await response.json();
 
-      try {
+      /*
+       * APIエラーを詳しく表示
+       */
 
-        do {
-
-          let url =
-            `https://www.googleapis.com/youtube/v3/playlistItems` +
-            `?key=${API_KEY}` +
-            `&playlistId=${playlistId}` +
-            `&part=snippet` +
-            `&maxResults=50`;
-
-          if (pageToken) {
-
-            url +=
-              `&pageToken=${pageToken}`;
-
-          }
-
-
-          const response =
-            await fetch(url);
-
-          const data =
-            await response.json();
-
-
-          if (data.error) {
-
-            console.error(
-              "プレイリスト取得エラー:",
-              data.error
-            );
-
-            container.innerHTML =
-              "<p>プレイリストを読み込めませんでした</p>";
-
-            return;
-
-          }
-
-
-          if (!data.items) break;
-
-
-          data.items.forEach(item => {
-
-            const videoId =
-              item.snippet?.resourceId?.videoId;
-
-            if (!videoId) return;
-
-
-            const link =
-              document.createElement("a");
-
-            link.href =
-              `https://www.youtube.com/watch?v=${videoId}`;
-
-            link.target = "_blank";
-
-            link.rel =
-              "noopener noreferrer";
-
-            link.className =
-              "thumbnail-link";
-
-
-            const img =
-              document.createElement("img");
-
-            img.src =
-              `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
-
-            img.alt =
-              item.snippet?.title || "YouTube動画";
-
-
-            link.appendChild(img);
-
-            container.appendChild(link);
-
-          });
-
-
-          pageToken =
-            data.nextPageToken || "";
-
-
-        } while (pageToken);
-
-
-      } catch (error) {
+      if (!response.ok || data.error) {
 
         console.error(
-          "プレイリスト取得エラー:",
-          error
+          "YouTube API エラー詳細:",
+          data
         );
+
+        const message =
+          data.error?.message ||
+          "不明なエラー";
 
         container.innerHTML =
-          "<p>プレイリストを読み込めませんでした</p>";
+          `<p>プレイリストを読み込めませんでした</p>
+           <p style="font-size:12px;">${message}</p>`;
 
+        return;
       }
 
-    }
-
-
-    /*
-     * =====================================
-     * 🚀 実行
-     * =====================================
-     */
-
-    document.addEventListener(
-      "DOMContentLoaded",
-      function() {
-
-
-        /*
-         * 🌟 管理人おすすめ
-         * APIを使わない
-         */
-
-        createThumbnails(
-          "recommended-videos",
-          recommendedVideos
-        );
-
-
-        /*
-         * 🎬 横動画
-         * APIを使わない
-         */
-
-        createThumbnails(
-          "normal-videos-list",
-          normalVideos
-        );
-
-
-        /*
-         * 📱 ショート
-         * APIを使わない
-         */
-
-        createThumbnails(
-          "shorts-list",
-          shortsVideos
-        );
-
-
-        /*
-         * 🎞️ MV
-         * プレイリストから取得
-         */
-
-        fetchPlaylistVideos(
-          MV_PLAYLIST_ID,
-          "mv-list"
-        );
-
-
-        /*
-         * 🎤 総集編
-         * プレイリストから取得
-         */
-
-        fetchPlaylistVideos(
-          COMPILATION_PLAYLIST_ID,
-          "compilation-list"
-        );
-
-
+      if (!data.items) {
+        container.innerHTML =
+          "<p>プレイリストに動画がありません</p>";
+        return;
       }
+
+      /*
+       * 動画を表示
+       */
+
+      data.items.forEach(item => {
+
+        const videoId =
+          item.snippet?.resourceId?.videoId;
+
+        if (!videoId) return;
+
+        const link =
+          document.createElement("a");
+
+        link.href =
+          `https://www.youtube.com/watch?v=${videoId}`;
+
+        link.target = "_blank";
+
+        link.rel =
+          "noopener noreferrer";
+
+        link.className =
+          "thumbnail-link";
+
+
+        const img =
+          document.createElement("img");
+
+        img.src =
+          `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
+
+        img.alt =
+          item.snippet?.title || "YouTube動画";
+
+
+        link.appendChild(img);
+
+        container.appendChild(link);
+
+      });
+
+      pageToken =
+        data.nextPageToken || "";
+
+    } while (pageToken);
+
+  } catch (error) {
+
+    console.error(
+      "プレイリスト取得エラー:",
+      error
     );
 
-  </script>
-
-</body>
-</html>
+    container.innerHTML =
+      "<p>プレイリストを読み込めませんでした</p>";
+  }
+}
