@@ -3,62 +3,135 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>動画一覧｜らてらてちゃん応援ルーム</title>
+
   <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* ========================================
+       🎬 サムネイル一覧
+    ======================================== */
+
+    .thumbnail-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      max-width: 850px;
+      margin: 0 auto;
+    }
+
+    .thumbnail-link {
+      display: block;
+      background: #111;
+      border-radius: 12px;
+      overflow: hidden;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .thumbnail-link:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.3);
+    }
+
+    .thumbnail-link img {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* スマホ */
+    @media (max-width: 700px) {
+      .thumbnail-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+    }
+
+    @media (max-width: 450px) {
+      .thumbnail-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
+
 
 <body>
 
   <div class="layout">
 
+    <!-- ================================
+         左メニュー
+    ================================= -->
+
     <nav class="side-menu">
-      <a href="index.html" class="menu-link">プロフィール</a>
-      <a href="songs.html" class="menu-link">うた</a>
-      <a href="videos.html" class="menu-link">最新動画</a>
-      <a href="videos-list.html" class="menu-link active">動画一覧</a>
-      <a href="fan.html" class="menu-link">ファンコーナー</a>
+
+      <a href="index.html" class="menu-link">
+        プロフィール
+      </a>
+
+      <a href="songs.html" class="menu-link">
+        うた
+      </a>
+
+      <a href="videos.html" class="menu-link">
+        最新動画
+      </a>
+
+      <a href="videos-list.html" class="menu-link active">
+        動画一覧
+      </a>
+
+      <a href="fan.html" class="menu-link">
+        ファンコーナー
+      </a>
+
     </nav>
 
+
+    <!-- ================================
+         メイン
+    ================================= -->
 
     <main class="main-content">
 
       <h1>☕️らてらてちゃん応援ルーム🎧️</h1>
 
 
-      <!-- =====================================
+      <!-- =================================
            🌟 管理人おすすめ
-      ====================================== -->
+      ================================= -->
+
       <div class="video-section">
 
         <h2>🌟 管理人おすすめ</h2>
 
-        <div id="recommended-videos" class="thumbnail-grid">
-
-          <!--
-          ここにお気に入り動画を追加
-
-          例：
-
-          <a href="https://www.youtube.com/watch?v=動画ID"
-             target="_blank"
-             rel="noopener noreferrer"
-             class="thumbnail-link">
-
-            <img
-              src="https://i.ytimg.com/vi/動画ID/mqdefault.jpg"
-              alt="動画タイトル">
-
-          </a>
-          -->
-
-        </div>
+        <div id="recommended-videos" class="thumbnail-grid"></div>
 
       </div>
 
 
-      <!-- =====================================
+      <!-- =================================
+           🎞️ MV
+      ================================= -->
+
+      <div class="video-section">
+
+        <h2>🎞️ MV</h2>
+
+        <div id="mv-list" class="thumbnail-grid"></div>
+
+      </div>
+
+
+      <!-- =================================
            🎬 横動画
-      ====================================== -->
+      ================================= -->
+
       <div class="video-section">
 
         <h2>🎬 横動画</h2>
@@ -68,9 +141,10 @@
       </div>
 
 
-      <!-- =====================================
-           📱 Shorts
-      ====================================== -->
+      <!-- =================================
+           📱 ショート
+      ================================= -->
+
       <div class="video-section">
 
         <h2>📱 ショート</h2>
@@ -80,49 +154,15 @@
       </div>
 
 
-      <!-- =====================================
-           🎞️ MV
-      ====================================== -->
-      <div class="video-section">
-
-        <h2>🎞️ MV</h2>
-
-        <div id="mv-list" class="thumbnail-grid">
-
-          <!--
-          MVを追加するときはここにサムネを追加
-
-          <a href="https://www.youtube.com/watch?v=動画ID"
-             target="_blank"
-             rel="noopener noreferrer"
-             class="thumbnail-link">
-
-            <img
-              src="https://i.ytimg.com/vi/動画ID/mqdefault.jpg"
-              alt="MV">
-
-          </a>
-          -->
-
-        </div>
-
-      </div>
-
-
-      <!-- =====================================
+      <!-- =================================
            🎤 動画・総集編
-      ====================================== -->
+      ================================= -->
+
       <div class="video-section">
 
         <h2>🎤 動画・総集編</h2>
 
-        <div id="compilation-list" class="thumbnail-grid">
-
-          <!--
-          総集編などを追加
-          -->
-
-        </div>
+        <div id="compilation-list" class="thumbnail-grid"></div>
 
       </div>
 
@@ -132,7 +172,241 @@
   </div>
 
 
-  <script src="script.js"></script>
+  <!-- =====================================
+       🎬 動画設定
+       ★ URLを変更するだけ ★
+  ====================================== -->
+
+  <script>
+
+    /*
+     * =====================================
+     * 🌟 管理人おすすめ
+     *
+     * ↓ このURLを好きなYouTube動画のURLに変更
+     * =====================================
+     */
+
+    const recommendedVideos = [
+
+      "https://www.youtube.com/watch?v=★ここを変更★",
+
+      "https://www.youtube.com/watch?v=★ここを変更★",
+
+      "https://www.youtube.com/watch?v=★ここを変更★",
+
+      "https://www.youtube.com/watch?v=★ここを変更★",
+
+      "https://www.youtube.com/watch?v=★ここを変更★"
+
+    ];
+
+
+    /*
+     * =====================================
+     * 🎞️ MV
+     *
+     * ↓ MVのURLに変更
+     * =====================================
+     */
+
+    const mvVideos = [
+
+      "https://www.youtube.com/watch?v=★ここを変更★",
+
+      "https://www.youtube.com/watch?v=★ここを変更★",
+
+      "https://www.youtube.com/watch?v=★ここを変更★"
+
+    ];
+
+
+    /*
+     * =====================================
+     * 🎬 横動画
+     *
+     * ↓ 横動画のURLに変更
+     * =====================================
+     */
+
+    const normalVideos = [
+
+      "https://www.youtube.com/watch?v=★ここを変更★",
+
+      "https://www.youtube.com/watch?v=★ここを変更★",
+
+      "https://www.youtube.com/watch?v=★ここを変更★"
+
+    ];
+
+
+    /*
+     * =====================================
+     * 📱 ショート
+     *
+     * ↓ ShortsのURLに変更
+     *
+     * https://www.youtube.com/shorts/XXXXXXXXXXX
+     * =====================================
+     */
+
+    const shortsVideos = [
+
+      "https://www.youtube.com/shorts/★ここを変更★",
+
+      "https://www.youtube.com/shorts/★ここを変更★",
+
+      "https://www.youtube.com/shorts/★ここを変更★"
+
+    ];
+
+
+    /*
+     * =====================================
+     * 🎤 動画・総集編
+     *
+     * ↓ 動画のURLに変更
+     * =====================================
+     */
+
+    const compilationVideos = [
+
+      "https://www.youtube.com/watch?v=★ここを変更★",
+
+      "https://www.youtube.com/watch?v=★ここを変更★",
+
+      "https://www.youtube.com/watch?v=★ここを変更★"
+
+    ];
+
+
+    /*
+     * =====================================
+     * YouTubeのURLから動画IDを取得
+     * =====================================
+     */
+
+    function getYouTubeId(url) {
+
+      try {
+
+        const parsed = new URL(url);
+
+        /* youtu.be */
+        if (parsed.hostname.includes("youtu.be")) {
+          return parsed.pathname.substring(1);
+        }
+
+        /* Shorts */
+        if (parsed.pathname.includes("/shorts/")) {
+          return parsed.pathname
+            .split("/shorts/")[1]
+            .split("/")[0];
+        }
+
+        /* 通常のYouTube */
+        if (parsed.searchParams.get("v")) {
+          return parsed.searchParams.get("v");
+        }
+
+        return null;
+
+      } catch (error) {
+
+        return null;
+
+      }
+
+    }
+
+
+    /*
+     * =====================================
+     * サムネイルを表示
+     * =====================================
+     */
+
+    function createThumbnails(containerId, videos) {
+
+      const container =
+        document.getElementById(containerId);
+
+      if (!container) return;
+
+
+      videos.forEach(url => {
+
+        const videoId = getYouTubeId(url);
+
+        if (!videoId) return;
+
+
+        const link =
+          document.createElement("a");
+
+        link.href = url;
+
+        link.target = "_blank";
+
+        link.rel = "noopener noreferrer";
+
+        link.className = "thumbnail-link";
+
+
+        const img =
+          document.createElement("img");
+
+        img.src =
+          `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
+
+        img.alt = "YouTube動画";
+
+
+        link.appendChild(img);
+
+        container.appendChild(link);
+
+      });
+
+    }
+
+
+    /*
+     * =====================================
+     * 🚀 各カテゴリーを表示
+     * =====================================
+     */
+
+    createThumbnails(
+      "recommended-videos",
+      recommendedVideos
+    );
+
+
+    createThumbnails(
+      "mv-list",
+      mvVideos
+    );
+
+
+    createThumbnails(
+      "normal-videos-list",
+      normalVideos
+    );
+
+
+    createThumbnails(
+      "shorts-list",
+      shortsVideos
+    );
+
+
+    createThumbnails(
+      "compilation-list",
+      compilationVideos
+    );
+
+  </script>
 
 </body>
 </html>
