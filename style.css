@@ -493,7 +493,7 @@ h1 {
 /* 子メニューの文字位置を揃える */
 .menu-link.child {
   display: block;
-  font-size: 20px;
+  font-size: 16px;
   padding: 10px 20px 10px 34px; /* 左の余白を統一 */
   text-align: left;
   opacity: 0.92;
@@ -501,5 +501,5 @@ h1 {
 }
 
 .menu-children {
-  padding-left: 70;
+  padding-left: 40;
 }
