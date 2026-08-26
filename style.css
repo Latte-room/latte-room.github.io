@@ -516,7 +516,7 @@ h1 {
   box-sizing: border-box !important;
   text-align: left !important;
   font-size: 15px !important;
-  padding: 10px 16px 10px 48px !important; /* 左位置はここで調整 */
+  padding: 10px 16px 10px 60px !important; /* 左位置はここで調整 */
   margin: 0 !important;
   opacity: 0.95;
 }
