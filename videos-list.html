@@ -6,9 +6,11 @@
   <title>動画一覧｜らてらてちゃん応援ルーム</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
   <div class="layout">
+
     <nav class="side-menu">
       <a href="index.html" class="menu-link">プロフィール</a>
       <a href="songs.html" class="menu-link">うた</a>
@@ -17,21 +19,120 @@
       <a href="fan.html" class="menu-link">ファンコーナー</a>
     </nav>
 
+
     <main class="main-content">
+
       <h1>☕️らてらてちゃん応援ルーム🎧️</h1>
 
+
+      <!-- =====================================
+           🌟 管理人おすすめ
+      ====================================== -->
       <div class="video-section">
-        <h2>🎬 横動画一覧</h2>
-        <div id="normal-videos-list" class="thumbnail-grid"></div>
+
+        <h2>🌟 管理人おすすめ</h2>
+
+        <div id="recommended-videos" class="thumbnail-grid">
+
+          <!--
+          ここにお気に入り動画を追加
+
+          例：
+
+          <a href="https://www.youtube.com/watch?v=動画ID"
+             target="_blank"
+             rel="noopener noreferrer"
+             class="thumbnail-link">
+
+            <img
+              src="https://i.ytimg.com/vi/動画ID/mqdefault.jpg"
+              alt="動画タイトル">
+
+          </a>
+          -->
+
+        </div>
+
       </div>
 
+
+      <!-- =====================================
+           🎬 横動画
+      ====================================== -->
       <div class="video-section">
-        <h2>📱 ショート一覧</h2>
-        <div id="shorts-list" class="thumbnail-grid"></div>
+
+        <h2>🎬 横動画</h2>
+
+        <div id="normal-videos-list" class="thumbnail-grid"></div>
+
       </div>
+
+
+      <!-- =====================================
+           📱 Shorts
+      ====================================== -->
+      <div class="video-section">
+
+        <h2>📱 ショート</h2>
+
+        <div id="shorts-list" class="thumbnail-grid"></div>
+
+      </div>
+
+
+      <!-- =====================================
+           🎞️ MV
+      ====================================== -->
+      <div class="video-section">
+
+        <h2>🎞️ MV</h2>
+
+        <div id="mv-list" class="thumbnail-grid">
+
+          <!--
+          MVを追加するときはここにサムネを追加
+
+          <a href="https://www.youtube.com/watch?v=動画ID"
+             target="_blank"
+             rel="noopener noreferrer"
+             class="thumbnail-link">
+
+            <img
+              src="https://i.ytimg.com/vi/動画ID/mqdefault.jpg"
+              alt="MV">
+
+          </a>
+          -->
+
+        </div>
+
+      </div>
+
+
+      <!-- =====================================
+           🎤 動画・総集編
+      ====================================== -->
+      <div class="video-section">
+
+        <h2>🎤 動画・総集編</h2>
+
+        <div id="compilation-list" class="thumbnail-grid">
+
+          <!--
+          総集編などを追加
+          -->
+
+        </div>
+
+      </div>
+
+
     </main>
+
   </div>
 
+
   <script src="script.js"></script>
+
 </body>
 </html>
