@@ -117,6 +117,7 @@
 
       <!-- =================================
            🎞️ MV
+           プレイリストから自動取得
       ================================= -->
 
       <div class="video-section">
@@ -130,6 +131,7 @@
 
       <!-- =================================
            🎬 横動画
+           URLを直接登録
       ================================= -->
 
       <div class="video-section">
@@ -143,6 +145,7 @@
 
       <!-- =================================
            📱 ショート
+           URLを直接登録
       ================================= -->
 
       <div class="video-section">
@@ -156,6 +159,7 @@
 
       <!-- =================================
            🎤 動画・総集編
+           プレイリストから自動取得
       ================================= -->
 
       <div class="video-section">
@@ -174,68 +178,81 @@
 
   <!-- =====================================
        🎬 動画設定
-       ★ URLを変更するだけ ★
   ====================================== -->
 
   <script>
 
     /*
      * =====================================
+     * 🔑 YouTube API
+     *
+     * ★ここに今使っているAPIキーを入れる★
+     * =====================================
+     */
+
+    const API_KEY = "★ここにAPIキー★";
+
+
+    /*
+     * =====================================
      * 🌟 管理人おすすめ
      *
-     * ↓ このURLを好きなYouTube動画のURLに変更
+     * ★YouTubeのURLを入れるだけ★
+     *
+     * 5～10個くらいがおすすめ
      * =====================================
      */
 
     const recommendedVideos = [
 
-      "https://www.youtube.com/watch?v=9uL1k1WFhxg",
+      // ★ここにYouTubeのURLを入れる★
 
-      "https://www.youtube.com/watch?v=★ここを変更★",
+      // 例：
+      // "https://www.youtube.com/watch?v=XXXXXXXXXXX",
 
-      "https://www.youtube.com/watch?v=★ここを変更★",
+      // "https://www.youtube.com/watch?v=XXXXXXXXXXX",
 
-      "https://www.youtube.com/watch?v=★ここを変更★",
+      // "https://www.youtube.com/watch?v=XXXXXXXXXXX",
 
-      "https://www.youtube.com/watch?v=★ここを変更★"
+      // "https://www.youtube.com/watch?v=XXXXXXXXXXX",
+
+      // "https://www.youtube.com/watch?v=XXXXXXXXXXX"
 
     ];
 
 
     /*
      * =====================================
-     * 🎞️ MV
+     * 🎞️ MVプレイリスト
      *
-     * ↓ MVのURLに変更
+     * ★ここにMVプレイリストIDを入れる★
+     *
+     * 例：
+     * https://www.youtube.com/playlist?list=ABC123
+     *
+     * ↓
+     * ABC123 の部分だけ入れる
      * =====================================
      */
 
-    const mvVideos = [
-
-      "https://www.youtube.com/watch?v=★ここを変更★",
-
-      "https://www.youtube.com/watch?v=★ここを変更★",
-
-      "https://www.youtube.com/watch?v=★ここを変更★"
-
-    ];
+    const MV_PLAYLIST_ID = "★ここにMVプレイリストID★";
 
 
     /*
      * =====================================
      * 🎬 横動画
      *
-     * ↓ 横動画のURLに変更
+     * ★YouTubeのURLを入れるだけ★
      * =====================================
      */
 
     const normalVideos = [
 
-      "https://www.youtube.com/watch?v=★ここを変更★",
+      // "https://www.youtube.com/watch?v=XXXXXXXXXXX",
 
-      "https://www.youtube.com/watch?v=★ここを変更★",
+      // "https://www.youtube.com/watch?v=XXXXXXXXXXX",
 
-      "https://www.youtube.com/watch?v=★ここを変更★"
+      // "https://www.youtube.com/watch?v=XXXXXXXXXXX"
 
     ];
 
@@ -244,45 +261,36 @@
      * =====================================
      * 📱 ショート
      *
-     * ↓ ShortsのURLに変更
-     *
-     * https://www.youtube.com/shorts/XXXXXXXXXXX
+     * ★ShortsのURLを入れるだけ★
      * =====================================
      */
 
     const shortsVideos = [
 
-      "https://www.youtube.com/shorts/★ここを変更★",
+      // "https://www.youtube.com/shorts/XXXXXXXXXXX",
 
-      "https://www.youtube.com/shorts/★ここを変更★",
+      // "https://www.youtube.com/shorts/XXXXXXXXXXX",
 
-      "https://www.youtube.com/shorts/★ここを変更★"
+      // "https://www.youtube.com/shorts/XXXXXXXXXXX"
 
     ];
 
 
     /*
      * =====================================
-     * 🎤 動画・総集編
+     * 🎤 総集編プレイリスト
      *
-     * ↓ 動画のURLに変更
+     * ★ここに総集編プレイリストIDを入れる★
      * =====================================
      */
 
-    const compilationVideos = [
-
-      "https://www.youtube.com/watch?v=★ここを変更★",
-
-      "https://www.youtube.com/watch?v=★ここを変更★",
-
-      "https://www.youtube.com/watch?v=★ここを変更★"
-
-    ];
+    const COMPILATION_PLAYLIST_ID =
+      "★ここに総集編プレイリストID★";
 
 
     /*
      * =====================================
-     * YouTubeのURLから動画IDを取得
+     * YouTube URLから動画IDを取得
      * =====================================
      */
 
@@ -292,21 +300,24 @@
 
         const parsed = new URL(url);
 
-        /* youtu.be */
         if (parsed.hostname.includes("youtu.be")) {
+
           return parsed.pathname.substring(1);
+
         }
 
-        /* Shorts */
         if (parsed.pathname.includes("/shorts/")) {
+
           return parsed.pathname
             .split("/shorts/")[1]
             .split("/")[0];
+
         }
 
-        /* 通常のYouTube */
         if (parsed.searchParams.get("v")) {
+
           return parsed.searchParams.get("v");
+
         }
 
         return null;
@@ -322,7 +333,8 @@
 
     /*
      * =====================================
-     * サムネイルを表示
+     * URLからサムネイルを作成
+     * APIクォータ 0
      * =====================================
      */
 
@@ -373,37 +385,212 @@
 
     /*
      * =====================================
-     * 🚀 各カテゴリーを表示
+     * 📋 プレイリストから動画を取得
+     *
+     * playlistItems.list を使用
+     *
+     * search.list より大幅にクォータが軽い
      * =====================================
      */
 
-    createThumbnails(
-      "recommended-videos",
-      recommendedVideos
-    );
+    async function fetchPlaylistVideos(
+      playlistId,
+      containerId
+    ) {
+
+      const container =
+        document.getElementById(containerId);
+
+      if (!container) return;
+
+      if (
+        !playlistId ||
+        playlistId.includes("★")
+      ) {
+
+        container.innerHTML =
+          "<p>プレイリストを設定してください</p>";
+
+        return;
+
+      }
 
 
-    createThumbnails(
-      "mv-list",
-      mvVideos
-    );
+      let pageToken = "";
+
+      try {
+
+        do {
+
+          let url =
+            `https://www.googleapis.com/youtube/v3/playlistItems` +
+            `?key=${API_KEY}` +
+            `&playlistId=${playlistId}` +
+            `&part=snippet` +
+            `&maxResults=50`;
+
+          if (pageToken) {
+
+            url +=
+              `&pageToken=${pageToken}`;
+
+          }
 
 
-    createThumbnails(
-      "normal-videos-list",
-      normalVideos
-    );
+          const response =
+            await fetch(url);
+
+          const data =
+            await response.json();
 
 
-    createThumbnails(
-      "shorts-list",
-      shortsVideos
-    );
+          if (data.error) {
+
+            console.error(
+              "プレイリスト取得エラー:",
+              data.error
+            );
+
+            container.innerHTML =
+              "<p>プレイリストを読み込めませんでした</p>";
+
+            return;
+
+          }
 
 
-    createThumbnails(
-      "compilation-list",
-      compilationVideos
+          if (!data.items) break;
+
+
+          data.items.forEach(item => {
+
+            const videoId =
+              item.snippet?.resourceId?.videoId;
+
+            if (!videoId) return;
+
+
+            const link =
+              document.createElement("a");
+
+            link.href =
+              `https://www.youtube.com/watch?v=${videoId}`;
+
+            link.target = "_blank";
+
+            link.rel =
+              "noopener noreferrer";
+
+            link.className =
+              "thumbnail-link";
+
+
+            const img =
+              document.createElement("img");
+
+            img.src =
+              `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
+
+            img.alt =
+              item.snippet?.title || "YouTube動画";
+
+
+            link.appendChild(img);
+
+            container.appendChild(link);
+
+          });
+
+
+          pageToken =
+            data.nextPageToken || "";
+
+
+        } while (pageToken);
+
+
+      } catch (error) {
+
+        console.error(
+          "プレイリスト取得エラー:",
+          error
+        );
+
+        container.innerHTML =
+          "<p>プレイリストを読み込めませんでした</p>";
+
+      }
+
+    }
+
+
+    /*
+     * =====================================
+     * 🚀 実行
+     * =====================================
+     */
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      function() {
+
+
+        /*
+         * 🌟 管理人おすすめ
+         * APIを使わない
+         */
+
+        createThumbnails(
+          "recommended-videos",
+          recommendedVideos
+        );
+
+
+        /*
+         * 🎬 横動画
+         * APIを使わない
+         */
+
+        createThumbnails(
+          "normal-videos-list",
+          normalVideos
+        );
+
+
+        /*
+         * 📱 ショート
+         * APIを使わない
+         */
+
+        createThumbnails(
+          "shorts-list",
+          shortsVideos
+        );
+
+
+        /*
+         * 🎞️ MV
+         * プレイリストから取得
+         */
+
+        fetchPlaylistVideos(
+          MV_PLAYLIST_ID,
+          "mv-list"
+        );
+
+
+        /*
+         * 🎤 総集編
+         * プレイリストから取得
+         */
+
+        fetchPlaylistVideos(
+          COMPILATION_PLAYLIST_ID,
+          "compilation-list"
+        );
+
+
+      }
     );
 
   </script>
