@@ -378,3 +378,32 @@ h1 {
   color: #fff3b0;
   text-shadow: 0 2px 8px rgba(255, 105, 180, 0.3);
 }
+
+/* ===== 階層メニュー ===== */
+.menu-group {
+  margin: 0;
+}
+
+.menu-parent {
+  font-weight: bold;
+}
+
+.menu-children {
+  padding-left: 8px;
+  margin-bottom: 4px;
+}
+
+.menu-link.child {
+  font-size: 15px;
+  padding: 10px 20px 10px 30px;
+  opacity: 0.92;
+}
+
+.menu-link.child:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.menu-link.child.active {
+  background: rgba(255, 255, 255, 0.3);
+  font-weight: bold;
+}
