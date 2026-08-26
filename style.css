@@ -504,19 +504,18 @@ h1 {
   padding-left: 40;
 }
 
-/* 子メニュー強制位置調整 */
+/* 子メニューを中央に寄せる */
 .menu-children {
+  text-align: center !important;
   padding-left: 0 !important;
-  text-align: left !important;
 }
 
 .menu-link.child {
   display: block !important;
   width: 100% !important;
-  box-sizing: border-box !important;
-  text-align: left !important;
+  text-align: center !important;
+  padding: 10px 16px !important;
+  margin: 0 auto !important;
   font-size: 15px !important;
-  padding: 10px 16px 10px 60px !important; /* 左位置はここで調整 */
-  margin: 0 !important;
-  opacity: 0.95;
+  box-sizing: border-box !important;
 }
