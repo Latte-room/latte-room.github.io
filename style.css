@@ -443,3 +443,49 @@ h1 {
   padding: 10px 20px 10px 30px;
   opacity: 0.92;
 }
+
+/* ===== 階層メニュー 位置修正 ===== */
+.menu-parent-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
+}
+
+.menu-parent-row .menu-link {
+  flex: 1;
+  padding-right: 40px; /* ▼のスペースを確保 */
+}
+
+.menu-toggle {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: white;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 8px;
+  line-height: 1;
+}
+
+.menu-toggle.open {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+.menu-children {
+  display: none;
+  padding-left: 8px;
+}
+
+.menu-children.open {
+  display: block;
+}
+
+.menu-link.child {
+  font-size: 15px;
+  padding: 10px 20px 10px 30px;
+  opacity: 0.92;
+}
