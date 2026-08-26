@@ -12,30 +12,40 @@
     <!-- 左メニュー -->
     <nav class="side-menu">
       <a href="index.html" class="menu-link">プロフィール</a>
-      <a href="songs.html" class="menu-link active">うた</a>
+
+      <!-- うた（階層付き） -->
+      <div class="menu-group">
+        <a href="songs.html" class="menu-link menu-parent active">うた</a>
+        <div class="menu-children">
+          <a href="songs.html#original" class="menu-link child">オリジナル曲</a>
+          <a href="songs.html#covers" class="menu-link child">カバー</a>
+          <a href="songs.html#gakuen" class="menu-link child">山下学園関連</a>
+        </div>
+      </div>
+
       <a href="videos.html" class="menu-link">最新動画</a>
       <a href="videos-list.html" class="menu-link">動画一覧</a>
       <a href="fan.html" class="menu-link">ファンコーナー</a>
     </nav>
 
-    <!-- 右側のコンテンツ全部をここに入れる -->
+    <!-- 右側のコンテンツ -->
     <main class="main-content">
       <h1>☕️らてらてちゃん応援ルーム🎧️</h1>
 
-      <!-- オリジナル曲（元のまま復活） -->
-      <div class="video-section">
+      <!-- オリジナル曲 -->
+      <div class="video-section" id="original">
         <h2>🎵 オリジナル曲 🎵</h2>
         <div id="original-songs"></div>
       </div>
 
       <!-- 歌ってみた（カバー） -->
-      <div class="video-section">
+      <div class="video-section" id="covers">
         <h2>🎤 歌ってみた（カバー）</h2>
         <div id="covers-slider"></div>
       </div>
 
       <!-- 山下学園関連 -->
-      <div class="video-section">
+      <div class="video-section" id="gakuen">
         <h2>🏫 山下学園関連</h2>
         <div id="gakuen-slider"></div>
       </div>
