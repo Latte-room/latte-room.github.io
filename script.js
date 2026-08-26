@@ -15,8 +15,6 @@ async function fetchLatestVideos() {
 
   let pageToken = "";
   let tryCount = 0;
-
-  // クォータ節約のため最大2ページまで
   const maxTries = 2;
 
   try {
@@ -108,12 +106,7 @@ async function fetchLatestVideos() {
   }
 
 
-  // ==================================================
-  // 🎬 横動画
-  // ==================================================
-
-  const latestVideo =
-    document.getElementById("latest-video");
+  const latestVideo = document.getElementById("latest-video");
 
   if (latestVideo) {
     latestVideo.innerHTML = normalVideo
@@ -124,7 +117,6 @@ async function fetchLatestVideos() {
             title="${normalTitle}"
             allowfullscreen>
           </iframe>
-
           <p>${normalTitle}</p>
         </div>
       `
@@ -132,12 +124,7 @@ async function fetchLatestVideos() {
   }
 
 
-  // ==================================================
-  // 📱 Shorts
-  // ==================================================
-
-  const latestShorts =
-    document.getElementById("latest-shorts");
+  const latestShorts = document.getElementById("latest-shorts");
 
   if (latestShorts) {
     latestShorts.innerHTML = shortsVideo
@@ -148,7 +135,6 @@ async function fetchLatestVideos() {
             title="${shortsTitle}"
             allowfullscreen>
           </iframe>
-
           <p>${shortsTitle}</p>
         </div>
       `
@@ -160,9 +146,6 @@ async function fetchLatestVideos() {
 
 // ==================================================
 // 🎵 プレイリストから動画を取得
-//
-// ここで1回だけプレイリストを取得して、
-// オリジナル曲・歌ってみた・山下学園に振り分ける
 // ==================================================
 
 async function fetchPlaylistSongs() {
@@ -173,8 +156,6 @@ async function fetchPlaylistSongs() {
 
   let pageToken = "";
   let tryCount = 0;
-
-  // 必要なら増やせる
   const maxTries = 10;
 
   try {
@@ -205,26 +186,13 @@ async function fetchPlaylistSongs() {
         break;
       }
 
-
-      // ==================================================
-      // 取得した動画を振り分け
-      // ==================================================
-
       for (const item of data.items) {
 
-        const rawTitle =
-          item.snippet?.title || "";
+        const rawTitle = item.snippet?.title || "";
+        const title = rawTitle.normalize("NFC");
+        const videoId = item.snippet?.resourceId?.videoId;
 
-        const title =
-          rawTitle.normalize("NFC");
-
-        const videoId =
-          item.snippet?.resourceId?.videoId;
-
-        if (!videoId) {
-          continue;
-        }
-
+        if (!videoId) continue;
 
         const videoData = {
           id: videoId,
@@ -233,38 +201,21 @@ async function fetchPlaylistSongs() {
             item.snippet?.thumbnails?.medium?.url ||
             item.snippet?.thumbnails?.default?.url ||
             "",
-          publishedAt:
-            item.snippet?.publishedAt || ""
+          publishedAt: item.snippet?.publishedAt || ""
         };
 
+        const isOriginal = title.includes("オリジナル曲");
 
-        // ==================================================
-        // 🎵 オリジナル曲
-        // ==================================================
-
-        const isOriginal =
-          title.includes("オリジナル曲");
-
-
-        // Shortsを除外
         const isShorts =
           title.includes("#shorts") ||
           title.toLowerCase().includes("shorts") ||
           title.includes("ショート");
 
-
         if (isOriginal && !isShorts) {
-
           if (!originalSongs.some(v => v.id === videoId)) {
             originalSongs.push(videoData);
           }
-
         }
-
-
-        // ==================================================
-        // ☕️ 山下学園
-        // ==================================================
 
         const isGakuen =
           title.includes("山下学園") ||
@@ -272,104 +223,37 @@ async function fetchPlaylistSongs() {
           title.includes("@山下") ||
           title.includes("フリーライブ");
 
-
-        // ==================================================
-        // 🎤 歌ってみた
-        // ==================================================
-
         const isCover =
           title.includes("Covered") ||
           title.includes("covered") ||
           title.includes("COVERED") ||
           title.includes("歌ってみた");
 
-
         if (isGakuen) {
-
           if (!gakuen.some(v => v.id === videoId)) {
             gakuen.push(videoData);
           }
-
         } else if (isCover) {
-
           if (!covers.some(v => v.id === videoId)) {
             covers.push(videoData);
           }
-
         }
-
       }
 
-
-      pageToken =
-        data.nextPageToken || "";
-
-      if (!pageToken) {
-        break;
-      }
+      pageToken = data.nextPageToken || "";
+      if (!pageToken) break;
     }
 
+    originalSongs.sort((a, b) => (b.publishedAt || "").localeCompare(a.publishedAt || ""));
+    covers.sort((a, b) => (b.publishedAt || "").localeCompare(a.publishedAt || ""));
+    gakuen.sort((a, b) => (b.publishedAt || "").localeCompare(a.publishedAt || ""));
 
-    // ==================================================
-    // 📅 公開日順
-    // ==================================================
-
-    originalSongs.sort(
-      (a, b) =>
-        (b.publishedAt || "")
-          .localeCompare(a.publishedAt || "")
-    );
-
-    covers.sort(
-      (a, b) =>
-        (b.publishedAt || "")
-          .localeCompare(a.publishedAt || "")
-    );
-
-    gakuen.sort(
-      (a, b) =>
-        (b.publishedAt || "")
-          .localeCompare(a.publishedAt || "")
-    );
-
-
-    // ==================================================
-    // 🎵 オリジナル曲
-    // ==================================================
-
-    createThumbSlider(
-      "original-songs",
-      originalSongs
-    );
-
-
-    // ==================================================
-    // 🎤 歌ってみた
-    // ==================================================
-
-    createThumbSlider(
-      "covers-slider",
-      covers
-    );
-
-
-    // ==================================================
-    // ☕️ 山下学園
-    // ==================================================
-
-    createThumbSlider(
-      "gakuen-slider",
-      gakuen
-    );
-
+    createThumbSlider("original-songs", originalSongs);
+    createThumbSlider("covers-slider", covers);
+    createThumbSlider("gakuen-slider", gakuen);
 
   } catch (err) {
-
-    console.error(
-      "プレイリスト取得エラー:",
-      err
-    );
-
+    console.error("プレイリスト取得エラー:", err);
   }
 }
 
@@ -379,289 +263,131 @@ async function fetchPlaylistSongs() {
 // 🎞️ サムネイル付きスライダー
 // ==================================================
 
-function createThumbSlider(
-  containerId,
-  videos
-) {
+function createThumbSlider(containerId, videos) {
 
-  const container =
-    document.getElementById(containerId);
-
-  if (!container) {
-    return;
-  }
-
+  const container = document.getElementById(containerId);
+  if (!container) return;
 
   if (!videos || videos.length === 0) {
-
-    container.innerHTML =
-      "<p>動画が見つかりませんでした</p>";
-
+    container.innerHTML = "<p>動画が見つかりませんでした</p>";
     return;
   }
-
 
   let currentIndex = 0;
 
-
-  // ==================================================
-  // 表示
-  // ==================================================
-
   function render() {
-
-    const video =
-      videos[currentIndex];
-
-
-    // --------------------------------------------------
-    // サムネイル
-    // --------------------------------------------------
+    const video = videos[currentIndex];
 
     let thumbsHtml = "";
 
     videos.forEach((v, i) => {
-
       thumbsHtml += `
         <div
           class="thumb-item ${i === currentIndex ? "active" : ""}"
           data-index="${i}"
-          style="
-            flex:0 0 210px;
-            width:210px;
-            min-width:210px;
-          "
+          style="flex:0 0 210px; width:210px; min-width:210px;"
         >
-
           <img
             src="${v.thumbnail}"
             alt=""
-            style="
-              width:100%;
-              height:80px;
-              object-fit:cover;
-              display:block;
-            "
+            style="width:100%; height:80px; object-fit:cover; display:block;"
           >
-
-          <p
-            style="
-              color:white;
-              font-size:12px;
-              padding:6px;
-              margin:0;
-              text-align:center;
-              white-space:nowrap;
-              overflow:hidden;
-              text-overflow:ellipsis;
-            "
-          >
+          <p style="color:white; font-size:12px; padding:6px; margin:0; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
             ${v.title}
           </p>
-
         </div>
       `;
-
     });
 
-
-    // --------------------------------------------------
-    // メイン画面
-    // --------------------------------------------------
-
     container.innerHTML = `
-
       <div class="thumb-main">
-
         <iframe
           src="https://www.youtube.com/embed/${video.id}"
           title="${video.title}"
           allowfullscreen>
         </iframe>
-
-        <p>
-          ${video.title}
-        </p>
-
+        <p>${video.title}</p>
       </div>
 
-
-      <div
-        class="thumb-list-wrapper"
-        style="
-          display:flex;
-          align-items:center;
-          gap:10px;
-        "
-      >
-
-        <button
-          class="thumb-arrow thumb-prev"
-        >
-          ‹
-        </button>
-
-
-        <div
-          class="thumb-list"
-          style="
-            display:flex;
-            flex-direction:row;
-            flex-wrap:nowrap;
-            overflow-x:auto;
-            gap:12px;
-            padding:8px 4px;
-            width:100%;
-          "
-        >
-
+      <div class="thumb-list-wrapper" style="display:flex; align-items:center; gap:10px;">
+        <button class="thumb-arrow thumb-prev">‹</button>
+        <div class="thumb-list" style="display:flex; flex-direction:row; flex-wrap:nowrap; overflow-x:auto; gap:12px; padding:8px 4px; width:100%;">
           ${thumbsHtml}
-
         </div>
-
-
-        <button
-          class="thumb-arrow thumb-next"
-        >
-          ›
-        </button>
-
+        <button class="thumb-arrow thumb-next">›</button>
       </div>
-
     `;
 
-
-    // ==================================================
-    // サムネイルクリック
-    // ==================================================
-
-    container
-      .querySelectorAll(".thumb-item")
-      .forEach(item => {
-
-        item.addEventListener(
-          "click",
-          () => {
-
-            currentIndex =
-              Number(
-                item.getAttribute("data-index")
-              );
-
-            render();
-
-          }
-        );
-
+    container.querySelectorAll(".thumb-item").forEach(item => {
+      item.addEventListener("click", () => {
+        currentIndex = Number(item.getAttribute("data-index"));
+        render();
       });
+    });
 
-
-    // ==================================================
-    // ◀ 前
-    // ==================================================
-
-    const prevButton =
-      container.querySelector(".thumb-prev");
-
+    const prevButton = container.querySelector(".thumb-prev");
     if (prevButton) {
-
-      prevButton.addEventListener(
-        "click",
-        () => {
-
-          currentIndex =
-            (currentIndex - 1 + videos.length)
-            % videos.length;
-
-          render();
-
-        }
-      );
-
+      prevButton.addEventListener("click", () => {
+        currentIndex = (currentIndex - 1 + videos.length) % videos.length;
+        render();
+      });
     }
 
-
-    // ==================================================
-    // ▶ 次
-    // ==================================================
-
-    const nextButton =
-      container.querySelector(".thumb-next");
-
+    const nextButton = container.querySelector(".thumb-next");
     if (nextButton) {
-
-      nextButton.addEventListener(
-        "click",
-        () => {
-
-          currentIndex =
-            (currentIndex + 1)
-            % videos.length;
-
-          render();
-
-        }
-      );
-
+      nextButton.addEventListener("click", () => {
+        currentIndex = (currentIndex + 1) % videos.length;
+        render();
+      });
     }
 
-
-    // ==================================================
-    // 選択中サムネイルを自動スクロール
-    // ==================================================
-
-    const activeThumb =
-      container.querySelector(
-        ".thumb-item.active"
-      );
-
-    const thumbList =
-      container.querySelector(
-        ".thumb-list"
-      );
-
+    const activeThumb = container.querySelector(".thumb-item.active");
+    const thumbList = container.querySelector(".thumb-list");
 
     if (activeThumb && thumbList) {
-
-      const listRect =
-        thumbList.getBoundingClientRect();
-
-      const thumbRect =
-        activeThumb.getBoundingClientRect();
-
+      const listRect = thumbList.getBoundingClientRect();
+      const thumbRect = activeThumb.getBoundingClientRect();
 
       if (thumbRect.left < listRect.left) {
-
         thumbList.scrollBy({
-          left:
-            thumbRect.left -
-            listRect.left -
-            20,
+          left: thumbRect.left - listRect.left - 20,
           behavior: "smooth"
         });
-
-      } else if (
-        thumbRect.right >
-        listRect.right
-      ) {
-
+      } else if (thumbRect.right > listRect.right) {
         thumbList.scrollBy({
-          left:
-            thumbRect.right -
-            listRect.right +
-            20,
+          left: thumbRect.right - listRect.right + 20,
           behavior: "smooth"
         });
-
       }
-
     }
-
   }
 
-
   render();
+}
 
+
+
+// ==================================================
+// 📂 メニュー開閉
+// ==================================================
+
+function setupMenuToggle() {
+  const toggle = document.querySelector(".menu-toggle");
+  const children = document.querySelector(".menu-children");
+
+  if (!toggle || !children) return;
+
+  // うたページにいるときは最初から開く
+  if (location.pathname.includes("songs.html") || location.hash) {
+    children.classList.add("open");
+    toggle.classList.add("open");
+  }
+
+  toggle.addEventListener("click", function(e) {
+    e.preventDefault();
+    children.classList.toggle("open");
+    toggle.classList.toggle("open");
+  });
 }
 
 
@@ -670,23 +396,10 @@ function createThumbSlider(
 // 🚀 実行
 // ==================================================
 
-document.addEventListener(
-  "DOMContentLoaded",
-  function() {
+document.addEventListener("DOMContentLoaded", function() {
+  console.log("DOM読み込み完了 → 動画取得開始");
 
-    console.log(
-      "DOM読み込み完了 → 動画取得開始"
-    );
-
-
-    // 最新動画
-    fetchLatestVideos();
-
-
-    // プレイリスト
-    // オリジナル曲・歌ってみた・山下学園を
-    // ここ1回でまとめて取得
-    fetchPlaylistSongs();
-
-  }
-);
+  setupMenuToggle();
+  fetchLatestVideos();
+  fetchPlaylistSongs();
+});
