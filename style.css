@@ -407,3 +407,39 @@ h1 {
   background: rgba(255, 255, 255, 0.3);
   font-weight: bold;
 }
+
+/* 開閉メニュー */
+.menu-parent-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.menu-toggle {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 8px 16px 8px 8px;
+  transition: transform 0.2s;
+}
+
+.menu-toggle.open {
+  transform: rotate(180deg);
+}
+
+.menu-children {
+  display: none;
+  padding-left: 8px;
+}
+
+.menu-children.open {
+  display: block;
+}
+
+.menu-link.child {
+  font-size: 15px;
+  padding: 10px 20px 10px 30px;
+  opacity: 0.92;
+}
