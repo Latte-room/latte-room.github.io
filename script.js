@@ -1,7 +1,8 @@
 const API_KEY = "AIzaSyBIrDQkZXjtMWbCjznHp_Rga-GhPFwZTWI"; // あなたのAPIキー
 const CHANNEL_ID = "UCKx_KMe4Q92491rkY8JufOg";
 const PLAYLIST_ID = "PLLJ57zRrF1yPhtd2yTExV-7A6wgbKV1Nx";
-
+const CALENDAR_API_KEY = "AIzaSyBmKOyZ89zUS5DWeiU6HScjUSRIUBBGI7Q";
+const CALENDAR_ID ="2a2565ff5f1a306d5c001cbc738f226af408a80e5c5e718c8d51f77a24a7f8f2@group.calendar.google.com";
 
 // ==================================================
 // 🎬 最新の横動画 ＆ 最新ショート
