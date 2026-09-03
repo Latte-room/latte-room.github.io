@@ -5,6 +5,72 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>プロフィール｜らてらてちゃん応援ルーム</title>
   <link rel="stylesheet" href="style.css">
+
+  <style>
+    .schedule-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-top: 10px;
+    }
+
+    .schedule-item {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 14px;
+      padding: 18px 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,.12);
+      text-align: left;
+      color: #333;
+    }
+
+    .schedule-date {
+      font-weight: bold;
+      font-size: 1.05em;
+      color: #5b3b70;
+      margin-bottom: 8px;
+    }
+
+    .schedule-time {
+      font-weight: bold;
+      font-size: 1.15em;
+      color: #333;
+      margin-bottom: 6px;
+    }
+
+    .schedule-title {
+      font-size: 1em;
+      color: #444;
+      white-space: pre-wrap;
+    }
+
+    .schedule-location {
+      margin-top: 6px;
+      font-size: 0.9em;
+      color: #777;
+    }
+
+    .no-schedule,
+    .loading,
+    .error-message {
+      text-align: center;
+      background: rgba(255,255,255,.95);
+      padding: 24px 18px;
+      border-radius: 14px;
+      color: #555;
+    }
+
+    .error-message {
+      color: #b00020;
+      line-height: 1.7;
+    }
+
+    .updated-time {
+      text-align: right;
+      color: rgba(255,255,255,.95);
+      font-size: 0.85em;
+      margin-top: 12px;
+    }
+  </style>
 </head>
 <body>
 
@@ -22,6 +88,7 @@
     <main class="main-content">
       <h1>☕️らてらてちゃん応援ルーム🎧️</h1>
 
+      <!-- プロフィール -->
       <div class="video-section">
         <h2>プロフィール</h2>
 
@@ -33,8 +100,190 @@
 
         <p>ここにプロフィール文を書いていきます。</p>
       </div>
+
+      <!-- 配信予定 -->
+      <div class="video-section">
+        <h2>📅 らてらてちゃん 配信予定</h2>
+
+        <div id="schedule-list" class="schedule-list">
+          <div class="loading">📡 配信予定を取得中……</div>
+        </div>
+
+        <div id="updated-time" class="updated-time"></div>
+      </div>
     </main>
   </div>
+
+  <script>
+    // ========================================
+    // Google Calendar API
+    // ========================================
+    const CALENDAR_API_KEY = "ここにAPIキーを入れる";
+    const CALENDAR_ID = "2a2565ff5f1a306d5c001cbc738f226af408a80e5c5e718c8d51f77a24a7f8f2@group.calendar.google.com";
+
+    // 「らてらて」と「らて」を検索
+    const SEARCH_WORDS = ["らてらて", "らて"];
+
+    function formatDate(date) {
+      const days = ["日", "月", "火", "水", "木", "金", "土"];
+      return (
+        date.getFullYear() + "年" +
+        (date.getMonth() + 1) + "月" +
+        date.getDate() + "日（" +
+        days[date.getDay()] + "）"
+      );
+    }
+
+    function formatTime(date) {
+      return (
+        String(date.getHours()).padStart(2, "0") + ":" +
+        String(date.getMinutes()).padStart(2, "0")
+      );
+    }
+
+    function escapeHtml(text) {
+      return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    async function fetchCalendarEvents(searchWord) {
+      const now = new Date();
+
+      const params = new URLSearchParams({
+        key: CALENDAR_API_KEY,
+        q: searchWord,
+        timeMin: now.toISOString(),
+        maxResults: "2500",
+        singleEvents: "true",
+        orderBy: "startTime"
+      });
+
+      const url =
+        "https://www.googleapis.com/calendar/v3/calendars/" +
+        encodeURIComponent(CALENDAR_ID) +
+        "/events?" +
+        params.toString();
+
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        let errorText = "";
+        try {
+          const errorData = await response.json();
+          errorText = errorData.error?.message || JSON.stringify(errorData);
+        } catch {
+          errorText = await response.text();
+        }
+        throw new Error("Google Calendar API エラー: " + response.status + " / " + errorText);
+      }
+
+      const data = await response.json();
+      return data.items || [];
+    }
+
+    function displayEvents(events) {
+      const container = document.getElementById("schedule-list");
+
+      const uniqueEvents = [];
+      const eventIds = new Set();
+
+      events.forEach(event => {
+        if (!event.id) return;
+        if (eventIds.has(event.id)) return;
+        eventIds.add(event.id);
+        uniqueEvents.push(event);
+      });
+
+      uniqueEvents.sort((a, b) => {
+        const dateA = new Date(a.start.dateTime || a.start.date);
+        const dateB = new Date(b.start.dateTime || b.start.date);
+        return dateA - dateB;
+      });
+
+      if (uniqueEvents.length === 0) {
+        container.innerHTML = `
+          <div class="no-schedule">
+            📭 現在、らてらてちゃんの配信予定はありません。
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = "";
+
+      uniqueEvents.forEach(event => {
+        const item = document.createElement("div");
+        item.className = "schedule-item";
+
+        const isAllDay = !!event.start.date;
+        let dateText = "";
+        let timeText = "";
+
+        if (isAllDay) {
+          const date = new Date(event.start.date + "T00:00:00");
+          dateText = formatDate(date);
+          timeText = "終日";
+        } else {
+          const start = new Date(event.start.dateTime);
+          dateText = formatDate(start);
+          timeText = formatTime(start);
+
+          if (event.end?.dateTime) {
+            const end = new Date(event.end.dateTime);
+            timeText += "〜" + formatTime(end);
+          }
+        }
+
+        const title = event.summary || "配信予定";
+        const location = event.location
+          ? `<div class="schedule-location">📍 ${escapeHtml(event.location)}</div>`
+          : "";
+
+        item.innerHTML = `
+          <div class="schedule-date">${dateText}</div>
+          <div class="schedule-time">🕐 ${timeText}</div>
+          <div class="schedule-title">${escapeHtml(title)}</div>
+          ${location}
+        `;
+
+        container.appendChild(item);
+      });
+    }
+
+    async function loadSchedule() {
+      const container = document.getElementById("schedule-list");
+
+      try {
+        const results = await Promise.all(
+          SEARCH_WORDS.map(word => fetchCalendarEvents(word))
+        );
+
+        const allEvents = results.flat();
+        displayEvents(allEvents);
+
+        const now = new Date();
+        document.getElementById("updated-time").textContent =
+          "最終取得：" + formatDate(now) + " " + formatTime(now);
+
+      } catch (error) {
+        console.error("📅 カレンダー取得エラー:", error);
+
+        container.innerHTML = `
+          <div class="error-message">
+            ⚠️ 配信予定を取得できませんでした。<br><br>
+            Google Calendar APIの設定や<br>
+            APIキーの制限をご確認ください。
+          </div>
+        `;
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", loadSchedule);
+  </script>
 
 </body>
 </html>
