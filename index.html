@@ -10,7 +10,7 @@
 
   <style>
     /* ========================================
-       📅 配信予定
+       📅 スケジュール
     ======================================== */
 
     .schedule-calendar {
@@ -26,6 +26,13 @@
       border-radius: 14px;
       background: #ffffff;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    }
+
+    .schedule-note {
+      margin-top: 12px;
+      font-size: 0.9em;
+      line-height: 1.7;
+      color: rgba(255, 255, 255, 0.95);
     }
 
     /* スマホ */
@@ -106,7 +113,7 @@
 
 
       <!-- ========================================
-           📅 らてらてちゃん 配信予定
+           📺 配信予定
       ======================================== -->
 
       <div class="video-section">
@@ -118,6 +125,27 @@
           <iframe
             src="https://timetreeapp.com/public_calendars/ymstgakuen_streaming/embed/monthly?calendar_name=true"
             title="山下学園 配信スケジュール"
+            loading="lazy">
+          </iframe>
+
+        </div>
+
+      </div>
+
+
+      <!-- ========================================
+           🎤 ライブ・イベント予定
+      ======================================== -->
+
+      <div class="video-section">
+
+        <h2>🎤 ライブ・イベント予定</h2>
+
+        <div class="schedule-calendar">
+
+          <iframe
+            src="https://timetreeapp.com/public_calendars/yamashita_gakuen/embed/monthly?calendar_name=true"
+            title="山下学園 ライブ・イベントスケジュール"
             loading="lazy">
           </iframe>
 
