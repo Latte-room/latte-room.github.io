@@ -3,119 +3,132 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>プロフィール｜らてらてちゃん応援ルーム</title>
+
   <link rel="stylesheet" href="style.css">
 
   <style>
-    .schedule-list {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
+    /* ========================================
+       📅 配信予定
+    ======================================== */
+
+    .schedule-calendar {
+      width: 100%;
       margin-top: 10px;
     }
 
-    .schedule-item {
-      background: rgba(255, 255, 255, 0.95);
+    .schedule-calendar iframe {
+      display: block;
+      width: 100%;
+      height: 700px;
+      border: none;
       border-radius: 14px;
-      padding: 18px 20px;
-      box-shadow: 0 4px 12px rgba(0,0,0,.12);
-      text-align: left;
-      color: #333;
+      background: #ffffff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
     }
 
-    .schedule-date {
-      font-weight: bold;
-      font-size: 1.05em;
-      color: #5b3b70;
-      margin-bottom: 8px;
-    }
-
-    .schedule-time {
-      font-weight: bold;
-      font-size: 1.15em;
-      color: #333;
-      margin-bottom: 6px;
-    }
-
-    .schedule-title {
-      font-size: 1em;
-      color: #444;
-      white-space: pre-wrap;
-    }
-
-    .schedule-location {
-      margin-top: 6px;
-      font-size: 0.9em;
-      color: #777;
-    }
-
-    .no-schedule,
-    .loading,
-    .error-message {
-      text-align: center;
-      background: rgba(255,255,255,.95);
-      padding: 24px 18px;
-      border-radius: 14px;
-      color: #555;
-    }
-
-    .error-message {
-      color: #b00020;
-      line-height: 1.7;
-    }
-
-    .updated-time {
-      text-align: right;
-      color: rgba(255,255,255,.95);
-      font-size: 0.85em;
-      margin-top: 12px;
+    /* スマホ */
+    @media (max-width: 700px) {
+      .schedule-calendar iframe {
+        height: 650px;
+      }
     }
   </style>
 </head>
+
+
 <body>
 
   <div class="layout">
-    <!-- 左メニュー -->
+
+    <!-- ========================================
+         左メニュー
+    ======================================== -->
+
     <nav class="side-menu">
-      <a href="index.html" class="menu-link active">プロフィール</a>
-      <a href="songs.html" class="menu-link">うた</a>
-      <a href="videos.html" class="menu-link">最新動画</a>
-      <a href="videos-list.html" class="menu-link">動画一覧</a>
-      <a href="fan.html" class="menu-link">ファンコーナー</a>
+
+      <a href="index.html" class="menu-link active">
+        プロフィール
+      </a>
+
+      <a href="songs.html" class="menu-link">
+        うた
+      </a>
+
+      <a href="videos.html" class="menu-link">
+        最新動画
+      </a>
+
+      <a href="videos-list.html" class="menu-link">
+        動画一覧
+      </a>
+
+      <a href="fan.html" class="menu-link">
+        ファンコーナー
+      </a>
+
     </nav>
 
-    <!-- メインコンテンツ -->
+
+    <!-- ========================================
+         メインコンテンツ
+    ======================================== -->
+
     <main class="main-content">
+
       <h1>☕️らてらてちゃん応援ルーム🎧️</h1>
 
-      <!-- プロフィール -->
+
+      <!-- ========================================
+           プロフィール
+      ======================================== -->
+
       <div class="video-section">
+
         <h2>プロフィール</h2>
 
         <div class="caution">
+
           <strong>【ご注意】</strong><br>
+
           当サイトはファン個人が運営する非公式の応援サイトです。<br>
+
           山下学園、らてらてちゃんご本人、および関係者様とは一切関係ありません。
+
         </div>
 
-        <p>ここにプロフィール文を書いていきます。</p>
+        <p>
+          ここにプロフィール文を書いていきます。
+        </p>
+
       </div>
 
-      <!-- 配信予定 -->
+
+      <!-- ========================================
+           📅 らてらてちゃん 配信予定
+      ======================================== -->
+
       <div class="video-section">
+
         <h2>📅 らてらてちゃん 配信予定</h2>
 
-        <div id="schedule-list" class="schedule-list">
-          <div class="loading">📡 配信予定を取得中……</div>
+        <div class="schedule-calendar">
+
+          <iframe
+            src="https://timetreeapp.com/public_calendars/ymstgakuen_streaming/embed/monthly?calendar_name=true"
+            title="山下学園 配信スケジュール"
+            loading="lazy">
+          </iframe>
+
         </div>
 
-        <div id="updated-time" class="updated-time"></div>
       </div>
-    </main>
-  </div>
 
-  <script>
-    </script>
+
+    </main>
+
+  </div>
 
 </body>
 </html>
