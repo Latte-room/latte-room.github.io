@@ -1,3 +1,30 @@
+
+過去のメッセージを読み込み中…
+流れ星流れないし元に戻ってないからさっきまで自分がやってたやつに直すわ
+うん、その方が安全だと思う🙏
+今回はこっちが**「星空の演出だけ追加する」つもりなのに、元のレイアウトまで触ってしまった**のがまずかった。
+
+いったん、さっきまで自分で作っていた正常な状態に戻してOK。今回渡した index-final.html と style-fixed.css は使わなくて大丈夫。
+
+元に戻せたら、次にやるなら方針を変えるね。
+
+元のHTML・CSSは一切変更せず、末尾に追加する星エフェクト部分だけ作る。
+そうすればメニュー位置やスマホ表示、カレンダーには触れずに済む。
+
+戻し終わった状態の index.html と style.css を基準にすれば、今度は余計な変更を入れないよ。
+
+もとに戻った
+よかった、ちゃんと元に戻ったなら一安心👌✨
+
+ここからは元の状態を絶対に崩さない方針でいこう。
+
+次に流れ星を入れるなら、レイアウト・左メニュー・カレンダー・既存CSSには手を加えず、星の演出に必要な部分だけ追加する形にするよ。🌌🌠
+
+特に今回は一気に丸ごと置き換えず、まず流れ星1本だけ追加して動作確認 → 動いたらキラキラを追加、の順番が安全だね。
+
+
+貼り付けたテキスト（1）(7).txt
+ドキュメント
 body {
   background-image: url("images/starry-sky-new.png?v=2");
   background-size: cover;
@@ -521,3 +548,159 @@ h1 {
   font-size: 17px !important;
   box-sizing: border-box !important;
 }
+
+戻した状態
+…
+うん、確認できたよ👌
+**今貼ってくれた style.css が「正常に戻った基準版」**として扱えばOK。
+
+それと、index.html 側も確認したけど、左メニューはちゃんと <body> 内の .layout の最初にあり、その横にメインコンテンツが来る元の構造に戻ってる。
+
+ここからは方針を固定しよう。
+
+既存部分は一文字も変更しない。
+
+次に星を動かすときは、
+
+今の背景 → そのまま
+左メニュー → そのまま
+スマホ設定 → そのまま
+カレンダー → そのまま
+動画関係 → そのまま
+レイアウト → そのまま
+星の演出だけ追加
+にする。
+
+あと前回流れ星が見えなかった原因も踏まえて、次は複雑にせず、まずは**「確実に見える流れ星1本」だけを追加して動作確認**するのがいいと思う🌠
+
+それがちゃんと右→左へ流れたら、そのコードを基準にして「たまに2本目」「星のキラキラ✨」を足せば、もう元のサイトを崩さず進められるよ。
+
+演出のみ付けたやつで完全版頂戴
+
+できたよ！🌌✨
+今回は戻した状態を基準にして、既存のレイアウトには手を加えず「演出だけ」追加してある。
+
+元の index.html の左メニュー → メインコンテンツという構造もそのまま。
+
+完全版2つ
+GitHubでは、
+
+index.html → 全部消して index-effects-only.html の中身を丸ごと貼る
+
+style.css → 全部消して style-effects-only.css の中身を丸ごと貼る
+
+でOK。
+
+今回は、
+
+元のサイト + キラキラ星6個 + 右→左へ流れる流れ星2本
+
+だけ。左メニュー、スマホ時の配置、カレンダー、背景画像、動画関係などの既存設定は変更してないよ👌
+
+流れ星も前回よりかなり見つけやすい明るさ・太さ・出現頻度にしてあるので、反映後はページを開いたまま10〜20秒くらい見てみてね🌠 
+
+
+index-effects-only.html
+HTML
+
+style-effects-only.css
+コード
+
+
+
+body {
+  background-image: url("images/starry-sky-new.png?v=2");
+  background-size: cover;
+  background-position: center top;
+  background-attachment: fixed;
+
+  background-color: #07133f;
+  color: #4a3e3d;
+  text-align: center;
+  font-family: sans-serif;
+  padding: 20px;
+  margin: 0;
+
+  min-height: 100vh;
+}
+
+/* 注意書き */
+.caution {
+  background-color: #ffffff;
+  border: 2px solid #d0b8ac;
+  padding: 15px;
+  margin: 0 auto 30px;
+  max-width: 600px;
+  border-radius: 8px;
+  color: #4a3e3d;
+  line-height: 1.6;
+}
+
+/* 動画セクション共通 */
+.video-section {
+  background: linear-gradient(135deg, #2CB6F6, #6dd5fa);
+  color: white;
+  border-radius: 16px;
+  padding: 25px 15px;
+  margin: 25px auto;
+  max-width: 900px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.video-section h2 {
+  border-bottom: 2px solid rgba(255, 255, 255, 0.7);
+  padding-bottom: 8px;
+  display: inline-block;
+  color: white;
+  margin: 5px 0 20px;
+  font-size: 22px;
+}
+
+/* ===== 横動画・ショート用 ===== */
+.video-card {
+  margin: 15px auto 0;
+  background: #111;
+  padding: 12px;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 800px;
+  box-sizing: border-box;
+}
+
+.video-card iframe {
+  width: 100%;
+  height: 450px;
+  border: none;
+  border-radius: 12px;
+  display: block;
+}
+
+.video-card p {
+  color: white;
+  margin: 12px 0 4px;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.video-card.shorts {
+  max-width: 360px;
+}
+
+.video-card.shorts iframe {
+  height: auto;
+  aspect-ratio: 9 / 16;
+}
+
+/* ===== ナビゲーション ===== */
+.main-nav {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 25px auto 30px;
+  max-width: 900px;
+}
+
+.nav-link {
+  padding: 10px 22px;
+  border-radius: 30px;
