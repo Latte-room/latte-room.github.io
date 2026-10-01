@@ -1,15 +1,17 @@
 body {
-  background-image: url("images/starry-sky.jpg");
+  background-image: url("images/starry-sky-new.png");
   background-size: cover;
-  background-position: center;
+  background-position: center top;
   background-attachment: fixed;
 
-  background-color: #fcf9cf;
+  background-color: #07133f;
   color: #4a3e3d;
   text-align: center;
   font-family: sans-serif;
   padding: 20px;
   margin: 0;
+
+  min-height: 100vh;
 }
 
 /* 注意書き */
