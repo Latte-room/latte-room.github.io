@@ -136,48 +136,49 @@
 
 
       <!-- ========================================
-           🎬 横動画
-      ======================================== -->
-
-      <div class="video-section">
-
-        <h2>🎬 横動画</h2>
-
-        <div
-          id="normal-videos-list"
-          class="thumbnail-grid">
-        </div>
-
-      </div>
-
-
-      <!-- ========================================
-           📱 ショート
-      ======================================== -->
-
-      <div class="video-section">
-
-        <h2>📱 ショート</h2>
-
-        <div
-          id="shorts-list"
-          class="thumbnail-grid">
-        </div>
-
-      </div>
-
-
-      <!-- ========================================
            🎤 総集編
            プレイリストから取得
       ======================================== -->
 
       <div class="video-section">
 
-        <h2>🎤 動画・総集編</h2>
+        <h2>🎬 総編集たち</h2>
 
         <div
           id="compilation-list"
+          class="thumbnail-grid">
+        </div>
+
+      </div>
+
+      <!-- ========================================
+           🎵 【勝手に主題歌】作って歌ってる
+           プレイリストから取得
+      ======================================== -->
+
+      <div class="video-section">
+
+        <h2>🎵 【勝手に主題歌】作って歌ってる</h2>
+
+        <div
+          id="theme-song-list"
+          class="thumbnail-grid">
+        </div>
+
+      </div>
+
+
+      <!-- ========================================
+           🎤 らてが歌ってる動画たち！
+           プレイリストから取得
+      ======================================== -->
+
+      <div class="video-section">
+
+        <h2>🎤 らてが歌ってる動画たち！</h2>
+
+        <div
+          id="singing-list"
           class="thumbnail-grid">
         </div>
 
@@ -224,7 +225,23 @@
     ======================================== */
 
     const COMPILATION_PLAYLIST_ID =
-      "ここに総集編プレイリストID";
+      "ここに総編集たちプレイリストID";
+
+
+    /* ========================================
+       🎵 【勝手に主題歌】作って歌ってる
+    ======================================== */
+
+    const THEME_SONG_PLAYLIST_ID =
+      "ここに主題歌プレイリストID";
+
+
+    /* ========================================
+       🎤 らてが歌ってる動画たち！
+    ======================================== */
+
+    const SINGING_PLAYLIST_ID =
+      "ここに歌ってる動画プレイリストID";
 
 
     /* ========================================
@@ -247,44 +264,6 @@
       // "https://www.youtube.com/watch?v=XXXXXXXXXXX",
 
       // "https://www.youtube.com/watch?v=XXXXXXXXXXX"
-
-    ];
-
-
-    /* ========================================
-       🎬 横動画
-
-       YouTubeのURLをそのまま入れる
-
-       APIクォータ消費：0
-    ======================================== */
-
-    const normalVideos = [
-
-      // "https://www.youtube.com/watch?v=XXXXXXXXXXX",
-
-      // "https://www.youtube.com/watch?v=XXXXXXXXXXX",
-
-      // "https://www.youtube.com/watch?v=XXXXXXXXXXX"
-
-    ];
-
-
-    /* ========================================
-       📱 ショート
-
-       ShortsのURLをそのまま入れる
-
-       APIクォータ消費：0
-    ======================================== */
-
-    const shortsVideos = [
-
-      // "https://www.youtube.com/shorts/XXXXXXXXXXX",
-
-      // "https://www.youtube.com/shorts/XXXXXXXXXXX",
-
-      // "https://www.youtube.com/shorts/XXXXXXXXXXX"
 
     ];
 
@@ -692,22 +671,6 @@
         );
 
 
-        /* 🎬 横動画 */
-
-        createThumbnails(
-          "normal-videos-list",
-          normalVideos
-        );
-
-
-        /* 📱 ショート */
-
-        createThumbnails(
-          "shorts-list",
-          shortsVideos
-        );
-
-
         /* 🎞️ MVプレイリスト */
 
         console.log(
@@ -731,6 +694,22 @@
         fetchPlaylistVideos(
           COMPILATION_PLAYLIST_ID,
           "compilation-list"
+        );
+
+
+        /* 🎵 【勝手に主題歌】作って歌ってる */
+
+        fetchPlaylistVideos(
+          THEME_SONG_PLAYLIST_ID,
+          "theme-song-list"
+        );
+
+
+        /* 🎤 らてが歌ってる動画たち！ */
+
+        fetchPlaylistVideos(
+          SINGING_PLAYLIST_ID,
+          "singing-list"
         );
 
       }
