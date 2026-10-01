@@ -591,7 +591,7 @@ h1 {
     0 0 20px 4px rgba(180, 220, 255, 0.5);
   opacity: 0;
   transform: rotate(-25deg);
-  animation: shooting 9s linear infinite;
+  animation: shooting 4s linear infinite;
 }
 
 @keyframes shooting {
