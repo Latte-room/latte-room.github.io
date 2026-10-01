@@ -54,13 +54,20 @@ jobs:
 
 
           def unfold_ics(text):
-              """ICSの折り返された行を元に戻す"""
-              lines = text.replace("\r\n", "\n").replace("\r", "\n").split("\n")
+              lines = (
+                  text
+                  .replace("\r\n", "\n")
+                  .replace("\r", "\n")
+                  .split("\n")
+              )
 
               result = []
 
               for line in lines:
-                  if (line.startswith(" ") or line.startswith("\t")) and result:
+                  if (
+                      (line.startswith(" ") or line.startswith("\t"))
+                      and result
+                  ):
                       result[-1] += line[1:]
                   else:
                       result.append(line)
@@ -106,7 +113,6 @@ jobs:
                       continue
 
                   left, value = line.split(":", 1)
-
                   key = left.split(";", 1)[0]
 
                   if key in {
@@ -128,57 +134,118 @@ jobs:
               if not value:
                   return None
 
-              # YYYYMMDD
+              # 終日予定
               if re.fullmatch(r"\d{8}", value):
                   dt = datetime.strptime(value, "%Y%m%d")
                   return dt.replace(tzinfo=JST)
 
               # UTC
               if re.fullmatch(r"\d{8}T\d{6}Z", value):
-                  dt = datetime.strptime(value, "%Y%m%dT%H%M%SZ")
-                  dt = dt.replace(tzinfo=ZoneInfo("UTC"))
+                  dt = datetime.strptime(
+                      value,
+                      "%Y%m%dT%H%M%SZ"
+                  )
+
+                  dt = dt.replace(
+                      tzinfo=ZoneInfo("UTC")
+                  )
+
                   return dt.astimezone(JST)
 
-              # ローカル時間
+              # 日本時間
               if re.fullmatch(r"\d{8}T\d{6}", value):
-                  dt = datetime.strptime(value, "%Y%m%dT%H%M%S")
-                  return dt.replace(tzinfo=JST)
+                  dt = datetime.strptime(
+                      value,
+                      "%Y%m%dT%H%M%S"
+                  )
+
+                  return dt.replace(
+                      tzinfo=JST
+                  )
 
               return None
 
 
           def event_to_json(event, event_type):
-              start = parse_datetime(event.get("DTSTART"))
-              end = parse_datetime(event.get("DTEND"))
+
+              start = parse_datetime(
+                  event.get("DTSTART")
+              )
+
+              end = parse_datetime(
+                  event.get("DTEND")
+              )
 
               if not start:
                   return None
 
               return {
                   "type": event_type,
-                  "title": event.get("SUMMARY", "").strip(),
+                  "title": event.get(
+                      "SUMMARY",
+                      ""
+                  ).strip(),
+
                   "start": start.isoformat(),
-                  "end": end.isoformat() if end else None,
-                  "location": event.get("LOCATION", "").strip(),
-                  "url": event.get("URL", "").strip(),
-                  "source": event.get("SOURCE", "").strip(),
-                  "description": event.get("DESCRIPTION", "").strip(),
-                  "uid": event.get("UID", "").strip()
+
+                  "end": (
+                      end.isoformat()
+                      if end
+                      else None
+                  ),
+
+                  "location": event.get(
+                      "LOCATION",
+                      ""
+                  ).strip(),
+
+                  "url": event.get(
+                      "URL",
+                      ""
+                  ).strip(),
+
+                  "source": event.get(
+                      "SOURCE",
+                      ""
+                  ).strip(),
+
+                  "description": event.get(
+                      "DESCRIPTION",
+                      ""
+                  ).strip(),
+
+                  "uid": event.get(
+                      "UID",
+                      ""
+                  ).strip()
               }
 
 
           # ==========================
-          # TimeTreeデータ読み込み
+          # 現在時刻
           # ==========================
 
-          streaming_events = parse_ics("streaming.ics")
-          live_events = parse_ics("live.ics")
+          now = datetime.now(JST)
+
+
+          # ==========================
+          # TimeTree読み込み
+          # ==========================
+
+          streaming_events = parse_ics(
+              "streaming.ics"
+          )
+
+          live_events = parse_ics(
+              "live.ics"
+          )
 
 
           # ==========================
           # 配信予定
           #
-          # らてらてちゃんだけ残す
+          # らてらてちゃんだけ
+          # ＋終了済みを除外
           # ==========================
 
           latte_words = [
@@ -190,38 +257,87 @@ jobs:
 
           for event in streaming_events:
 
-              title = event.get("SUMMARY", "")
-              description = event.get("DESCRIPTION", "")
+              title = event.get(
+                  "SUMMARY",
+                  ""
+              )
 
-              search_text = title + "\n" + description
+              description = event.get(
+                  "DESCRIPTION",
+                  ""
+              )
 
-              if any(word in search_text for word in latte_words):
+              search_text = (
+                  title
+                  + "\n"
+                  + description
+              )
 
-                  item = event_to_json(
-                      event,
-                      "streaming"
+              # らてらてちゃん以外は除外
+              if not any(
+                  word in search_text
+                  for word in latte_words
+              ):
+                  continue
+
+              item = event_to_json(
+                  event,
+                  "streaming"
+              )
+
+              if not item:
+                  continue
+
+              start = datetime.fromisoformat(
+                  item["start"]
+              )
+
+              end = (
+                  datetime.fromisoformat(
+                      item["end"]
                   )
+                  if item["end"]
+                  else start
+              )
 
-                  if item:
-                      filtered_streaming.append(item)
+              # 終了済みは除外
+              if end < now:
+                  continue
+
+              filtered_streaming.append(
+                  item
+              )
 
 
           # ==========================
           # ライブ・イベント
           #
-          # 新入生ライブだけ除外
+          # 「新入生」を含む予定を除外
+          # ＋終了済みを除外
           # ==========================
 
           filtered_live = []
 
           for event in live_events:
 
-              title = event.get("SUMMARY", "")
-              description = event.get("DESCRIPTION", "")
+              title = event.get(
+                  "SUMMARY",
+                  ""
+              )
 
-              search_text = title + "\n" + description
+              description = event.get(
+                  "DESCRIPTION",
+                  ""
+              )
 
-              if "新入生ライブ" in search_text:
+              search_text = (
+                  title
+                  + "\n"
+                  + description
+              )
+
+              # 新入生関連を除外
+              if "新入生" in search_text:
                   continue
 
               item = event_to_json(
@@ -229,12 +345,32 @@ jobs:
                   "live"
               )
 
-              if item:
-                  filtered_live.append(item)
+              if not item:
+                  continue
+
+              start = datetime.fromisoformat(
+                  item["start"]
+              )
+
+              end = (
+                  datetime.fromisoformat(
+                      item["end"]
+                  )
+                  if item["end"]
+                  else start
+              )
+
+              # 終了済みは除外
+              if end < now:
+                  continue
+
+              filtered_live.append(
+                  item
+              )
 
 
           # ==========================
-          # 日付順に並べる
+          # 日時順
           # ==========================
 
           filtered_streaming.sort(
@@ -247,10 +383,8 @@ jobs:
 
 
           # ==========================
-          # JSON作成
+          # JSON出力
           # ==========================
-
-          now = datetime.now(JST)
 
           output = {
               "updatedAt": now.isoformat(),
@@ -259,7 +393,9 @@ jobs:
           }
 
 
-          Path("schedule-data.json").write_text(
+          Path(
+              "schedule-data.json"
+          ).write_text(
               json.dumps(
                   output,
                   ensure_ascii=False,
@@ -269,9 +405,13 @@ jobs:
           )
 
 
+          # ==========================
+          # Actionsログ
+          # ==========================
+
           print("")
           print("==============================")
-          print("  らてらてちゃん予定抽出結果")
+          print("  らてらてちゃん予定")
           print("==============================")
           print("")
 
@@ -302,7 +442,9 @@ jobs:
               )
 
           print("")
-          print("schedule-data.json を作成しました")
+          print(
+              "schedule-data.json を更新しました"
+          )
           PY
 
           python filter_schedule.py
