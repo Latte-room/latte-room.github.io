@@ -13,32 +13,321 @@
        📅 スケジュール
     ======================================== */
 
-    .schedule-calendar {
+    .schedule-box {
       width: 100%;
-      margin-top: 10px;
+      margin-top: 15px;
     }
 
-    .schedule-calendar iframe {
+    .calendar-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 15px;
+    }
+
+    .calendar-title {
+      min-width: 150px;
+      margin: 0;
+      text-align: center;
+      font-size: 1.25rem;
+      font-weight: bold;
+      color: #ffffff;
+    }
+
+    .calendar-button {
+      border: none;
+      border-radius: 10px;
+      padding: 8px 14px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 0.95rem;
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.18);
+      box-shadow: 0 2px 7px rgba(0, 0, 0, 0.15);
+      transition: 0.2s;
+    }
+
+    .calendar-button:hover {
+      background: rgba(255, 255, 255, 0.30);
+      transform: translateY(-1px);
+    }
+
+    .calendar-wrap {
+      width: 100%;
+      overflow-x: auto;
+      border-radius: 14px;
+    }
+
+    .calendar {
+      width: 100%;
+      min-width: 700px;
+      border-collapse: separate;
+      border-spacing: 2px;
+      table-layout: fixed;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .calendar th {
+      padding: 10px 4px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.20);
+      color: #ffffff;
+      font-size: 0.9rem;
+    }
+
+    .calendar th:first-child {
+      color: #ffd2df;
+    }
+
+    .calendar th:last-child {
+      color: #cfe8ff;
+    }
+
+    .calendar td {
+      height: 115px;
+      padding: 6px;
+      vertical-align: top;
+      background: rgba(255, 255, 255, 0.92);
+      color: #333333;
+      border-radius: 5px;
+    }
+
+    .calendar td.empty-day {
+      background: rgba(255, 255, 255, 0.30);
+    }
+
+    .calendar td.today {
+      outline: 3px solid #ffd65c;
+      outline-offset: -3px;
+    }
+
+    .day-number {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      color: #333333;
+    }
+
+    .sunday .day-number {
+      color: #d84c6f;
+    }
+
+    .saturday .day-number {
+      color: #3979c6;
+    }
+
+    .schedule-event {
       display: block;
       width: 100%;
-      height: 700px;
+      margin: 3px 0;
+      padding: 5px 6px;
       border: none;
-      border-radius: 14px;
+      border-radius: 6px;
+      text-align: left;
+      font-size: 0.75rem;
+      line-height: 1.35;
+      cursor: pointer;
+      word-break: break-word;
+      transition: 0.15s;
+    }
+
+    .schedule-event:hover {
+      transform: scale(1.02);
+      filter: brightness(1.05);
+    }
+
+    .streaming-event {
+      color: #ffffff;
+      background: linear-gradient(
+        135deg,
+        #5577e8,
+        #805ad5
+      );
+    }
+
+    .live-event {
+      color: #ffffff;
+      background: linear-gradient(
+        135deg,
+        #e45b8f,
+        #c84e6d
+      );
+    }
+
+    .event-time {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 2px;
+    }
+
+    .schedule-legend {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      flex-wrap: wrap;
+      margin: 12px 0 5px;
+      color: #ffffff;
+      font-size: 0.85rem;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .legend-color {
+      width: 13px;
+      height: 13px;
+      border-radius: 4px;
+    }
+
+    .legend-streaming {
+      background: #6574d9;
+    }
+
+    .legend-live {
+      background: #d85b83;
+    }
+
+    .schedule-message {
+      padding: 20px;
+      text-align: center;
+      color: #ffffff;
+      font-size: 0.95rem;
+    }
+
+    .schedule-update {
+      margin-top: 10px;
+      text-align: right;
+      font-size: 0.78rem;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+
+    /* ========================================
+       📋 予定詳細
+    ======================================== */
+
+    .schedule-modal {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      inset: 0;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.65);
+      align-items: center;
+      justify-content: center;
+    }
+
+    .schedule-modal.show {
+      display: flex;
+    }
+
+    .schedule-modal-content {
+      position: relative;
+      width: 100%;
+      max-width: 520px;
+      max-height: 80vh;
+      overflow-y: auto;
+      padding: 25px;
+      border-radius: 18px;
+      color: #333333;
       background: #ffffff;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.35);
     }
 
-    .schedule-note {
-      margin-top: 12px;
-      font-size: 0.9em;
+    .schedule-modal-content h3 {
+      margin: 0 35px 15px 0;
+      color: #51428a;
+      line-height: 1.5;
+    }
+
+    .schedule-modal-close {
+      position: absolute;
+      top: 12px;
+      right: 15px;
+      width: 35px;
+      height: 35px;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.3rem;
+      color: #555555;
+      background: #eeeeee;
+    }
+
+    .schedule-detail-row {
+      margin: 10px 0;
       line-height: 1.7;
-      color: rgba(255, 255, 255, 0.95);
+      white-space: pre-wrap;
+      word-break: break-word;
     }
 
-    /* スマホ */
+    .schedule-detail-label {
+      font-weight: bold;
+      color: #51428a;
+    }
+
+    .schedule-link {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 10px 18px;
+      border-radius: 10px;
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: bold;
+      background: linear-gradient(
+        135deg,
+        #5577e8,
+        #805ad5
+      );
+    }
+
+    .schedule-link:hover {
+      opacity: 0.9;
+    }
+
+
+    /* ========================================
+       📱 スマホ
+    ======================================== */
+
     @media (max-width: 700px) {
-      .schedule-calendar iframe {
-        height: 650px;
+
+      .calendar {
+        min-width: 620px;
+      }
+
+      .calendar td {
+        height: 100px;
+      }
+
+      .schedule-event {
+        font-size: 0.70rem;
+      }
+
+      .calendar-header {
+        gap: 7px;
+      }
+
+      .calendar-title {
+        min-width: 125px;
+        font-size: 1.05rem;
+      }
+
+      .calendar-button {
+        padding: 7px 10px;
+        font-size: 0.85rem;
+      }
+
+      .schedule-modal-content {
+        padding: 22px 18px;
       }
     }
   </style>
@@ -120,14 +409,9 @@
 
         <h2>📅 らてらてちゃん 配信予定</h2>
 
-        <div class="schedule-calendar">
-
-          <iframe
-            src="https://timetreeapp.com/public_calendars/ymstgakuen_streaming/embed/monthly?calendar_name=true"
-            title="山下学園 配信スケジュール"
-            loading="lazy">
-          </iframe>
-
+        <div
+          id="streaming-schedule"
+          class="schedule-box">
         </div>
 
       </div>
@@ -141,14 +425,9 @@
 
         <h2>🎤 ライブ・イベント予定</h2>
 
-        <div class="schedule-calendar">
-
-          <iframe
-            src="https://timetreeapp.com/public_calendars/yamashita_gakuen/embed/monthly?calendar_name=true"
-            title="山下学園 ライブ・イベントスケジュール"
-            loading="lazy">
-          </iframe>
-
+        <div
+          id="live-schedule"
+          class="schedule-box">
         </div>
 
       </div>
@@ -157,6 +436,761 @@
     </main>
 
   </div>
+
+
+  <!-- ========================================
+       📋 予定詳細ウィンドウ
+  ======================================== -->
+
+  <div
+    id="schedule-modal"
+    class="schedule-modal">
+
+    <div class="schedule-modal-content">
+
+      <button
+        id="schedule-modal-close"
+        class="schedule-modal-close"
+        type="button">
+        ×
+      </button>
+
+      <div id="schedule-modal-body"></div>
+
+    </div>
+
+  </div>
+
+
+  <script>
+    /* ========================================
+       📅 スケジュール設定
+    ======================================== */
+
+    let scheduleData = {
+      streaming: [],
+      live: []
+    };
+
+    let updatedAt = "";
+
+    const calendarStates = {
+      streaming: new Date(),
+      live: new Date()
+    };
+
+
+    /* ========================================
+       JSON取得
+    ======================================== */
+
+    async function loadSchedule() {
+
+      try {
+
+        const response = await fetch(
+          "schedule-data.json?t=" + Date.now(),
+          {
+            cache: "no-store"
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(
+            "schedule-data.json の取得に失敗しました"
+          );
+        }
+
+        const data = await response.json();
+
+        scheduleData.streaming =
+          Array.isArray(data.streaming)
+            ? data.streaming
+            : [];
+
+        scheduleData.live =
+          Array.isArray(data.live)
+            ? data.live
+            : [];
+
+        updatedAt = data.updatedAt || "";
+
+        renderCalendar("streaming");
+        renderCalendar("live");
+
+      } catch (error) {
+
+        console.error(error);
+
+        document.getElementById(
+          "streaming-schedule"
+        ).innerHTML =
+          '<div class="schedule-message">' +
+          '配信予定を読み込めませんでした。' +
+          '</div>';
+
+        document.getElementById(
+          "live-schedule"
+        ).innerHTML =
+          '<div class="schedule-message">' +
+          'ライブ・イベント予定を読み込めませんでした。' +
+          '</div>';
+      }
+    }
+
+
+    /* ========================================
+       カレンダー作成
+    ======================================== */
+
+    function renderCalendar(type) {
+
+      const container =
+        document.getElementById(
+          type === "streaming"
+            ? "streaming-schedule"
+            : "live-schedule"
+        );
+
+      const currentDate =
+        calendarStates[type];
+
+      const year =
+        currentDate.getFullYear();
+
+      const month =
+        currentDate.getMonth();
+
+      const firstDay =
+        new Date(
+          year,
+          month,
+          1
+        ).getDay();
+
+      const lastDate =
+        new Date(
+          year,
+          month + 1,
+          0
+        ).getDate();
+
+
+      let html = "";
+
+
+      /* ヘッダー */
+
+      html += `
+        <div class="calendar-header">
+
+          <button
+            class="calendar-button"
+            type="button"
+            onclick="changeMonth('${type}', -1)">
+            ‹
+          </button>
+
+          <button
+            class="calendar-button"
+            type="button"
+            onclick="goCurrentMonth('${type}')">
+            今月
+          </button>
+
+          <div class="calendar-title">
+            ${year}年 ${month + 1}月
+          </div>
+
+          <button
+            class="calendar-button"
+            type="button"
+            onclick="changeMonth('${type}', 1)">
+            ›
+          </button>
+
+        </div>
+      `;
+
+
+      /* 凡例 */
+
+      html += `
+        <div class="schedule-legend">
+      `;
+
+      if (type === "streaming") {
+
+        html += `
+          <span class="legend-item">
+            <span
+              class="legend-color legend-streaming">
+            </span>
+            らてらてちゃん配信
+          </span>
+        `;
+
+      } else {
+
+        html += `
+          <span class="legend-item">
+            <span
+              class="legend-color legend-live">
+            </span>
+            ライブ・イベント
+          </span>
+        `;
+      }
+
+      html += `
+        </div>
+      `;
+
+
+      /* カレンダー */
+
+      html += `
+        <div class="calendar-wrap">
+
+          <table class="calendar">
+
+            <thead>
+              <tr>
+                <th>日</th>
+                <th>月</th>
+                <th>火</th>
+                <th>水</th>
+                <th>木</th>
+                <th>金</th>
+                <th>土</th>
+              </tr>
+            </thead>
+
+            <tbody>
+      `;
+
+
+      let day = 1;
+
+      for (let week = 0; week < 6; week++) {
+
+        if (day > lastDate) {
+          break;
+        }
+
+        html += "<tr>";
+
+        for (
+          let weekday = 0;
+          weekday < 7;
+          weekday++
+        ) {
+
+          if (
+            (week === 0 &&
+             weekday < firstDay)
+            ||
+            day > lastDate
+          ) {
+
+            html +=
+              '<td class="empty-day"></td>';
+
+            continue;
+          }
+
+
+          const cellDate =
+            new Date(
+              year,
+              month,
+              day
+            );
+
+
+          const dateString =
+            formatLocalDate(
+              cellDate
+            );
+
+
+          const events =
+            scheduleData[type]
+              .filter(event => {
+
+                if (!event.start) {
+                  return false;
+                }
+
+                return (
+                  event.start.slice(0, 10)
+                  === dateString
+                );
+              });
+
+
+          const today =
+            new Date();
+
+          const isToday =
+            today.getFullYear() === year &&
+            today.getMonth() === month &&
+            today.getDate() === day;
+
+
+          let tdClass = "";
+
+          if (weekday === 0) {
+            tdClass += " sunday";
+          }
+
+          if (weekday === 6) {
+            tdClass += " saturday";
+          }
+
+          if (isToday) {
+            tdClass += " today";
+          }
+
+
+          html += `
+            <td class="${tdClass.trim()}">
+
+              <span class="day-number">
+                ${day}
+              </span>
+          `;
+
+
+          events.forEach(event => {
+
+            const time =
+              formatEventTime(
+                event.start
+              );
+
+            const eventClass =
+              type === "streaming"
+                ? "streaming-event"
+                : "live-event";
+
+
+            html += `
+              <button
+                type="button"
+                class="schedule-event ${eventClass}"
+                onclick='openScheduleDetail(
+                  ${JSON.stringify(event)}
+                )'>
+
+                <span class="event-time">
+                  ${escapeHtml(time)}
+                </span>
+
+                ${escapeHtml(event.title)}
+
+              </button>
+            `;
+          });
+
+
+          html += "</td>";
+
+          day++;
+        }
+
+        html += "</tr>";
+      }
+
+
+      html += `
+            </tbody>
+
+          </table>
+
+        </div>
+      `;
+
+
+      /* 更新日時 */
+
+      if (updatedAt) {
+
+        html += `
+          <div class="schedule-update">
+            最終更新：
+            ${escapeHtml(
+              formatUpdatedAt(updatedAt)
+            )}
+          </div>
+        `;
+      }
+
+
+      container.innerHTML = html;
+    }
+
+
+    /* ========================================
+       月移動
+    ======================================== */
+
+    function changeMonth(
+      type,
+      amount
+    ) {
+
+      const current =
+        calendarStates[type];
+
+      calendarStates[type] =
+        new Date(
+          current.getFullYear(),
+          current.getMonth() + amount,
+          1
+        );
+
+      renderCalendar(type);
+    }
+
+
+    function goCurrentMonth(type) {
+
+      const now = new Date();
+
+      calendarStates[type] =
+        new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          1
+        );
+
+      renderCalendar(type);
+    }
+
+
+    /* ========================================
+       詳細表示
+    ======================================== */
+
+    function openScheduleDetail(event) {
+
+      const modal =
+        document.getElementById(
+          "schedule-modal"
+        );
+
+      const body =
+        document.getElementById(
+          "schedule-modal-body"
+        );
+
+
+      let html = `
+        <h3>
+          ${escapeHtml(event.title)}
+        </h3>
+      `;
+
+
+      html += `
+        <div class="schedule-detail-row">
+
+          <span class="schedule-detail-label">
+            📅 日時
+          </span><br>
+
+          ${escapeHtml(
+            formatDetailDate(
+              event.start,
+              event.end
+            )
+          )}
+
+        </div>
+      `;
+
+
+      if (event.location) {
+
+        html += `
+          <div class="schedule-detail-row">
+
+            <span class="schedule-detail-label">
+              📍 場所
+            </span><br>
+
+            ${escapeHtml(event.location)}
+
+          </div>
+        `;
+      }
+
+
+      if (event.description) {
+
+        html += `
+          <div class="schedule-detail-row">
+
+            <span class="schedule-detail-label">
+              📝 詳細
+            </span><br>
+
+            ${escapeHtml(
+              event.description
+            )}
+
+          </div>
+        `;
+      }
+
+
+      const link =
+        event.url ||
+        event.source;
+
+
+      if (link) {
+
+        html += `
+          <a
+            class="schedule-link"
+            href="${escapeAttribute(link)}"
+            target="_blank"
+            rel="noopener noreferrer">
+
+            詳細ページを開く
+
+          </a>
+        `;
+      }
+
+
+      body.innerHTML = html;
+
+      modal.classList.add("show");
+    }
+
+
+    function closeScheduleDetail() {
+
+      document
+        .getElementById(
+          "schedule-modal"
+        )
+        .classList.remove("show");
+    }
+
+
+    document
+      .getElementById(
+        "schedule-modal-close"
+      )
+      .addEventListener(
+        "click",
+        closeScheduleDetail
+      );
+
+
+    document
+      .getElementById(
+        "schedule-modal"
+      )
+      .addEventListener(
+        "click",
+        function(event) {
+
+          if (
+            event.target === this
+          ) {
+            closeScheduleDetail();
+          }
+        }
+      );
+
+
+    document.addEventListener(
+      "keydown",
+      function(event) {
+
+        if (event.key === "Escape") {
+          closeScheduleDetail();
+        }
+      }
+    );
+
+
+    /* ========================================
+       日付表示
+    ======================================== */
+
+    function formatLocalDate(date) {
+
+      const year =
+        date.getFullYear();
+
+      const month =
+        String(
+          date.getMonth() + 1
+        ).padStart(2, "0");
+
+      const day =
+        String(
+          date.getDate()
+        ).padStart(2, "0");
+
+      return (
+        year +
+        "-" +
+        month +
+        "-" +
+        day
+      );
+    }
+
+
+    function formatEventTime(value) {
+
+      if (!value) {
+        return "";
+      }
+
+      const date =
+        new Date(value);
+
+      return (
+        String(
+          date.getHours()
+        ).padStart(2, "0")
+        +
+        ":"
+        +
+        String(
+          date.getMinutes()
+        ).padStart(2, "0")
+      );
+    }
+
+
+    function formatDetailDate(
+      startValue,
+      endValue
+    ) {
+
+      if (!startValue) {
+        return "";
+      }
+
+      const start =
+        new Date(startValue);
+
+      const weekdays = [
+        "日",
+        "月",
+        "火",
+        "水",
+        "木",
+        "金",
+        "土"
+      ];
+
+
+      let text =
+        start.getFullYear()
+        + "年"
+        + (start.getMonth() + 1)
+        + "月"
+        + start.getDate()
+        + "日（"
+        + weekdays[start.getDay()]
+        + "） "
+        + String(
+          start.getHours()
+        ).padStart(2, "0")
+        + ":"
+        + String(
+          start.getMinutes()
+        ).padStart(2, "0");
+
+
+      if (endValue) {
+
+        const end =
+          new Date(endValue);
+
+        text +=
+          " ～ "
+          + String(
+            end.getHours()
+          ).padStart(2, "0")
+          + ":"
+          + String(
+            end.getMinutes()
+          ).padStart(2, "0");
+      }
+
+
+      return text;
+    }
+
+
+    function formatUpdatedAt(value) {
+
+      const date =
+        new Date(value);
+
+      return (
+        date.getFullYear()
+        + "/"
+        + String(
+          date.getMonth() + 1
+        ).padStart(2, "0")
+        + "/"
+        + String(
+          date.getDate()
+        ).padStart(2, "0")
+        + " "
+        + String(
+          date.getHours()
+        ).padStart(2, "0")
+        + ":"
+        + String(
+          date.getMinutes()
+        ).padStart(2, "0")
+      );
+    }
+
+
+    /* ========================================
+       HTML安全対策
+    ======================================== */
+
+    function escapeHtml(value) {
+
+      return String(
+        value ?? ""
+      )
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+
+    function escapeAttribute(value) {
+
+      return escapeHtml(value);
+    }
+
+
+    /* ========================================
+       開始
+    ======================================== */
+
+    loadSchedule();
+
+  </script>
 
 </body>
 </html>
