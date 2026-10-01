@@ -40,7 +40,7 @@ jobs:
             -c yamashita_gakuen \
             -o live.ics
 
-      - name: Create filtered schedule
+      - name: Create schedule history
         shell: bash
         run: |
           cat > filter_schedule.py <<'PY'
@@ -52,6 +52,10 @@ jobs:
 
           JST = ZoneInfo("Asia/Tokyo")
 
+
+          # ========================================
+          # ICSの折り返しを戻す
+          # ========================================
 
           def unfold_ics(text):
               lines = (
@@ -75,6 +79,10 @@ jobs:
               return result
 
 
+          # ========================================
+          # ICS文字列を読みやすくする
+          # ========================================
+
           def unescape(value):
               return (
                   value
@@ -86,8 +94,15 @@ jobs:
               )
 
 
+          # ========================================
+          # ICS読み込み
+          # ========================================
+
           def parse_ics(path):
-              text = Path(path).read_text(encoding="utf-8")
+              text = Path(path).read_text(
+                  encoding="utf-8"
+              )
+
               lines = unfold_ics(text)
 
               events = []
@@ -100,6 +115,7 @@ jobs:
                       continue
 
                   if line == "END:VEVENT":
+
                       if event:
                           events.append(event)
 
@@ -112,8 +128,15 @@ jobs:
                   if ":" not in line:
                       continue
 
-                  left, value = line.split(":", 1)
-                  key = left.split(";", 1)[0]
+                  left, value = line.split(
+                      ":",
+                      1
+                  )
+
+                  key = left.split(
+                      ";",
+                      1
+                  )[0]
 
                   if key in {
                       "SUMMARY",
@@ -125,22 +148,41 @@ jobs:
                       "SOURCE",
                       "UID"
                   }:
-                      event[key] = unescape(value)
+                      event[key] = unescape(
+                          value
+                      )
 
               return events
 
 
+          # ========================================
+          # 日時変換
+          # ========================================
+
           def parse_datetime(value):
+
               if not value:
                   return None
 
               # 終日予定
-              if re.fullmatch(r"\d{8}", value):
-                  dt = datetime.strptime(value, "%Y%m%d")
-                  return dt.replace(tzinfo=JST)
+              if re.fullmatch(
+                  r"\d{8}",
+                  value
+              ):
+                  dt = datetime.strptime(
+                      value,
+                      "%Y%m%d"
+                  )
+
+                  return dt.replace(
+                      tzinfo=JST
+                  )
 
               # UTC
-              if re.fullmatch(r"\d{8}T\d{6}Z", value):
+              if re.fullmatch(
+                  r"\d{8}T\d{6}Z",
+                  value
+              ):
                   dt = datetime.strptime(
                       value,
                       "%Y%m%dT%H%M%SZ"
@@ -150,10 +192,15 @@ jobs:
                       tzinfo=ZoneInfo("UTC")
                   )
 
-                  return dt.astimezone(JST)
+                  return dt.astimezone(
+                      JST
+                  )
 
               # 日本時間
-              if re.fullmatch(r"\d{8}T\d{6}", value):
+              if re.fullmatch(
+                  r"\d{8}T\d{6}",
+                  value
+              ):
                   dt = datetime.strptime(
                       value,
                       "%Y%m%dT%H%M%S"
@@ -166,7 +213,14 @@ jobs:
               return None
 
 
-          def event_to_json(event, event_type):
+          # ========================================
+          # JSON形式に変換
+          # ========================================
+
+          def event_to_json(
+              event,
+              event_type
+          ):
 
               start = parse_datetime(
                   event.get("DTSTART")
@@ -181,6 +235,7 @@ jobs:
 
               return {
                   "type": event_type,
+
                   "title": event.get(
                       "SUMMARY",
                       ""
@@ -221,16 +276,16 @@ jobs:
               }
 
 
-          # ==========================
+          # ========================================
           # 現在時刻
-          # ==========================
+          # ========================================
 
           now = datetime.now(JST)
 
 
-          # ==========================
-          # TimeTree読み込み
-          # ==========================
+          # ========================================
+          # TimeTreeの最新データを取得
+          # ========================================
 
           streaming_events = parse_ics(
               "streaming.ics"
@@ -241,19 +296,19 @@ jobs:
           )
 
 
-          # ==========================
-          # 配信予定
+          # ========================================
+          # 今回取得した配信予定
           #
           # らてらてちゃんだけ
-          # ＋終了済みを除外
-          # ==========================
+          # 過去も残す
+          # ========================================
 
           latte_words = [
               "らてらて",
               "神宮寺らて"
           ]
 
-          filtered_streaming = []
+          new_streaming = []
 
           for event in streaming_events:
 
@@ -273,7 +328,6 @@ jobs:
                   + description
               )
 
-              # らてらてちゃん以外は除外
               if not any(
                   word in search_text
                   for word in latte_words
@@ -285,38 +339,20 @@ jobs:
                   "streaming"
               )
 
-              if not item:
-                  continue
-
-              start = datetime.fromisoformat(
-                  item["start"]
-              )
-
-              end = (
-                  datetime.fromisoformat(
-                      item["end"]
+              if item:
+                  new_streaming.append(
+                      item
                   )
-                  if item["end"]
-                  else start
-              )
-
-              # 終了済みは除外
-              if end < now:
-                  continue
-
-              filtered_streaming.append(
-                  item
-              )
 
 
-          # ==========================
-          # ライブ・イベント
+          # ========================================
+          # 今回取得したライブ・イベント
           #
-          # 「新入生」を含む予定を除外
-          # ＋終了済みを除外
-          # ==========================
+          # 新入生関連だけ除外
+          # 過去も残す
+          # ========================================
 
-          filtered_live = []
+          new_live = []
 
           for event in live_events:
 
@@ -336,7 +372,7 @@ jobs:
                   + description
               )
 
-              # 新入生関連を除外
+              # 新入生関連は保存しない
               if "新入生" in search_text:
                   continue
 
@@ -345,57 +381,164 @@ jobs:
                   "live"
               )
 
-              if not item:
-                  continue
-
-              start = datetime.fromisoformat(
-                  item["start"]
-              )
-
-              end = (
-                  datetime.fromisoformat(
-                      item["end"]
+              if item:
+                  new_live.append(
+                      item
                   )
-                  if item["end"]
-                  else start
+
+
+          # ========================================
+          # 以前保存した履歴を読み込む
+          # ========================================
+
+          old_streaming = []
+          old_live = []
+
+          schedule_path = Path(
+              "schedule-data.json"
+          )
+
+          if schedule_path.exists():
+
+              try:
+
+                  old_data = json.loads(
+                      schedule_path.read_text(
+                          encoding="utf-8"
+                      )
+                  )
+
+                  old_streaming = (
+                      old_data.get(
+                          "streaming",
+                          []
+                      )
+                  )
+
+                  old_live = (
+                      old_data.get(
+                          "live",
+                          []
+                      )
+                  )
+
+              except Exception as error:
+
+                  print(
+                      "以前のJSONを読み込めませんでした:",
+                      error
+                  )
+
+
+          # ========================================
+          # UIDを使って履歴を統合
+          #
+          # 同じ予定は重複させない
+          # 最新情報があれば上書き
+          # ========================================
+
+          def merge_events(
+              old_events,
+              new_events
+          ):
+
+              merged = {}
+
+
+              # 以前保存した予定
+              for event in old_events:
+
+                  uid = event.get(
+                      "uid",
+                      ""
+                  )
+
+                  if uid:
+                      merged[uid] = event
+
+
+              # 今回取得した予定
+              # 同じUIDなら最新情報で上書き
+              for event in new_events:
+
+                  uid = event.get(
+                      "uid",
+                      ""
+                  )
+
+                  if uid:
+                      merged[uid] = event
+
+
+              result = list(
+                  merged.values()
               )
 
-              # 終了済みは除外
-              if end < now:
+              result.sort(
+                  key=lambda x:
+                  x.get(
+                      "start",
+                      ""
+                  )
+              )
+
+              return result
+
+
+          all_streaming = merge_events(
+              old_streaming,
+              new_streaming
+          )
+
+          all_live = merge_events(
+              old_live,
+              new_live
+          )
+
+
+          # ========================================
+          # 念のため、過去に保存された
+          # 新入生関連も履歴から除外
+          # ========================================
+
+          cleaned_live = []
+
+          for event in all_live:
+
+              search_text = (
+                  event.get(
+                      "title",
+                      ""
+                  )
+                  + "\n"
+                  + event.get(
+                      "description",
+                      ""
+                  )
+              )
+
+              if "新入生" in search_text:
                   continue
 
-              filtered_live.append(
-                  item
+              cleaned_live.append(
+                  event
               )
 
-
-          # ==========================
-          # 日時順
-          # ==========================
-
-          filtered_streaming.sort(
-              key=lambda x: x["start"]
-          )
-
-          filtered_live.sort(
-              key=lambda x: x["start"]
-          )
+          all_live = cleaned_live
 
 
-          # ==========================
+          # ========================================
           # JSON出力
-          # ==========================
+          # ========================================
 
           output = {
               "updatedAt": now.isoformat(),
-              "streaming": filtered_streaming,
-              "live": filtered_live
+              "streaming": all_streaming,
+              "live": all_live
           }
 
 
-          Path(
-              "schedule-data.json"
-          ).write_text(
+          schedule_path.write_text(
               json.dumps(
                   output,
                   ensure_ascii=False,
@@ -405,43 +548,71 @@ jobs:
           )
 
 
-          # ==========================
+          # ========================================
           # Actionsログ
-          # ==========================
+          # ========================================
 
           print("")
-          print("==============================")
-          print("  らてらてちゃん予定")
-          print("==============================")
-          print("")
+          print(
+              "=============================="
+          )
 
           print(
-              "配信予定:",
-              len(filtered_streaming),
+              "  らてらてちゃん予定・履歴"
+          )
+
+          print(
+              "=============================="
+          )
+
+          print("")
+
+
+          print(
+              "配信予定・履歴:",
+              len(all_streaming),
               "件"
           )
 
-          for event in filtered_streaming:
+          for event in all_streaming:
+
               print(
-                  event["start"],
-                  event["title"]
+                  event.get(
+                      "start",
+                      ""
+                  ),
+                  event.get(
+                      "title",
+                      ""
+                  )
               )
+
 
           print("")
 
+
           print(
-              "ライブ・イベント:",
-              len(filtered_live),
+              "ライブ・イベント履歴:",
+              len(all_live),
               "件"
           )
 
-          for event in filtered_live:
+          for event in all_live:
+
               print(
-                  event["start"],
-                  event["title"]
+                  event.get(
+                      "start",
+                      ""
+                  ),
+                  event.get(
+                      "title",
+                      ""
+                  )
               )
 
+
           print("")
+
           print(
               "schedule-data.json を更新しました"
           )
@@ -464,6 +635,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "予定に変更はありません"
           else
-            git commit -m "Update Latte schedule"
+            git commit -m "Update Latte schedule history"
             git push
           fi
