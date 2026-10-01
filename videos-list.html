@@ -21,15 +21,34 @@
       margin: 0 auto;
     }
 
-    /* 総編集まとめだけ、動画が少ないとき中央に配置 */
-    #compilation-list:has(.thumbnail-link:nth-child(1):last-child) {
-      grid-template-columns: minmax(0, 274px);
+    /* 総編集まとめだけ、1～2本なら中央寄せ */
+    #compilation-list {
+      display: flex;
+      flex-wrap: wrap;
       justify-content: center;
+      gap: 18px;
+      max-width: 850px;
+      margin: 0 auto;
     }
 
-    #compilation-list:has(.thumbnail-link:nth-child(2):last-child) {
-      grid-template-columns: repeat(2, minmax(0, 274px));
-      justify-content: center;
+    #compilation-list .thumbnail-link {
+      width: calc((100% - 36px) / 3);
+    }
+
+    @media (max-width: 700px) {
+      #compilation-list {
+        gap: 12px;
+      }
+
+      #compilation-list .thumbnail-link {
+        width: calc((100% - 12px) / 2);
+      }
+    }
+
+    @media (max-width: 450px) {
+      #compilation-list .thumbnail-link {
+        width: 100%;
+      }
     }
 
     .thumbnail-link {
@@ -177,9 +196,6 @@
 
       </div>
 
-    </main>
-
-  </div>
 
       <!-- ========================================
            🎤 総集編
@@ -196,6 +212,10 @@
         </div>
 
       </div>
+
+    </main>
+
+  </div>
 
   
 
