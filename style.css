@@ -543,7 +543,7 @@ h1 {
   z-index: 1;
 }
 
-/* キラキラ星 */
+@keyframes twinkle
 .star {
   position: absolute;
   background: #fff;
