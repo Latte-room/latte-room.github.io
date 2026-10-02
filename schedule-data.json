@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-02T18:50:00.603524+09:00",
+  "updatedAt": "2026-10-03T01:17:20.785835+09:00",
   "streaming": [
     {
       "type": "streaming",
@@ -55,6 +55,17 @@
       "source": "https://timetr.ee/p/ymstgakuen_streaming/3066607906469351075",
       "description": "",
       "uid": "3066607906469351075"
+    },
+    {
+      "type": "streaming",
+      "title": "らてらてちゃん（らて＠Youtube）",
+      "start": "2026-10-02T20:30:00+09:00",
+      "end": "2026-10-02T21:00:00+09:00",
+      "location": "",
+      "url": "",
+      "source": "https://timetr.ee/p/ymstgakuen_streaming/3068144593456500295",
+      "description": "",
+      "uid": "3068144593456500295"
     },
     {
       "type": "streaming",
