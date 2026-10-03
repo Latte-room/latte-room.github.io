@@ -575,7 +575,7 @@ h1 {
   position: absolute;
   height: 2px;
   background: linear-gradient(
-    to left,                       /* 進行方向（左）に向かって明るくなる */
+    to right,                     /* 進行方向（左）に向かって明るくなる */
     transparent,
     rgba(255, 255, 255, 0.3),
     rgba(255, 255, 255, 0.8),
