@@ -392,18 +392,76 @@ function setupMenuToggle() {
 }
 
 /* ========================================
-   ★ ランダム流れ星の関数たち
+   ★ ランダム流れ星
 ======================================== */
 
 function createShootingStar() {
-  // ...前回のコード
+  const overlay = document.querySelector('.starry-overlay');
+  if (!overlay) return;
+
+  const star = document.createElement('div');
+  star.className = 'shooting-star';
+
+  // ランダム設定
+  const size = 1.8 + Math.random() * 2.2;          // 太さ
+  const length = 140 + Math.random() * 160;        // 長さ
+  const duration = 2.6 + Math.random() * 2.8;      // 速さ
+  const angle = -25 - Math.random() * 35;          // 角度
+  const startTop = Math.random() * 55;             // 開始位置（上から）
+  const startRight = -80 - Math.random() * 120;    // 右端から
+
+  star.style.width = length + 'px';
+  star.style.height = size + 'px';
+  star.style.top = startTop + '%';
+  star.style.right = startRight + 'px';
+  star.style.transform = `rotate(${angle}deg)`;
+
+  // アニメーション
+  star.style.animation = `shooting-random ${duration}s linear forwards`;
+
+  overlay.appendChild(star);
+
+  // 終わったら削除
+  setTimeout(() => {
+    star.remove();
+  }, duration * 1000 + 100);
 }
 
 function startShootingStars() {
-  // ...前回のコード
+  // 最初に2本出す
+  createShootingStar();
+  setTimeout(createShootingStar, 700 + Math.random() * 1000);
+
+  // 以降、ランダムな間隔で2〜3本ずつ出し続ける
+  setInterval(() => {
+    const count = 2 + Math.floor(Math.random() * 2); // 2か3本
+    for (let i = 0; i < count; i++) {
+      setTimeout(createShootingStar, i * (500 + Math.random() * 800));
+    }
+  }, 4200 + Math.random() * 2800);
 }
 
-// キーフレーム追加の部分もここに
+// キーフレームを追加
+const shootingStyle = document.createElement('style');
+shootingStyle.textContent = `
+  @keyframes shooting-random {
+    0% {
+      transform: translateX(0) translateY(0) rotate(var(--angle, -35deg));
+      opacity: 0;
+    }
+    8% {
+      opacity: 1;
+    }
+    85% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateX(-130vw) translateY(45vh) rotate(var(--angle, -35deg));
+      opacity: 0;
+    }
+  }
+`;
+document.head.appendChild(shootingStyle);
 
 // ==================================================
 // 🚀 実行
