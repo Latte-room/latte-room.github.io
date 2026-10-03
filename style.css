@@ -575,7 +575,7 @@ h1 {
   position: absolute;
   width: 100px;
   height: 7px;
-  background: linear-gradient(to left, rgba(255,255,255,0.95), rgba(255,255,255,0.45), transparent);
+  background: linear-gradient(to right, rgba(255,255,255,0.95), rgba(255,255,255,0.45), transparent);
   border-radius: 50%;
   filter: drop-shadow(0 0 6px rgba(255,255,255,0.9));
   opacity: 0;
