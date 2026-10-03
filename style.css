@@ -570,43 +570,82 @@ h1 {
   50%      { opacity: 1;    transform: scale(1.35); }
 }
 
-/* ===== 流れ星（リアル版） ===== */
+/* ===== 流れ星（先端を進行方向に修正） ===== */
 .shooting-star {
   position: absolute;
+  width: 140px;                 /* 少し長めに */
   height: 2px;
   background: linear-gradient(
-    to right,                     /* 進行方向（左）に向かって明るくなる */
-    transparent,
-    rgba(255, 255, 255, 0.3),
-    rgba(255, 255, 255, 0.8),
-    #ffffff
+    to right,                   /* 左（進行方向）が明るく → 右が透明 */
+    #ffffff,
+    rgba(255, 255, 255, 0.75),
+    rgba(255, 255, 255, 0.25),
+    transparent
   );
   border-radius: 50%;
   filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.9));
   opacity: 0;
   pointer-events: none;
-  transform-origin: right center;  /* 回転の基準を後ろに */
+  transform-origin: left center; /* 回転基準を先端側に */
 }
 
-/* 先端をもっと明るく・少し太くする */
+/* 丸（先端）を左側（進行方向）に配置 */
 .shooting-star::after {
   content: "";
   position: absolute;
-  right: 0;                        /* 先端側 */
+  left: 0;                      /* ← ここがポイント（進行方向） */
   top: 50%;
-  transform: translateY(-50%);
-  width: 6px;
-  height: 6px;
+  transform: translate(-50%, -50%);
+  width: 7px;
+  height: 7px;
   background: #fff;
   border-radius: 50%;
-  box-shadow: 
+  box-shadow:
     0 0 8px 2px #fff,
-    0 0 16px 4px rgba(180, 220, 255, 0.8);
+    0 0 16px 5px rgba(180, 220, 255, 0.85);
+}
+
+/* 4本の位置・タイミング */
+.shooting-star.star1 {
+  top: 8%;
+  right: -150px;
+  animation: shooting 4.2s linear infinite;
+}
+
+.shooting-star.star2 {
+  top: 18%;
+  right: -150px;
+  animation: shooting 5.1s linear infinite;
+  animation-delay: 1.3s;
+}
+
+.shooting-star.star3 {
+  top: 5%;
+  right: -150px;
+  animation: shooting 3.8s linear infinite;
+  animation-delay: 2.6s;
+}
+
+.shooting-star.star4 {
+  top: 14%;
+  right: -150px;
+  animation: shooting 4.7s linear infinite;
+  animation-delay: 0.7s;
 }
 
 @keyframes shooting {
-  0%   { transform: translateX(0) translateY(0) rotate(-32deg); opacity: 0; }
-  8%   { opacity: 1; }
-  75%  { opacity: 1; }
-  100% { transform: translateX(-135vw) translateY(50vh) rotate(-32deg); opacity: 0; }
+  0% {
+    transform: translateX(0) translateY(0) rotate(-32deg);
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-140vw) translateY(50vh) rotate(-32deg);
+    opacity: 0;
+  }
 }
