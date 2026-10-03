@@ -406,7 +406,7 @@ function createShootingStar() {
   const size = 1.8 + Math.random() * 2.2;          // 太さ
   const length = 140 + Math.random() * 160;        // 長さ
   const duration = 2.6 + Math.random() * 2.8;      // 速さ
-  const angle = -25 - Math.random() * 35;          // 角度
+  const angle = 20 - Math.random() * 35;          // 角度
   const startTop = Math.random() * 55;             // 開始位置（上から）
   const startRight = -80 - Math.random() * 120;    // 右端から
 
