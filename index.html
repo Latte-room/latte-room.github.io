@@ -349,8 +349,8 @@
   <div class="twinkle-star s8"></div>
   <div class="twinkle-star s9"></div>
   <div class="twinkle-star s10"></div>
-
-  <div class="starry-overlay" aria-hidden="true">
+</div>
+  
   <!-- 流れ星 4本 -->
   <div class="shooting-star star1"></div>
   <div class="shooting-star star2"></div>
@@ -1157,10 +1157,77 @@
 
 
     /* ========================================
-       開始
+       ★ ランダム流れ星
     ======================================== */
 
-    loadSchedule();
+    function createShootingStar() {
+      const overlay = document.querySelector('.starry-overlay');
+      if (!overlay) {
+        console.log("starry-overlay が見つかりません");
+        return;
+      }
+
+      const star = document.createElement('div');
+      star.className = 'shooting-star';
+
+      const size = 2 + Math.random() * 2;
+      const length = 150 + Math.random() * 150;
+      const duration = 2.8 + Math.random() * 2.5;
+      const angle = -20 - Math.random() * 40;
+      const startTop = 5 + Math.random() * 50;
+      const startRight = -100 - Math.random() * 100;
+
+      star.style.cssText = `
+        width: ${length}px;
+        height: ${size}px;
+        top: ${startTop}%;
+        right: ${startRight}px;
+        --angle: ${angle}deg;
+        transform: rotate(${angle}deg);
+      `;
+
+      star.style.animation = `shooting-random ${duration}s linear forwards`;
+
+      overlay.appendChild(star);
+
+      setTimeout(() => {
+        star.remove();
+      }, duration * 1000 + 200);
+    }
+
+    function startShootingStars() {
+      console.log("流れ星スタート");
+      createShootingStar();
+      setTimeout(createShootingStar, 900);
+
+      setInterval(() => {
+        const count = 2 + Math.floor(Math.random() * 2);
+        for (let i = 0; i < count; i++) {
+          setTimeout(createShootingStar, i * 700);
+        }
+      }, 5000);
+    }
+
+    // キーフレーム追加
+    const shootingStyle = document.createElement('style');
+    shootingStyle.textContent = `
+      @keyframes shooting-random {
+        0% {
+          transform: translateX(0) translateY(0) rotate(var(--angle));
+          opacity: 0;
+        }
+        5% { opacity: 1; }
+        80% { opacity: 1; }
+        100% {
+          transform: translateX(-140vw) translateY(50vh) rotate(var(--angle));
+          opacity: 0;
+        }
+      }
+    `;
+    document.head.appendChild(shootingStyle);
+
+    // 開始
+    startShootingStars();
 
   </script>
 
