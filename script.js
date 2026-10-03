@@ -391,7 +391,19 @@ function setupMenuToggle() {
   });
 }
 
+/* ========================================
+   ★ ランダム流れ星の関数たち
+======================================== */
 
+function createShootingStar() {
+  // ...前回のコード
+}
+
+function startShootingStars() {
+  // ...前回のコード
+}
+
+// キーフレーム追加の部分もここに
 
 // ==================================================
 // 🚀 実行
@@ -403,4 +415,6 @@ document.addEventListener("DOMContentLoaded", function() {
   setupMenuToggle();
   fetchLatestVideos();
   fetchPlaylistSongs();
+
+  startShootingStars();   // ← ここで呼び出す
 });
