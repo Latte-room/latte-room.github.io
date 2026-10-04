@@ -574,7 +574,7 @@ h1 {
 .shooting-star {
   position: absolute;
   width: 140px;                 /* 少し長めに */
-  height: 2px;
+  height: 4px;
   background: linear-gradient(
     to right,                   /* 左（進行方向）が明るく → 右が透明 */
     #ffffff,
