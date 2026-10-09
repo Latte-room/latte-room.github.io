@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-09T18:10:50.316250+09:00",
+  "updatedAt": "2026-10-10T01:16:03.905290+09:00",
   "streaming": [
     {
       "type": "streaming",
@@ -88,6 +88,28 @@
       "source": "https://timetr.ee/p/ymstgakuen_streaming/3066606740763216986",
       "description": "",
       "uid": "3066606740763216986"
+    },
+    {
+      "type": "streaming",
+      "title": "らてらてちゃん（山下学園TikTok）",
+      "start": "2026-10-09T21:00:00+09:00",
+      "end": "2026-10-09T21:30:00+09:00",
+      "location": "",
+      "url": "",
+      "source": "https://timetr.ee/p/ymstgakuen_streaming/3073348469424032857",
+      "description": "",
+      "uid": "3073348469424032857"
+    },
+    {
+      "type": "streaming",
+      "title": "らてらてちゃん（山下学園YouTube）",
+      "start": "2026-10-09T21:30:00+09:00",
+      "end": "2026-10-09T22:00:00+09:00",
+      "location": "",
+      "url": "",
+      "source": "https://timetr.ee/p/ymstgakuen_streaming/3073348779148217475",
+      "description": "",
+      "uid": "3073348779148217475"
     }
   ],
   "live": [
@@ -321,6 +343,50 @@
       "source": "https://timetr.ee/p/yamashita_gakuen/3060858804846708974",
       "description": "【山下学園スペシャルライブ！🏫✨】\n\nこの日は、\nいつもの4人だけじゃありません…！\n\nいつもよりちょっとにぎやかな山下学園、\nどんなライブになるか楽しみにしててね〜！！！\n\n\nhttps://livepocket.jp/e/r-c8p",
       "uid": "3060858804846708974"
+    },
+    {
+      "type": "live",
+      "title": "ライブ予定",
+      "start": "2026-11-01T17:00:00+09:00",
+      "end": "2026-11-01T21:00:00+09:00",
+      "location": "粉浜西１丁目２−１ 4f",
+      "url": "https://x.com/y_gakuen",
+      "source": "https://timetr.ee/p/yamashita_gakuen/3073386723322087610",
+      "description": "ちょっと待ってね、、！",
+      "uid": "3073386723322087610"
+    },
+    {
+      "type": "live",
+      "title": "ライブ予定",
+      "start": "2026-11-07T17:00:00+09:00",
+      "end": "2026-11-07T21:00:00+09:00",
+      "location": "粉浜西１丁目２−１ 4f",
+      "url": "https://x.com/y_gakuen",
+      "source": "https://timetr.ee/p/yamashita_gakuen/3073387472961653276",
+      "description": "ちょっと待ってね、、！",
+      "uid": "3073387472961653276"
+    },
+    {
+      "type": "live",
+      "title": "ライブ予定",
+      "start": "2026-11-14T17:00:00+09:00",
+      "end": "2026-11-14T21:00:00+09:00",
+      "location": "粉浜西１丁目２−１ 4f",
+      "url": "https://x.com/y_gakuen",
+      "source": "https://timetr.ee/p/yamashita_gakuen/3073387867989592864",
+      "description": "ちょっと待ってね、、！",
+      "uid": "3073387867989592864"
+    },
+    {
+      "type": "live",
+      "title": "ライブ予定",
+      "start": "2026-11-23T17:00:00+09:00",
+      "end": "2026-11-23T21:00:00+09:00",
+      "location": "粉浜西１丁目２−１ 4f",
+      "url": "https://x.com/y_gakuen",
+      "source": "https://timetr.ee/p/yamashita_gakuen/3073388131685484622",
+      "description": "ちょっと待ってね、、！",
+      "uid": "3073388131685484622"
     }
   ]
 }
