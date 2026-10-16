@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-16T16:14:05.993977+09:00",
+  "updatedAt": "2026-10-16T21:30:29.889422+09:00",
   "streaming": [
     {
       "type": "streaming",
@@ -110,6 +110,28 @@
       "source": "https://timetr.ee/p/ymstgakuen_streaming/3073348779148217475",
       "description": "",
       "uid": "3073348779148217475"
+    },
+    {
+      "type": "streaming",
+      "title": "らてらてちゃん（TikTok）",
+      "start": "2026-10-16T21:00:00+09:00",
+      "end": "2026-10-16T21:00:00+09:00",
+      "location": "",
+      "url": "",
+      "source": "https://timetr.ee/p/ymstgakuen_streaming/3078442781253996259",
+      "description": "",
+      "uid": "3078442781253996259"
+    },
+    {
+      "type": "streaming",
+      "title": "らてらてちゃん（YouTube）",
+      "start": "2026-10-16T21:30:00+09:00",
+      "end": "2026-10-16T21:30:00+09:00",
+      "location": "",
+      "url": "",
+      "source": "https://timetr.ee/p/ymstgakuen_streaming/3078442990272941183",
+      "description": "",
+      "uid": "3078442990272941183"
     }
   ],
   "live": [
@@ -357,6 +379,28 @@
     },
     {
       "type": "live",
+      "title": "アニソン縛りライブ！",
+      "start": "2026-11-01T17:00:00+09:00",
+      "end": "2026-11-01T21:00:00+09:00",
+      "location": "粉浜西１丁目２−１ 4f",
+      "url": "https://livepocket.jp/e/dokec4ir66",
+      "source": "https://timetr.ee/p/yamashita_gakuen/3077596927685281838",
+      "description": "🎤 アニソン好き、集まれー！！\n11月最初のライブは、アニソン縛り！\nこれまで反響の大きかったアニソンを中心に、山下学園の4人でお届けします！\n初めての方も大歓迎！\n🕓 開場16:00／開演17:00\n📍 山下学園 仮校舎\n🎫 詳細・お申し込み\nhttps://livepocket.jp/e/dokec4ir66",
+      "uid": "3077596927685281838"
+    },
+    {
+      "type": "live",
+      "title": "学生限定！無料ライブ！",
+      "start": "2026-11-07T13:00:00+09:00",
+      "end": "2026-11-07T15:00:00+09:00",
+      "location": "粉浜西１丁目２−１ 4f",
+      "url": "https://livepocket.jp/e/di3rlfs31o",
+      "source": "https://timetr.ee/p/yamashita_gakuen/3077559947345775393",
+      "description": "🏫 学生限定！入場無料！\n学生のみんなに向けた特別なライブを開催！\nライブが初めての方も大歓迎！\nお友達を誘って、ぜひ遊びに来てください！\n🕛 開場12:00／開演13:00\n📍 山下学園 仮校舎\n🎫 詳細・お申し込み\nhttps://livepocket.jp/e/di3rlfs31o",
+      "uid": "3077559947345775393"
+    },
+    {
+      "type": "live",
       "title": "ライブ予定",
       "start": "2026-11-07T17:00:00+09:00",
       "end": "2026-11-07T21:00:00+09:00",
@@ -365,6 +409,28 @@
       "source": "https://timetr.ee/p/yamashita_gakuen/3073387472961653276",
       "description": "ちょっと待ってね、、！",
       "uid": "3073387472961653276"
+    },
+    {
+      "type": "live",
+      "title": "リクエストライブ！",
+      "start": "2026-11-07T17:00:00+09:00",
+      "end": "2026-11-07T21:00:00+09:00",
+      "location": "粉浜西１丁目２−１ 4f",
+      "url": "https://livepocket.jp/e/plt2cjjqr1",
+      "source": "https://timetr.ee/p/yamashita_gakuen/3077556743115622540",
+      "description": "🎤 あなたの聴きたい曲を歌います！\nみんなからのリクエストをもとに、ライブの内容が決まる特別公演！\n⚠️ チケットが50枚売れなかった場合、開催できません。\nみんなで一緒に、このライブを実現させよう！\n🕓 開場16:00／開演17:00\n📍 山下学園 仮校舎\n🎫 詳細・お申し込み\nhttps://livepocket.jp/e/plt2cjjqr1",
+      "uid": "3077556743115622540"
+    },
+    {
+      "type": "live",
+      "title": "無料握手会！",
+      "start": "2026-11-14T13:00:00+09:00",
+      "end": "2026-11-14T15:00:00+09:00",
+      "location": "粉浜西１丁目２−１ 4f",
+      "url": "https://livepocket.jp/e/wbdth-adnz",
+      "source": "https://timetr.ee/p/yamashita_gakuen/3077562025296251448",
+      "description": "🤝 山下学園 無料握手会！\n山下学園の4人に会いに来ませんか？\nいつも応援してくれる方も、初めましての方も大歓迎！\n🕛 開場12:00／開始13:00\n📍 山下学園 仮校舎\n🎫 詳細・お申し込み\nhttps://livepocket.jp/e/wbdth-adnz",
+      "uid": "3077562025296251448"
     },
     {
       "type": "live",
@@ -379,6 +445,17 @@
     },
     {
       "type": "live",
+      "title": "FC限定 授業参観ライブ！",
+      "start": "2026-11-14T17:00:00+09:00",
+      "end": "2026-11-14T21:00:00+09:00",
+      "location": "粉浜西１丁目２−１ 4f",
+      "url": "https://yamashitagakuen.bitfan.id/contents/452063",
+      "source": "https://timetr.ee/p/yamashita_gakuen/3077557716395477375",
+      "description": "🏫 山下学園のFC限定 授業参観ライブ！\nファンクラブ会員限定のライブです！\n普段のライブとはひと味違う、山下学園ならではの特別な時間！\nぜひ、4人の様子を見に来てください！\n🕓 開場16:00／開演17:00\n📍 山下学園 仮校舎\n🎫 詳細・お申し込み\nhttps://yamashitagakuen.bitfan.id/contents/452063",
+      "uid": "3077557716395477375"
+    },
+    {
+      "type": "live",
       "title": "ライブ予定",
       "start": "2026-11-23T17:00:00+09:00",
       "end": "2026-11-23T21:00:00+09:00",
@@ -387,6 +464,17 @@
       "source": "https://timetr.ee/p/yamashita_gakuen/3073388131685484622",
       "description": "ちょっと待ってね、、！",
       "uid": "3073388131685484622"
+    },
+    {
+      "type": "live",
+      "title": "？？縛りライブ！",
+      "start": "2026-11-23T17:00:00+09:00",
+      "end": "2026-11-23T21:00:00+09:00",
+      "location": "粉浜西１丁目２−１ 4f",
+      "url": "https://livepocket.jp/e/y_zs5iuc2_",
+      "source": "https://timetr.ee/p/yamashita_gakuen/3077558270001662420",
+      "description": "🗳️ 今回のライブは、みんなの投票で決まる！\nアイドル？ボカロ？懐メロ？\nどんな縛りライブになるかは、みんなの投票次第！\nあなたの見たいライブに投票してね！\n🕓 開場16:00／開演17:00\n📍 山下学園 仮校舎\n🎫 詳細・お申し込み\nhttps://livepocket.jp/e/y_zs5iuc2_",
+      "uid": "3077558270001662420"
     }
   ]
 }
