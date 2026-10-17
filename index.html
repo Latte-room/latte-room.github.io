@@ -359,22 +359,22 @@
 
     <!-- ★ らてらてちゃんについて（展開メニュー） -->
     <div class="menu-group">
-      <a href="#" class="menu-link menu-toggle">
-        らてらてちゃんについて
-        <span class="toggle-arrow">›</span>
-      </a>
-      <div class="menu-children">
-        <a href="#profile" class="menu-link child-link">プロフィール</a>
-        <a href="#streaming-schedule-section" class="menu-link child-link">📅 配信予定</a>
-        <a href="#live-schedule-section" class="menu-link child-link">🎤 ライブ・イベント</a>
+      <div class="menu-parent-row">
+        <a href="index.html" class="menu-link menu-parent active">らてらてちゃんについて</a>
+        <button class="menu-toggle open" type="button" aria-label="メニューを開閉">▼</button>
+      </div>
+      <div class="menu-children open">
+        <a href="#profile" class="menu-link child">プロフィール</a>
+        <a href="#streaming-schedule-section" class="menu-link child">📅 配信予定</a>
+        <a href="#live-schedule-section" class="menu-link child">🎤 ライブ・イベント</a>
       </div>
     </div>
 
-    <!-- 他ページ -->
     <a href="songs.html" class="menu-link">うた</a>
     <a href="videos.html" class="menu-link">最新動画</a>
     <a href="videos-list.html" class="menu-link">動画一覧</a>
     <a href="fan.html" class="menu-link">ファンコーナー</a>
+
   </nav>
 
   <!-- ========================================
@@ -384,7 +384,7 @@
 
     <h1>☕️らてらてちゃん応援ルーム🎧️</h1>
 
-    <!-- ★ 注意書きをタイトル直下に移動 -->
+    <!-- ★ 注意書き（タイトル直下） -->
     <div class="caution">
       <strong>【ご注意】</strong><br>
       当サイトはファン個人が運営する非公式の応援サイトです。<br>
@@ -1160,6 +1160,26 @@
 
 
     /* ========================================
+       📂 メニュー開閉
+    ======================================== */
+
+    function setupMenuToggle() {
+      document.querySelectorAll(".menu-group").forEach(group => {
+        const toggle = group.querySelector(".menu-toggle");
+        const children = group.querySelector(".menu-children");
+        if (!toggle || !children) return;
+
+        toggle.addEventListener("click", function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          children.classList.toggle("open");
+          toggle.classList.toggle("open");
+        });
+      });
+    }
+
+
+    /* ========================================
        ★ ランダム流れ星
     ======================================== */
 
@@ -1230,6 +1250,7 @@
     document.head.appendChild(shootingStyle);
 
     // 開始
+    setupMenuToggle();
     loadSchedule();
     startShootingStars();
 
