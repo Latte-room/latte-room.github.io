@@ -356,10 +356,19 @@
        左メニュー
   ======================================== -->
   <nav class="side-menu">
-    <!-- ページ内ジャンプ -->
-    <a href="#profile" class="menu-link active">プロフィール</a>
-    <a href="#streaming-schedule-section" class="menu-link">📅 配信予定</a>
-    <a href="#live-schedule-section" class="menu-link">🎤 ライブ・イベント</a>
+
+    <!-- ★ らてらてちゃんについて（展開メニュー） -->
+    <div class="menu-group">
+      <a href="#" class="menu-link menu-toggle">
+        らてらてちゃんについて
+        <span class="toggle-arrow">›</span>
+      </a>
+      <div class="menu-children">
+        <a href="#profile" class="menu-link child-link">プロフィール</a>
+        <a href="#streaming-schedule-section" class="menu-link child-link">📅 配信予定</a>
+        <a href="#live-schedule-section" class="menu-link child-link">🎤 ライブ・イベント</a>
+      </div>
+    </div>
 
     <!-- 他ページ -->
     <a href="songs.html" class="menu-link">うた</a>
