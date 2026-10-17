@@ -356,7 +356,12 @@
        左メニュー
   ======================================== -->
   <nav class="side-menu">
-    <a href="index.html" class="menu-link active">プロフィール</a>
+    <!-- ページ内ジャンプ -->
+    <a href="#profile" class="menu-link active">プロフィール</a>
+    <a href="#streaming-schedule-section" class="menu-link">📅 配信予定</a>
+    <a href="#live-schedule-section" class="menu-link">🎤 ライブ・イベント</a>
+
+    <!-- 他ページ -->
     <a href="songs.html" class="menu-link">うた</a>
     <a href="videos.html" class="menu-link">最新動画</a>
     <a href="videos-list.html" class="menu-link">動画一覧</a>
@@ -370,25 +375,27 @@
 
     <h1>☕️らてらてちゃん応援ルーム🎧️</h1>
 
+    <!-- ★ 注意書きをタイトル直下に移動 -->
+    <div class="caution">
+      <strong>【ご注意】</strong><br>
+      当サイトはファン個人が運営する非公式の応援サイトです。<br>
+      山下学園、らてらてちゃんご本人、および関係者様とは一切関係ありません。
+    </div>
+
     <!-- プロフィール -->
-    <div class="video-section">
+    <div id="profile" class="video-section">
       <h2>プロフィール</h2>
-      <div class="caution">
-        <strong>【ご注意】</strong><br>
-        当サイトはファン個人が運営する非公式の応援サイトです。<br>
-        山下学園、らてらてちゃんご本人、および関係者様とは一切関係ありません。
-      </div>
       <p>ここにプロフィール文を書いていきます。</p>
     </div>
 
     <!-- 配信予定 -->
-    <div class="video-section">
+    <div id="streaming-schedule-section" class="video-section">
       <h2>📅 らてらてちゃん 配信予定</h2>
       <div id="streaming-schedule" class="schedule-box"></div>
     </div>
 
     <!-- ライブ・イベント予定 -->
-    <div class="video-section">
+    <div id="live-schedule-section" class="video-section">
       <h2>🎤 ライブ・イベント予定</h2>
       <div id="live-schedule" class="schedule-box"></div>
     </div>
@@ -1214,7 +1221,7 @@
     document.head.appendChild(shootingStyle);
 
     // 開始
-    loadSchedule();          // ← これを追加！
+    loadSchedule();
     startShootingStars();
 
   </script>
