@@ -11,25 +11,38 @@
   <div class="layout">
     <!-- 左メニュー -->
     <nav class="side-menu">
-  <a href="index.html" class="menu-link">プロフィール</a>
 
-  <!-- うた（開閉式） -->
-  <div class="menu-group">
-    <div class="menu-parent-row">
-      <a href="songs.html" class="menu-link menu-parent active">うた</a>
-      <button class="menu-toggle" aria-label="メニューを開く">▼</button>
-    </div>
-    <div class="menu-children">
-      <a href="songs.html#original" class="menu-link child">　　　・ オリジナル曲</a>
-      <a href="songs.html#covers" class="menu-link child">・ カバー</a>
-      <a href="songs.html#gakuen" class="menu-link child">　　　・ 山下学園関連</a>
-    </div>
-  </div>
+      <!-- らてらてちゃんについて（展開メニュー） -->
+      <div class="menu-group">
+        <div class="menu-parent-row">
+          <a href="index.html" class="menu-link menu-parent">らてらてちゃんについて</a>
+          <button class="menu-toggle" type="button" aria-label="メニューを開閉">▼</button>
+        </div>
+        <div class="menu-children">
+          <a href="index.html#profile" class="menu-link child">プロフィール</a>
+          <a href="index.html#streaming-schedule-section" class="menu-link child">📅 配信予定</a>
+          <a href="index.html#live-schedule-section" class="menu-link child">🎤 ライブ・イベント</a>
+        </div>
+      </div>
 
-  <a href="videos.html" class="menu-link">最新動画</a>
-  <a href="videos-list.html" class="menu-link">動画一覧</a>
-  <a href="fan.html" class="menu-link">ファンコーナー</a>
-</nav>
+      <!-- うた（開閉式・このページなので active） -->
+      <div class="menu-group">
+        <div class="menu-parent-row">
+          <a href="songs.html" class="menu-link menu-parent active">うた</a>
+          <button class="menu-toggle open" type="button" aria-label="メニューを開閉">▼</button>
+        </div>
+        <div class="menu-children open">
+          <a href="songs.html#original" class="menu-link child">・ オリジナル曲</a>
+          <a href="songs.html#covers" class="menu-link child">・ カバー</a>
+          <a href="songs.html#gakuen" class="menu-link child">・ 山下学園関連</a>
+        </div>
+      </div>
+
+      <a href="videos.html" class="menu-link">最新動画</a>
+      <a href="videos-list.html" class="menu-link">動画一覧</a>
+      <a href="fan.html" class="menu-link">ファンコーナー</a>
+
+    </nav>
 
     <!-- 右側のコンテンツ -->
     <main class="main-content">
