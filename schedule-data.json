@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-30T23:14:12.201813+09:00",
+  "updatedAt": "2026-10-31T04:27:42.871447+09:00",
   "streaming": [
     {
       "type": "streaming",
@@ -154,6 +154,28 @@
       "source": "https://timetr.ee/p/ymstgakuen_streaming/3082982343112297619",
       "description": "",
       "uid": "3082982343112297619"
+    },
+    {
+      "type": "streaming",
+      "title": "らてらてちゃん（TikTok）",
+      "start": "2026-10-30T21:00:00+09:00",
+      "end": "2026-10-30T21:00:00+09:00",
+      "location": "",
+      "url": "",
+      "source": "https://timetr.ee/p/ymstgakuen_streaming/3088609359803092837",
+      "description": "",
+      "uid": "3088609359803092837"
+    },
+    {
+      "type": "streaming",
+      "title": "らてらてちゃん（YouTube）",
+      "start": "2026-10-30T21:29:00+09:00",
+      "end": "2026-10-30T21:29:00+09:00",
+      "location": "",
+      "url": "",
+      "source": "https://timetr.ee/p/ymstgakuen_streaming/3088609653555367275",
+      "description": "",
+      "uid": "3088609653555367275"
     }
   ],
   "live": [
