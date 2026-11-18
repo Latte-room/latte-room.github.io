@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-18T13:25:57.136958+09:00",
+  "updatedAt": "2026-11-18T23:04:06.326504+09:00",
   "streaming": [
     {
       "type": "streaming",
@@ -629,6 +629,39 @@
       "source": "https://timetr.ee/p/yamashita_gakuen/3077558270001662420",
       "description": "🗳️ 今回のライブは、みんなの投票で決まる！\nアイドル？ボカロ？懐メロ？\nどんな縛りライブになるかは、みんなの投票次第！\nあなたの見たいライブに投票してね！\n🕓 開場16:00／開演17:00\n📍 山下学園 仮校舎\n🎫 詳細・お申し込み\nhttps://livepocket.jp/e/y_zs5iuc2_",
       "uid": "3077558270001662420"
+    },
+    {
+      "type": "live",
+      "title": "日本祭2026 屋外ライブ",
+      "start": "2026-11-28T15:00:00+09:00",
+      "end": "2026-11-28T15:30:00+09:00",
+      "location": "ATT 4 FUN Xinyi Store",
+      "url": "https://japanfes-tw.com/#stage",
+      "source": "https://timetr.ee/p/yamashita_gakuen/3102339599108917557",
+      "description": "＼山下学園、初の海外進出‼️／\n\nなんと、台湾でライブすることになりました！！\n\n山下学園が海外に…！！\nめちゃめちゃ緊張するけど、楽しみです！\n\n台湾に住んでるみんなー！\n私たちのライブ、見に来てねー！！",
+      "uid": "3102339599108917557"
+    },
+    {
+      "type": "live",
+      "title": "日本祭2026 屋外ライブ",
+      "start": "2026-11-29T12:00:00+09:00",
+      "end": "2026-11-29T12:30:00+09:00",
+      "location": "ATT 4 FUN Xinyi Store",
+      "url": "https://japanfes-tw.com/#stage",
+      "source": "https://timetr.ee/p/yamashita_gakuen/3102340010939238402",
+      "description": "＼山下学園、初の海外進出‼️／\n\nなんと、台湾でライブすることになりました！！\n\n山下学園が海外に…！！\nめちゃめちゃ緊張するけど、楽しみです！\n\n台湾に住んでるみんなー！\n私たちのライブ、見に来てねー！！",
+      "uid": "3102340010939238402"
+    },
+    {
+      "type": "live",
+      "title": "日台女声ナイト",
+      "start": "2026-11-29T18:30:00+09:00",
+      "end": "2026-11-29T22:00:00+09:00",
+      "location": "Billboard Live TAIPEI",
+      "url": "https://www.instagram.com/p/Df1yFB8haBN/",
+      "source": "https://timetr.ee/p/yamashita_gakuen/3102340264015153464",
+      "description": "＼山下学園、初の海外進出‼️／\n\nなんと、台湾でライブすることになりました！！\n\n山下学園が海外に…！！\nめちゃめちゃ緊張するけど、楽しみです！\n\n台湾に住んでるみんなー！\n私たちのライブ、見に来てねー！！",
+      "uid": "3102340264015153464"
     }
   ]
 }
